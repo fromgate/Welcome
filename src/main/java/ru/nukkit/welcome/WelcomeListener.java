@@ -16,7 +16,7 @@ public class WelcomeListener implements Listener {
 
     @EventHandler (ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onQuit (PlayerQuitEvent event){
-        if (PasswordProvider.hasPassword(event.getPlayer()))
+        if (PlayerManager.isPlayerLoggedIn(event.getPlayer()))
             PasswordProvider.checkAutologin(event.getPlayer());
     }
 }
