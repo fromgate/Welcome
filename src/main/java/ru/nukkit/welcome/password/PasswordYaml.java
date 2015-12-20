@@ -12,13 +12,10 @@ import java.util.Set;
 public class PasswordYaml implements Password {
     private Map<String,String> passwords;
     private Map<String,LoginState> logins;
-    //private Map<String,String> ips;
 
     public PasswordYaml(){
         this.passwords = new HashMap<String, String>();
         logins = new HashMap<String, LoginState>();
-        /* this.uuids = new HashMap<String, String>();
-        this.ips = new HashMap<String, String>(); */
         load();
     }
 
@@ -51,13 +48,17 @@ public class PasswordYaml implements Password {
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         long loginTime = System.currentTimeMillis();
         LoginState prevLogin = this.logins.containsKey(playerName) ? this.logins.get(playerName) : null;
-        LoginState newLogin = new LoginState(uuid,ip,loginTime);
-        logins.put(playerName,newLogin);
-        save();
         if (prevLogin==null) return false;
+        LoginState newLogin = new LoginState(uuid,ip,loginTime);
         if (!prevLogin.uuid.equalsIgnoreCase(newLogin.uuid)) return false;
         if (!prevLogin.ip.equalsIgnoreCase(newLogin.ip)) return false;
         return (newLogin.time-prevLogin.time)<=Welcome.getPlugin().getMaxAutoTime();
+    }
+
+    public void updateAutoLogin(String playerName, String uuid, String ip) {
+        LoginState newLogin = new LoginState(uuid,ip,System.currentTimeMillis());
+        logins.put(playerName,newLogin);
+        save();
     }
 
 
@@ -80,6 +81,7 @@ public class PasswordYaml implements Password {
                 cfg.setNested(key+".ip",ls.ip);
                 cfg.setNested(key+".time",ls.time);
             }
+            cfg.save();
         } catch (Exception e){
             e.printStackTrace();
         }

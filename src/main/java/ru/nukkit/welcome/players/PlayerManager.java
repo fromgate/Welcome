@@ -42,7 +42,7 @@ public class PlayerManager {
         if (!player.isOnline()) return;
         if (isPlayerRegistered(player)) return;
         String name = player.getName();
-        if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTimeTicks());
+        if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTime());
         if (System.currentTimeMillis()<waitLogin.get(name)) {
             Message.TYPE_REG.tip(5,player,'6');
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
@@ -61,7 +61,7 @@ public class PlayerManager {
         if (!player.isOnline()) return;
         if (isPlayerLoggedIn(player)) return;
         String name = player.getName();
-        if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTimeTicks()); //3 минуты - это всё потом в конфиг!
+        if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTime()); //3 минуты - это всё потом в конфиг!
         if (System.currentTimeMillis()<waitLogin.get(name)) {
             Message.TYPE_LGN.tip(5,player,'6');
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
@@ -87,6 +87,7 @@ public class PlayerManager {
         setPlayerLoggedIn (player);
         Message.REG_LOG.log(player.getName(),"NOCOLOR");
         Message.REG_OK.print(player,'6');
+        PasswordProvider.updateAutologin (player);
         return Message.REG_OK.tip(5,player,'6');
     }
 
@@ -97,6 +98,7 @@ public class PlayerManager {
         setPlayerLoggedIn (player);
         Message.LGN_LOG.log(player.getName(),"NOCOLOR");
         Message.LGN_OK.print(player,'6');
+        PasswordProvider.updateAutologin (player);
         return Message.LGN_OK.tip(5,player,'6');
     }
 

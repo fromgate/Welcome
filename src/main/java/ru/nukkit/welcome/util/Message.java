@@ -19,41 +19,41 @@ public enum Message {
 	LNG_SAVE_FAIL ("Failed to save lang file"),
 	LNG_PRINT_FAIL ("Failed to print message %1%. Sender object is null."),
 	LNG_CONFIG ("[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%"),
-	WORD_UNKNOWN ("Unknown"), CMD_REG_DESC("Register player on server"), 
+	WORD_UNKNOWN ("Unknown"), CMD_REG_DESC("Register player on server"),
 	TYPE_LGN("Type /login <password> to login!"),
 	TYPE_REG ("Type /register <password> <password> to login!"),
-    KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!"),
-    LGN_ALREADY("You're already logged in!"),
+	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!"),
+	LGN_ALREADY("You're already logged in!"),
 	REG_ALREADY("You're already registerd!"),
-    LGN_MISS_PWD("Missed password! Type /login <password>"),
-    UNREG_MISS_PWD("Missed password! Type /unreg <password>"),
-    ERR_PWD_WRONG("Wrong password!"),
-    LGN_OK("You successfully logged-in! Welcome!"),
-    REG_OK("You successfully registered! Welcome!"),
-    ERR_PWD_NOTMATCH("Entered passwords are not match!"),
-    CMD_LGN_DESC("Login command"),
-    REG_LOG("Player %1% registered!"),
-    LGN_LOG("Player %1% logged-in!"),
-    UNREG_OK("You was removed from server. Next time you must register again!"),
-    CMD_UNREG_DESC("Unregister from server"),
-    CMD_RMV_DESC("Remove (unregister) provided player"),
-    RMV_NEED_PLAYER("Player name was not provided (/welcome remove <player>)"),
-    RMV_FAIL("Failed to remove player: %1%"),
+	LGN_MISS_PWD("Missed password! Type /login <password>"),
+	UNREG_MISS_PWD("Missed password! Type /unreg <password>"),
+	ERR_PWD_WRONG("Wrong password!"),
+	LGN_OK("You successfully logged-in! Welcome!"),
+	REG_OK("You successfully registered! Welcome!"),
+	ERR_PWD_NOTMATCH("Entered passwords are not match!"),
+	CMD_LGN_DESC("Login command"),
+	REG_LOG("Player %1% registered!"),
+	LGN_LOG("Player %1% logged-in!"),
+	UNREG_OK("You was removed from server. Next time you must register again!"),
+	CMD_UNREG_DESC("Unregister from server"),
+	CMD_RMV_DESC("Remove (unregister) provided player"),
+	RMV_NEED_PLAYER("Player name was not provided (/welcome remove <player>)"),
+	RMV_FAIL("Failed to remove player: %1%"),
 	RMV_OK("Player %1% removed!"),
 	LGN_AUTO("Welcome back, %1%!"),
 	CPW_DESC("Change password"),
-    CPW_USAGE("/changepassword <OldPassword> <NewPassword> <NewPassword>"),
-    ERR_NOT_LOGGED("You're not logged in! Operation declined."),
-    CPW_OK("Your password was successfully changed"),
-    CMD_HELP_DESC ("Show help"),
-    HLP_TITLE("%1% | Nukkit authorization system"),
+	CPW_USAGE("/changepassword <OldPassword> <NewPassword> <NewPassword>"),
+	ERR_NOT_LOGGED("You're not logged in! Operation declined."),
+	CPW_OK("Your password was successfully changed"),
+	CMD_HELP_DESC ("Show help"),
+	HLP_TITLE("%1% | Nukkit authorization system"),
 	CMD_WLC_DESC("Welcome plugin command"),
-    ERR_PWD_VALIDATE("Your password is not valid!"),
-    PWD_VALID_INFO ("Password must contain: %1% Length: %2%-%3%"),
-    VLD_CAPITAL("capital letters"),
-    VLD_LETTERS("letters"),
-    VLD_SPEC_CHR("special chars"),
-    VLD_NUMBER("numbers"), PWD_VALID_PATTERN("Password validator regex prepared: %1%");
+	ERR_PWD_VALIDATE("Your password is not valid!"),
+	PWD_VALID_INFO ("Password must contain: %1% Length: %2%-%3%"),
+	VLD_CAPITAL("capital letters"),
+	VLD_LETTERS("letters"),
+	VLD_SPEC_CHR("special chars"),
+	VLD_NUMBER("numbers"), PWD_VALID_PATTERN("Password validator regex prepared: %1%");
 
 	private static PluginBase plugin = null;
 	private static boolean debugMode = false;
@@ -88,7 +88,7 @@ public enum Message {
 	 * @param s
 	 * @return вЂ” always returns true.
 	 * Examples:
-	 * Message.ERROR_MESSAGE.log(variable1); // just print in log 
+	 * Message.ERROR_MESSAGE.log(variable1); // just print in log
 	 * return Message.ERROR_MESSAGE.log(variable1); // print in log and return value true
 	 */
 	public boolean log(Object... s){
@@ -107,26 +107,26 @@ public enum Message {
 	}
 
 	public boolean tip (int seconds, CommandSender sender, Object... s){
-        if (sender == null) return Message.LNG_PRINT_FAIL.log(this.name());
-        final Player player = sender instanceof Player ? (Player) sender : null;
-        final String message = getText(s);
-        if (player==null) sender.sendMessage(message);
-        else for (int i=0;i<seconds;i++) Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
-            public void run() {
-                if (player.isOnline()) player.sendTip(message);
-            }
-        },20*i);
-        return true;
+		if (sender == null) return Message.LNG_PRINT_FAIL.log(this.name());
+		final Player player = sender instanceof Player ? (Player) sender : null;
+		final String message = getText(s);
+		if (player==null) sender.sendMessage(message);
+		else for (int i=0;i<seconds;i++) Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
+			public void run() {
+				if (player.isOnline()) player.sendTip(message);
+			}
+		},20*i);
+		return true;
 	}
 
-    public boolean tip (CommandSender sender, Object... s){
-        if (sender == null) return Message.LNG_PRINT_FAIL.log(this.name());
-        Player player = sender instanceof Player ? (Player) sender : null;
-        String message = getText(s);
-        if (player==null) sender.sendMessage(message);
-        else player.sendTip(message);
-        return true;
-    }
+	public boolean tip (CommandSender sender, Object... s){
+		if (sender == null) return Message.LNG_PRINT_FAIL.log(this.name());
+		Player player = sender instanceof Player ? (Player) sender : null;
+		String message = getText(s);
+		if (player==null) sender.sendMessage(message);
+		else player.sendTip(message);
+		return true;
+	}
 
 	/**
 	 * Send message to Player or to ConsoleSender
@@ -136,7 +136,7 @@ public enum Message {
 	 */
 	public boolean print (CommandSender sender, Object... s){
 		if (sender == null) return Message.LNG_PRINT_FAIL.log(this.name());
-        sender.sendMessage(getText(s));
+		sender.sendMessage(getText(s));
 		return true;
 	}
 
@@ -148,7 +148,7 @@ public enum Message {
 	 *
 	 * Examples:
 	 * Message.MSG_BROADCAST.broadcast ("pluginname.broadcast"); // send message to all players with permission "pluginname.broadcast"
-	 * Message.MSG_BROADCAST.broadcast (null); // send message to all players 
+	 * Message.MSG_BROADCAST.broadcast (null); // send message to all players
 	 */
 	public boolean broadcast (String permission, Object... s){
 		for (Player player : plugin.getServer().getOnlinePlayers().values()){
@@ -159,7 +159,7 @@ public enum Message {
 
 
 	/**
-	 * Get formated text. 
+	 * Get formated text.
 	 * @param keys
 	 * @return
 	 */
@@ -235,13 +235,13 @@ public enum Message {
 
 	private static boolean copyLanguage(){
 		File f = new File(plugin.getDataFolder(),language+".lng");
-        return plugin.saveResource("lang/" +language+".lng",false,f);
+		return plugin.saveResource("lang/" +language+".lng",false,f);
 	}
 
 	private static void initMessages(){
-        copyLanguage();
+		copyLanguage();
 
-	    Config lng = null;
+		Config lng = null;
 		try {
 			File f = new File (plugin.getDataFolder()+File.separator+language+".lng");
 			lng = new Config(f,Config.YAML);

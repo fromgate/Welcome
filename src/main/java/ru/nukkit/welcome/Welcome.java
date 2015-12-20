@@ -83,7 +83,7 @@ public class Welcome extends PluginBase {
         return TimeUtil.parseTime(this.autoLoginMaxTime);
     }
 
-    public int getWaitTimeTicks(){
-        return TimeUtil.timeToTicks(TimeUtil.parseTime(timeWaitLogin)).intValue();
+    public long getWaitTime(){
+        return TimeUtil.parseTime(timeWaitLogin);
     }
 }

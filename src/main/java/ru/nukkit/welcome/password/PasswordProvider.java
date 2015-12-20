@@ -4,6 +4,7 @@ package ru.nukkit.welcome.password;
 import cn.nukkit.Player;
 import cn.nukkit.utils.TextFormat;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.players.PlayerManager;
 
 public enum PasswordProvider {
     YAML (PasswordYaml.class),
@@ -54,7 +55,6 @@ public enum PasswordProvider {
         return checkPassword(player.getName(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
     }
 
-
     public static boolean setPassword (String playerName, String pwdStr){
         return passworder.setPassword(playerName,Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
     }
@@ -90,6 +90,10 @@ public enum PasswordProvider {
         return passworder.checkAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress());
     }
 
-
-
+    public static void updateAutologin(Player player) {
+        if (!hasPassword(player)) return;
+        if (Welcome.getPlugin().isAutologinDisabled()) return;
+        if (!PlayerManager.isPlayerLoggedIn(player)) return;
+        passworder.updateAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress());
+    }
 }

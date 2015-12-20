@@ -11,8 +11,6 @@ import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.db.LastloginTable;
 import ru.nukkit.welcome.db.PasswordsTable;
 
-import java.sql.SQLException;
-
 public class PasswordDbLib implements Password {
 
     private boolean enabled;
@@ -50,7 +48,7 @@ public class PasswordDbLib implements Password {
         PasswordsTable pt = null;
         try {
             pt = passDao.queryForId(playerName);
-        } catch (SQLException e) {
+        } catch (Exception e) {
             return false;
         }
         if (pt.getPassword()==null) return false;
@@ -65,13 +63,14 @@ public class PasswordDbLib implements Password {
         if (pt!=null)
             try {
                 passDao.create(pt);
-            } catch (SQLException e) {
+            } catch (Exception e) {
                 pt = null;
             }
         if (pt == null) try {
             pt = passDao.queryForId(playerName);
             pt.setPassword(password);
-        } catch (SQLException e) {
+            passDao.update(pt);
+        } catch (Exception e) {
             return false;
         }
         return true;
@@ -82,7 +81,7 @@ public class PasswordDbLib implements Password {
         if (playerName==null||playerName.isEmpty()) return false;
         try {
             return passDao.idExists(playerName);
-        } catch (SQLException e) {
+        } catch (Exception e) {
         }
         return  false;
 
@@ -102,8 +101,8 @@ public class PasswordDbLib implements Password {
     }
 
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
-        long loginTime = System.currentTimeMillis();
         if (!enabled) return false;
+        long loginTime = System.currentTimeMillis();
         if (playerName==null||playerName.isEmpty()) return false;
         String prevIp = "";
         String prevUUID = "";
@@ -111,25 +110,33 @@ public class PasswordDbLib implements Password {
         LastloginTable llt = null;
         try {
             llt = lastloginDao.queryForId(playerName);
-        } catch (SQLException e) {
-        }
-
-        if (llt!=null){
             prevIp = llt.getIp();
             prevUUID = llt.getUuid();
             prevTime = llt.getTime();
-
-            llt.setUuid(uuid);
-            llt.setIp(ip);
-            llt.setTime(loginTime);
-        } else try {
-            lastloginDao.create(new LastloginTable(playerName,uuid,ip,loginTime));
-        } catch (SQLException e) {
+        } catch (Exception e) {
         }
-
         if (loginTime-prevTime>Welcome.getPlugin().getMaxAutoTime()) return false;
         if (prevIp.isEmpty()||prevUUID.isEmpty()) return false;
         if (!prevUUID.equalsIgnoreCase(uuid)) return false;
         return prevIp.equalsIgnoreCase(ip);
     }
+
+    public void updateAutoLogin(String playerName, String uuid, String ip) {
+        if (!enabled) return;
+        if (playerName==null||playerName.isEmpty()) return;
+        long loginTime = System.currentTimeMillis();
+        LastloginTable llt = null;
+        try {
+            llt = lastloginDao.queryForId(playerName);
+            llt.setUuid(uuid);
+            llt.setIp(ip);
+            llt.setTime(loginTime);
+            lastloginDao.update(llt);
+        } catch (Exception e) {
+        }
+        if (llt==null) try {
+            lastloginDao.create(new LastloginTable(playerName,uuid,ip,loginTime));
+        } catch (Exception e){}
+    }
+
 }
