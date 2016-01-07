@@ -9,6 +9,7 @@ import ru.nukkit.welcome.util.Message;
 public class CmdLgn extends Cmd {
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
+        Message.debugMessage("command: login player: "+(player==null ? "null" : player.getName()));
         if (player == null) return false;
         return PlayerManager.loginCommand(player, args.length>0 ? args[0] : "");
     }

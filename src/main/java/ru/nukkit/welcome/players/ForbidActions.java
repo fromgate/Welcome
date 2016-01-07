@@ -11,6 +11,7 @@ import cn.nukkit.event.block.SignChangeEvent;
 import cn.nukkit.event.inventory.*;
 import cn.nukkit.event.player.*;
 import ru.nukkit.welcome.commands.Commander;
+import ru.nukkit.welcome.util.Message;
 
 public class ForbidActions implements Listener {
 
@@ -92,13 +93,15 @@ public class ForbidActions implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerChatEvent(PlayerChatEvent event) {
         cancel(event.getPlayer(), event);
+        if (event.isCancelled()) Message.debugMessage("PlayerChatEvent is cancelled:",event.getMessage());
     }
 
-    // Сюда надо добавить пропуск команды регистрации и логина!!!
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
+        Message.debugMessage("PlayerManager.isPlayerLoggedIn(event.getPlayer()) : "+PlayerManager.isPlayerLoggedIn(event.getPlayer()));
         if (PlayerManager.isPlayerLoggedIn(event.getPlayer())) return;
         String cmd = Commander.getCommandByAlias(event.getMessage().substring(1).split(" ")[0]);
+        Message.debugMessage("cmd: "+(cmd==null ? "null" : cmd));
         if (cmd!=null&&(cmd.equalsIgnoreCase("register")||cmd.equalsIgnoreCase("login"))) return; // Разрешаем только команды для регистрации
         event.setCancelled();
     }

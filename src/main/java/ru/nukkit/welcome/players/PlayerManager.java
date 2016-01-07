@@ -44,7 +44,7 @@ public class PlayerManager {
         String name = player.getName();
         if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTime());
         if (System.currentTimeMillis()<waitLogin.get(name)) {
-            Message.TYPE_REG.tip(5,player,'6');
+            Message.TYPE_REG.tip(5,player);
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                    startWaitRegister(player);
@@ -63,7 +63,7 @@ public class PlayerManager {
         String name = player.getName();
         if (!waitLogin.containsKey(name)) waitLogin.put(name,System.currentTimeMillis()+Welcome.getPlugin().getWaitTime()); //3 минуты - это всё потом в конфиг!
         if (System.currentTimeMillis()<waitLogin.get(name)) {
-            Message.TYPE_LGN.tip(5,player,'6');
+            Message.TYPE_LGN.tip(5,player);
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitLogin (player);
@@ -94,7 +94,7 @@ public class PlayerManager {
     public static boolean loginCommand (Player player, String password){
         if (password==null||password.isEmpty()) return Message.LGN_MISS_PWD.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
-        if (!PasswordProvider.checkPassword(player,password)) return Message.ERR_PWD_WRONG.print(player,'c');
+        if (!PasswordProvider.checkPassword(player,password)) return Message.ERR_PWD_WRONG.print(player);
         setPlayerLoggedIn (player);
         Message.LGN_LOG.log(player.getName(),"NOCOLOR");
         Message.LGN_OK.print(player,'6');
@@ -105,8 +105,8 @@ public class PlayerManager {
 
     public static boolean unregCommand(Player player, String password) {
         if (password==null||password.isEmpty()) return Message.UNREG_MISS_PWD.print(player);
-        if (!PasswordProvider.checkPassword(player,password)) return Message.ERR_PWD_WRONG.print(player,'c');
+        if (!PasswordProvider.checkPassword(player,password)) return Message.ERR_PWD_WRONG.print(player);
         PasswordProvider.removePassword(player);
-        return player.kick(Message.UNREG_OK.getText('c'),false);
+        return player.kick(Message.UNREG_OK.getText(),false);
     }
 }

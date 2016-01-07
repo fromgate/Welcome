@@ -5,7 +5,7 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import ru.nukkit.welcome.util.Message;
 
-@CmdDefine(command = "welcome", alias = "wel", subCommands ={"help"} , permission = "welcome.help", description = Message.CMD_HELP_DESC)
+@CmdDefine(command = "welcome", alias = "wel", subCommands ={"help"} , permission = "welcome.help", description = Message.CMD_HELP_DESC, allowConsole = true)
 public class CmdHelp extends Cmd{
 
 

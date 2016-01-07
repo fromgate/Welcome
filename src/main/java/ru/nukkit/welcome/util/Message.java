@@ -19,26 +19,27 @@ public enum Message {
 	LNG_SAVE_FAIL ("Failed to save lang file"),
 	LNG_PRINT_FAIL ("Failed to print message %1%. Sender object is null."),
 	LNG_CONFIG ("[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%"),
-	WORD_UNKNOWN ("Unknown"), CMD_REG_DESC("Register player on server"),
-	TYPE_LGN("Type /login <password> to login!"),
-	TYPE_REG ("Type /register <password> <password> to login!"),
-	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!"),
-	LGN_ALREADY("You're already logged in!"),
-	REG_ALREADY("You're already registerd!"),
-	LGN_MISS_PWD("Missed password! Type /login <password>"),
-	UNREG_MISS_PWD("Missed password! Type /unreg <password>"),
-	ERR_PWD_WRONG("Wrong password!"),
+	WORD_UNKNOWN ("Unknown"),
+	CMD_REG_DESC("Register player on server"),
+	TYPE_LGN("Type /login <password> to login!",'6'),
+	TYPE_REG ("Type /register <password> <password> to login!",'6'),
+	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!",'c'),
+	LGN_ALREADY("You're already logged in!",'c'),
+	REG_ALREADY("You're already registerd!",'c'),
+	LGN_MISS_PWD("Missed password! Type /login <password>",'c'),
+	UNREG_MISS_PWD("Missed password! Type /unreg <password>",'c'),
+	ERR_PWD_WRONG("Wrong password!",'c'),
 	LGN_OK("You successfully logged-in! Welcome!"),
 	REG_OK("You successfully registered! Welcome!"),
-	ERR_PWD_NOTMATCH("Entered passwords are not match!"),
+	ERR_PWD_NOTMATCH("Entered passwords are not match!",'c'),
 	CMD_LGN_DESC("Login command"),
 	REG_LOG("Player %1% registered!"),
 	LGN_LOG("Player %1% logged-in!"),
-	UNREG_OK("You was removed from server. Next time you must register again!"),
+	UNREG_OK("You was removed from server. Next time you must register again!", 'c'),
 	CMD_UNREG_DESC("Unregister from server"),
 	CMD_RMV_DESC("Remove (unregister) provided player"),
 	RMV_NEED_PLAYER("Player name was not provided (/welcome remove <player>)"),
-	RMV_FAIL("Failed to remove player: %1%"),
+	RMV_FAIL("Failed to remove player: %1%",'c'),
 	RMV_OK("Player %1% removed!"),
 	LGN_AUTO("Welcome back, %1%!"),
 	CPW_DESC("Change password"),
@@ -53,7 +54,8 @@ public enum Message {
 	VLD_CAPITAL("capital letters"),
 	VLD_LETTERS("letters"),
 	VLD_SPEC_CHR("special chars"),
-	VLD_NUMBER("numbers"), PWD_VALID_PATTERN("Password validator regex prepared: %1%");
+	VLD_NUMBER("numbers"),
+    PWD_VALID_PATTERN("Password validator regex prepared: %1%");
 
 	private static PluginBase plugin = null;
 	private static boolean debugMode = false;
@@ -170,7 +172,7 @@ public enum Message {
 		boolean skipDefaultColors = false;
 		boolean fullFloat = false;
 		int count=1;
-		char [] colors = new char[]{c1,c2};
+		char [] colors = new char[]{color1 == null ? c1 : color1 , color2 == null ? c2 : color2};
 		int c = 0;
 		DecimalFormat fmt = new DecimalFormat("####0.##");
 		for (int i = 0; i<keys.length; i++){
@@ -211,18 +213,35 @@ public enum Message {
 	}
 
 	private String message;
+	private Character color1;
+	private Character color2;
 	Message (String msg){
 		message = msg;
+		this.color1 = null;
+		this.color2 = null;
+	}
+	Message (String msg, char color1, char color2){
+		this.message = msg;
+		this.color1 = color1;
+		this.color2 = color2;
+	}
+	Message (String msg, char color){
+		this (msg,color,color);
+	}
+
+	@Override
+	public String toString(){
+		return this.getText("NOCOLOR");
 	}
 
 
 	///////////////////////////////////////////////////////////////////////////////////////////////
 	public static void init(PluginBase plg){
 		plugin = plg;
-		language = plg.getConfig().get("general.language","english");
-		plg.getConfig().set("general.language", language);
-		debugMode = plg.getConfig().get("general.debug-mode",false);
-		plg.getConfig().set("general.debug-mode",debugMode);
+		language = plg.getConfig().getNested("general.language","english");
+		plg.getConfig().setNested("general.language", language);
+		debugMode = plg.getConfig().getNested("general.debug-mode",false);
+		plg.getConfig().setNested("general.debug-mode",debugMode);
 		plg.saveConfig();
 		initMessages();
 		saveMessages();
@@ -234,8 +253,7 @@ public enum Message {
 	}
 
 	private static boolean copyLanguage(){
-		File f = new File(plugin.getDataFolder(),language+".lng");
-		return plugin.saveResource("lang/" +language+".lng",false,f);
+		return plugin.saveResource("lang/" +language+".lng",language+".lng",false);
 	}
 
 	private static void initMessages(){
@@ -269,7 +287,7 @@ public enum Message {
 	}
 
 	public static boolean debugMessage (Object... s){
-		if (debugMode) plugin.getLogger().info(TextFormat.clean(join (s)));
+		if (debugMode) plugin.getLogger().info("[debug] "+ TextFormat.clean(join (s)));
 		return true;
 
 	}
