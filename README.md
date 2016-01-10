@@ -1,7 +1,7 @@
 # Welcome
 **Autorization plugin for Nukkit server**
 
-[**Download at nukkit.ru](http://nukkit.ru/resources/welcome.17/)
+[**Download at nukkit.ru**](http://nukkit.ru/resources/welcome.17/)
 
 ## Features
 
