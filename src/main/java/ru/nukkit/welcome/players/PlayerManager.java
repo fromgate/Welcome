@@ -2,6 +2,7 @@ package ru.nukkit.welcome.players;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.entity.Effect;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.PasswordProvider;
 import ru.nukkit.welcome.password.PasswordValidator;
@@ -27,6 +28,7 @@ public class PlayerManager {
             Message.LGN_AUTO.tip(5,player,'e','6',player.getName());
             return;
         }
+        setBlindEffect(player);
         if (!PasswordProvider.hasPassword(player)) startWaitRegister (player);
         else startWaitLogin(player);
     }
@@ -47,7 +49,7 @@ public class PlayerManager {
             Message.TYPE_REG.tip(5,player);
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
-                   startWaitRegister(player);
+                    startWaitRegister(player);
                 }
             },200);
         } else player.kick(Message.KICK_TIMEOUT.getText(),false);
@@ -88,6 +90,7 @@ public class PlayerManager {
         Message.REG_LOG.log(player.getName(),"NOCOLOR");
         Message.REG_OK.print(player,'6');
         PasswordProvider.updateAutologin (player);
+        clearBlindEffect(player);
         return Message.REG_OK.tip(5,player,'6');
     }
 
@@ -99,6 +102,7 @@ public class PlayerManager {
         Message.LGN_LOG.log(player.getName(),"NOCOLOR");
         Message.LGN_OK.print(player,'6');
         PasswordProvider.updateAutologin (player);
+        clearBlindEffect(player);
         return Message.LGN_OK.tip(5,player,'6');
     }
 
@@ -108,5 +112,21 @@ public class PlayerManager {
         if (!PasswordProvider.checkPassword(player,password)) return Message.ERR_PWD_WRONG.print(player);
         PasswordProvider.removePassword(player);
         return player.kick(Message.UNREG_OK.getText(),false);
+    }
+
+
+    private static void clearBlindEffect(Player player){
+        if (!Welcome.getPlugin().useBlindEffect()) return;
+        if (player.hasEffect(Effect.BLINDNESS))
+            player.removeEffect(Effect.BLINDNESS);
+    }
+    private static void setBlindEffect(Player player){
+        if (!Welcome.getPlugin().useBlindEffect()) return;
+        Effect effect = Effect.getEffect(Effect.BLINDNESS);
+        effect.setAmbient(false);
+        effect.setDuration(Integer.MAX_VALUE);
+        effect.setAmplifier(10);
+        player.addEffect(effect);
+
     }
 }

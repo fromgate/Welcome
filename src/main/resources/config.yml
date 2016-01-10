@@ -1,0 +1,37 @@
+# Welcome
+# plugin for Nukkit
+# created by fromgate
+# http://nukkit.ru/resources/welcome.17/
+#
+general:
+# Plugin language. Supported: english, russian
+  language: english
+# Enable/Disable debug messages. Don't touch this ;)
+  debug-mode: false
+password:
+# Password hash algorithm. Supported values: MD5, SHA1, SHA256, SHA512
+  hash-algorithm: SHA256
+# Time to wait until user login.
+# If time passed - user will be kicked out from the server
+  wait-time: 3m
+# Password validator options
+  validator:
+    force-capitals: false
+    force-specials: false
+    force-numbers: true
+    min-length: 6
+    max-length: 16
+database:
+# Where to store you passwords
+# DATABASE - SQLite or MySQL database configured at DBLib plugin
+# YAML - in yaml files
+  provider: DATABASE
+autologin:
+# Remember user IP, UUID and Name. Next time (during the provide time limit)
+# client with same parameters will be logged in automatically
+  disable: true
+  time: 15m
+# Debuff effects for not-loged users
+before-login:
+# Blinde effect if user is not logged-in
+  blind-effect: true

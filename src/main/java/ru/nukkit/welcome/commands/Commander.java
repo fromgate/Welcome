@@ -9,6 +9,7 @@ import ru.nukkit.welcome.util.Message;
 import ru.nukkit.welcome.util.Paginator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Commander {
@@ -29,26 +30,25 @@ public class Commander {
 		return plugin;
 	}
 
-
     private static boolean isRegistered(String cmdStr){
         for (Cmd cmd : commands)
             if (cmd.getCommand().equalsIgnoreCase(cmdStr)) return true;
         return false;
     }
 
-
     public static boolean addNewCommand (Cmd cmd){
         return addNewCommand (cmd, null);
     }
+
 	public static boolean addNewCommand (Cmd cmd, Message description){
 		if (cmd.getCommand() == null) return false;
 		if (cmd.getCommand().isEmpty()) return false;
-        if (!isRegistered(cmd.getCommand()))        {
+        if (!isRegistered(cmd.getCommand())){
             CommandExecutor newCmd = new CommandExecutor(cmd.getCommand());
             newCmd.setDescription(description == null ? cmd.getDescription() : description.getText("NOCOLOR"));
             newCmd.setAliases(cmd.getAliases());
             plugin.getServer().getCommandMap().register(plugin.getName()+"_cmd", newCmd);
-            plugin.getLogger().info(TextFormat.GREEN+"Command registered: "+TextFormat.DARK_GREEN+cmd.toString());
+            Message.CMD_REGISTERED.debug(cmd.toString());
         }
 		commands.add(cmd);
 		return true;
@@ -90,6 +90,7 @@ public class Commander {
         for (Cmd cmd : commands){
             if (!cmd.isCommand(cmdLabel)) continue;
             if (cmd.executeCommand(sender, args)) return true;
+            else Message.debugMessage("Command not executed:",sender.getName(),cmdLabel, cmd.getCommand(), new ArrayList<String>(Arrays.asList(args)).toString());
         }
         return false;
     }
@@ -102,6 +103,4 @@ public class Commander {
     public static boolean isPluginCommand (String cmdLabel){
         return getCommandByAlias(cmdLabel)!=null;
     }
-
-
 }

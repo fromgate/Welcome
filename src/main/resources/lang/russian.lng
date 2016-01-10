@@ -38,3 +38,5 @@ vld_capital: заглавные буквы
 vld_letters: буквы
 vld_spec_chr: специальные символы
 vld_number: цифры
+permission_fail: Уровень доступа недостаточено для выполнения команды!
+player_command_only: Эта команда доступна только из игры!

@@ -64,10 +64,10 @@ public abstract class Cmd {
 	}
 
 	public boolean executeCommand(CommandSender sender, String [] params){
-		if (!canExecute (sender)) return false;
 		if (!this.checkParams(params)) return false;
         Player player = sender instanceof Player ? (Player) sender : null;
-        if (player == null && !this.allowConsole) return false;
+        if (player == null && !this.allowConsole) return Message.PLAYER_COMMAD_ONLY.print(sender);
+        if (!canExecute (sender)) return Message.PERMISSION_FAIL.print(sender);
         return execute (sender, player, params);
 	}
 

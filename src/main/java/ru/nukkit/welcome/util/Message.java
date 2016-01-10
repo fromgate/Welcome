@@ -17,9 +17,12 @@ public enum Message {
 	//Default (lang) messages
 	LNG_LOAD_FAIL ("Failed to load languages from file. Default message used"),
 	LNG_SAVE_FAIL ("Failed to save lang file"),
-	LNG_PRINT_FAIL ("Failed to print message %1%. Sender object is null."),
+	LNG_PRINT_FAIL ("Failed to print message to 'null': \"%1%\""),
 	LNG_CONFIG ("[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%"),
 	WORD_UNKNOWN ("Unknown"),
+	PERMISSION_FAIL ("You have not enough permissions to execute this command",'c'),
+    PLAYER_COMMAD_ONLY ("You can use this command in-game only!",'c'),
+    CMD_REGISTERED("Command registered: %1%"),
 	CMD_REG_DESC("Register player on server"),
 	TYPE_LGN("Type /login <password> to login!",'6'),
 	TYPE_REG ("Type /register <password> <password> to login!",'6'),
@@ -166,13 +169,13 @@ public enum Message {
 	 * @return
 	 */
 	public String getText (Object... keys){
-		if (keys.length ==0) return TextFormat.colorize("&"+c1+this.message);
+        char [] colors = new char[]{color1 == null ? c1 : color1 , color2 == null ? c2 : color2};
+		if (keys.length ==0) return TextFormat.colorize("&"+colors[0]+this.message);
 		String str = this.message;
 		boolean noColors = false;
 		boolean skipDefaultColors = false;
 		boolean fullFloat = false;
 		int count=1;
-		char [] colors = new char[]{color1 == null ? c1 : color1 , color2 == null ? c2 : color2};
 		int c = 0;
 		DecimalFormat fmt = new DecimalFormat("####0.##");
 		for (int i = 0; i<keys.length; i++){
@@ -239,10 +242,7 @@ public enum Message {
 	public static void init(PluginBase plg){
 		plugin = plg;
 		language = plg.getConfig().getNested("general.language","english");
-		plg.getConfig().setNested("general.language", language);
 		debugMode = plg.getConfig().getNested("general.debug-mode",false);
-		plg.getConfig().setNested("general.debug-mode",debugMode);
-		plg.saveConfig();
 		initMessages();
 		saveMessages();
 		LNG_CONFIG.debug(Message.values().length,language,true,debugMode);

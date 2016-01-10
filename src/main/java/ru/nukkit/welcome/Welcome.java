@@ -9,9 +9,6 @@ import ru.nukkit.welcome.players.ForbidActions;
 import ru.nukkit.welcome.util.Message;
 import ru.nukkit.welcome.util.TimeUtil;
 
-import java.io.File;
-import java.io.IOException;
-
 public class Welcome extends PluginBase {
 
     private static Welcome instance;
@@ -31,11 +28,12 @@ public class Welcome extends PluginBase {
     int validatorMinLength;
     int validatorMaxLength;
 
+    boolean setBlindEffect;
 
     @Override
     public void onEnable(){
         instance = this;
-        reloadCfg();
+        loadCfg();
         Message.init(this);
         PasswordValidator.init(this.validatorSpecialChar,this.validatorCapitalLetter,this.validatorNumber, this.validatorMinLength, this.validatorMaxLength);
         PasswordProvider.init();
@@ -44,36 +42,21 @@ public class Welcome extends PluginBase {
         Commander.init(this);
     }
 
-    public void reloadCfg(){
+    public void loadCfg(){
         this.getDataFolder().mkdirs();
-        File f = new File(this.getDataFolder()+File.separator+"config.yml");
-        if (!f.exists()) try {
-            f.createNewFile();
-        } catch (Exception e) {
-            Message.debugMessage("Failed to create file config.yml");
-        }
+        this.saveResource("config.yml");
         this.reloadConfig();
         this.hashMethod = this.getConfig().getNested("password.hash-algorithm", HashType.SHA256.name());
-        this.getConfig().setNested("password.hash-algorithm", getHashAlgorithm().name());
         this.timeWaitLogin = this.getConfig().getNested("password.wait-time","3m");
-        this.getConfig().setNested("password.wait-time",this.timeWaitLogin);
         this.passwordProvider = this.getConfig().getNested("database.provider",PasswordProvider.DATABASE.name());
-        this.getConfig().setNested("database.provider",this.passwordProvider);
         this.autologinDisabled = this.getConfig().getNested("autologin.disable", false);
-        this.getConfig().setNested("autologin.disable", this.autologinDisabled);
         this.autoLoginMaxTime = this.getConfig().getNested("autologin.time", "15m");
-        this.getConfig().setNested("autologin.time", this.autoLoginMaxTime);
         this.validatorCapitalLetter = this.getConfig().getNested("validate-force-capitals",false);
-        this.getConfig().setNested("password.validator.force-capitals",this.validatorCapitalLetter);
         this.validatorSpecialChar = this.getConfig().getNested("password.validator.force-specials",false);
-        this.getConfig().setNested("password.validator.force-specials",this.validatorSpecialChar );
         this.validatorNumber = this.getConfig().getNested("password.validator.force-numbers",true);
-        this.getConfig().setNested("password.validator.force-numbers",this.validatorNumber );
         this.validatorMinLength = this.getConfig().getNested("password.validator.min-length",6);
-        this.getConfig().setNested("password.validator.min-length",this.validatorMinLength);
         this.validatorMaxLength = this.getConfig().getNested("password.validator.max-length",16);
-        this.getConfig().setNested("password.validator.max-length",this.validatorMaxLength);
-        this.saveConfig();
+        this.setBlindEffect = this.getConfig().getNested("before-login.blind-effect",true);
     }
 
 
@@ -92,7 +75,12 @@ public class Welcome extends PluginBase {
         return TimeUtil.parseTime(this.autoLoginMaxTime);
     }
 
-    public long getWaitTime(){
+    public Long getWaitTime(){
         return TimeUtil.parseTime(timeWaitLogin);
     }
+
+    public boolean useBlindEffect(){
+        return this.setBlindEffect;
+    }
+
 }
