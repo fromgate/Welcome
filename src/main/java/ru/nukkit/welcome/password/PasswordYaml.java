@@ -56,7 +56,11 @@ public class PasswordYaml implements Password {
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip) {
-        LoginState newLogin = new LoginState(uuid,ip,System.currentTimeMillis());
+        updateAutoLogin (playerName,uuid,ip,System.currentTimeMillis());
+    }
+
+    public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
+        LoginState newLogin = new LoginState(uuid,ip,currentTime);
         logins.put(playerName,newLogin);
         save();
     }

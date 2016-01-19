@@ -9,4 +9,5 @@ public interface Password {
     public abstract boolean removePassword (String playerName);
     public abstract boolean checkAutoLogin (String playerName, String uuid, String ip);
     public abstract void updateAutoLogin (String playerName, String uuid, String ip);
+    public abstract void updateAutoLogin (String playerName, String uuid, String ip, long currentTime);
 }

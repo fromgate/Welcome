@@ -40,6 +40,11 @@ public class PlayerManager {
         player.setMetadata("welcome-in-game", new LoginMeta());
     }
 
+    public static void setPlayerLoggedOff (Player player){
+        if (player.hasMetadata("welcome-in-game"))
+            player.removeMetadata("welcome-in-game",Welcome.getPlugin());
+    }
+
     private static void startWaitRegister(final Player player) {
         if (!player.isOnline()) return;
         if (isPlayerRegistered(player)) return;
@@ -74,7 +79,6 @@ public class PlayerManager {
         } else player.kick(Message.KICK_TIMEOUT.getText(),false);
     }
 
-
     public static boolean regCommand (Player player, String password1, String password2){
         if (isPlayerRegistered(player)) return Message.REG_ALREADY.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
@@ -106,6 +110,12 @@ public class PlayerManager {
         return Message.LGN_OK.tip(5,player,'6');
     }
 
+    public static boolean logOff (Player player){
+        if (!isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
+        setPlayerLoggedOff(player);
+        PasswordProvider.removeAutologin(player);
+        return player.kick(Message.LOGOFF_OK.getText(),false);
+    }
 
     public static boolean unregCommand(Player player, String password) {
         if (password==null||password.isEmpty()) return Message.UNREG_MISS_PWD.print(player);
@@ -113,7 +123,6 @@ public class PlayerManager {
         PasswordProvider.removePassword(player);
         return player.kick(Message.UNREG_OK.getText(),false);
     }
-
 
     private static void clearBlindEffect(Player player){
         if (!Welcome.getPlugin().useBlindEffect()) return;
@@ -127,6 +136,5 @@ public class PlayerManager {
         effect.setDuration(Integer.MAX_VALUE);
         effect.setAmplifier(10);
         player.addEffect(effect);
-
     }
 }

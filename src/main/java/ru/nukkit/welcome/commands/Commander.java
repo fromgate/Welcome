@@ -19,6 +19,7 @@ public class Commander {
     public static void init (PluginBase plg){
 		plugin = plg;
         addNewCommand(new CmdLgn());
+        addNewCommand(new CmdLogOff());
         addNewCommand(new CmdReg());
         addNewCommand(new CmdUnreg());
         addNewCommand(new CmdChangePwd());

@@ -120,23 +120,24 @@ public class PasswordDbLib implements Password {
         if (!prevUUID.equalsIgnoreCase(uuid)) return false;
         return prevIp.equalsIgnoreCase(ip);
     }
-
     public void updateAutoLogin(String playerName, String uuid, String ip) {
+        updateAutoLogin(playerName,uuid,ip,System.currentTimeMillis());
+    }
+
+    public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
         if (!enabled) return;
         if (playerName==null||playerName.isEmpty()) return;
-        long loginTime = System.currentTimeMillis();
         LastloginTable llt = null;
         try {
             llt = lastloginDao.queryForId(playerName);
             llt.setUuid(uuid);
             llt.setIp(ip);
-            llt.setTime(loginTime);
+            llt.setTime(currentTime);
             lastloginDao.update(llt);
         } catch (Exception e) {
         }
         if (llt==null) try {
-            lastloginDao.create(new LastloginTable(playerName,uuid,ip,loginTime));
+            lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));
         } catch (Exception e){}
     }
-
 }

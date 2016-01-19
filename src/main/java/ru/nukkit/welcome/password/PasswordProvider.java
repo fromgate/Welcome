@@ -96,4 +96,11 @@ public enum PasswordProvider {
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
         passworder.updateAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress());
     }
+
+    public static void removeAutologin(Player player) {
+        if (Welcome.getPlugin().isAutologinDisabled()) return;
+        if (!hasPassword(player)) return;
+        if (!PlayerManager.isPlayerLoggedIn(player)) return;
+        passworder.updateAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress(),0);
+    }
 }
