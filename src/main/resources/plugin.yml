@@ -7,10 +7,10 @@ softdepend: [DbLib]
 description: User authentication plugin
 permissions:
   welcome.login:
-    descripition: Allows to use commands /welcome login and /welcome logoff
+    descripition: Allows to use commands /login and /logoff
     default: true
   welcome.register:
-    description: Allows to use command /welcome register
+    description: Allows to use command /register
     default: true
   welcome.help:
     description: Allows to use command /welcome help
@@ -19,5 +19,5 @@ permissions:
     description: Allows to use command /welcome remove
     default: op
   welcome.unregister:
-    description: Allows to use command /welcome unregister
+    description: Allows to use command /unregister
     default: op
