@@ -1,7 +1,23 @@
 name: Welcome
 main: ru.nukkit.welcome.Welcome
-version: "0.0.4"
+version: "0.0.5"
 author: fromgate, nukkit.ru
 api: ["1.0.0"]
 softdepend: [DbLib]
 description: User authentication plugin
+permissions:
+  welcome.login:
+    descripition: Allows to use commands /welcome login and /welcome logoff
+    default: true
+  welcome.register:
+    description: Allows to use command /welcome register
+    default: true
+  welcome.help:
+    description: Allows to use command /welcome help
+    default: op
+  welcome.remove:
+    description: Allows to use command /welcome remove
+    default: op
+  welcome.unregister:
+    description: Allows to use command /welcome unregister
+    default: op
