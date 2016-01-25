@@ -11,7 +11,7 @@ public class CmdHelp extends Cmd{
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
         int pageNum = args.length>1&&args[1].matches("\\d+") ? Integer.parseInt(args[1]) : 1;
-        Commander.printHelp(player,pageNum);
+        Commander.printHelp(sender,pageNum);
         return true;
     }
 }

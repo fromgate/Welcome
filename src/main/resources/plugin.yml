@@ -12,6 +12,9 @@ permissions:
   welcome.register:
     description: Allows to use command /register
     default: true
+  welcome.changepassword:
+    description: Allows to use command /changepassword
+    default: true
   welcome.help:
     description: Allows to use command /welcome help
     default: op
