@@ -2,7 +2,7 @@ package ru.nukkit.welcome.players;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.entity.Effect;
+import cn.nukkit.potion.Effect;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.PasswordProvider;
 import ru.nukkit.welcome.password.PasswordValidator;
