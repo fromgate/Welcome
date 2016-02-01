@@ -74,16 +74,16 @@ public class PasswordYaml implements Password {
             if (f.exists()) f.delete();
             Config cfg = new Config (f,Config.YAML);
             for (String password : passwords.keySet())
-                cfg.setNested(password, passwords.get(password));
+                cfg.set(password, passwords.get(password));
             cfg.save();
             f = new File(dir, "lastlogin.yml");
             if (f.exists()) f.delete();
             cfg = new Config (f,Config.YAML);
             for (String key : this.logins.keySet()){
                 LoginState ls = this.logins.get(key);
-                cfg.setNested(key+".uuid",ls.uuid);
-                cfg.setNested(key+".ip",ls.ip);
-                cfg.setNested(key+".time",ls.time);
+                cfg.set(key+".uuid",ls.uuid);
+                cfg.set(key+".ip",ls.ip);
+                cfg.set(key+".time",ls.time);
             }
             cfg.save();
         } catch (Exception e){
@@ -100,7 +100,7 @@ public class PasswordYaml implements Password {
             Config cfg = new Config(f,Config.YAML);
             passwords = new HashMap<String, String>();
             for (String key : cfg.getAll().keySet()){
-                passwords.put(key, (String) cfg.getNested(key));
+                passwords.put(key, cfg.getString(key));
             }
             f = new File(dir, "lastlogin.yml");
             if (!f.exists()) f.createNewFile();
@@ -112,9 +112,9 @@ public class PasswordYaml implements Password {
                     String k = key.split(".")[0];
                     if (usedKeys.contains(k)) continue;
                     usedKeys.add(k);
-                    String uuid = (String) cfg.getNested(key+".uuid");
-                    String ip = (String) cfg.getNested(key+".uuid");
-                    long time = (Long) cfg.getNested(key+".time");
+                    String uuid = cfg.getString(key+".uuid");
+                    String ip = cfg.getString(key+".uuid");
+                    long time = cfg.getLong(key+".time");
                     this.logins.put(k,new LoginState(uuid,ip,time));
                 }
             }

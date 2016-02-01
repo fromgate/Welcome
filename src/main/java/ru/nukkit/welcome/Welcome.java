@@ -46,17 +46,17 @@ public class Welcome extends PluginBase {
         this.getDataFolder().mkdirs();
         this.saveResource("config.yml");
         this.reloadConfig();
-        this.hashMethod = this.getConfig().getNested("password.hash-algorithm", HashType.SHA256.name());
-        this.timeWaitLogin = this.getConfig().getNested("password.wait-time","3m");
-        this.passwordProvider = this.getConfig().getNested("database.provider",PasswordProvider.DATABASE.name());
-        this.autologinDisabled = this.getConfig().getNested("autologin.disable", false);
-        this.autoLoginMaxTime = this.getConfig().getNested("autologin.time", "15m");
-        this.validatorCapitalLetter = this.getConfig().getNested("validate-force-capitals",false);
-        this.validatorSpecialChar = this.getConfig().getNested("password.validator.force-specials",false);
-        this.validatorNumber = this.getConfig().getNested("password.validator.force-numbers",true);
-        this.validatorMinLength = this.getConfig().getNested("password.validator.min-length",6);
-        this.validatorMaxLength = this.getConfig().getNested("password.validator.max-length",16);
-        this.setBlindEffect = this.getConfig().getNested("before-login.blind-effect",true);
+        this.hashMethod = this.getConfig().getString("password.hash-algorithm", HashType.SHA256.name());
+        this.timeWaitLogin = this.getConfig().getString("password.wait-time","3m");
+        this.passwordProvider = this.getConfig().getString("database.provider",PasswordProvider.DATABASE.name());
+        this.autologinDisabled = this.getConfig().getBoolean("autologin.disable", false);
+        this.autoLoginMaxTime = this.getConfig().getString("autologin.time", "15m");
+        this.validatorCapitalLetter = this.getConfig().getBoolean("validate-force-capitals",false);
+        this.validatorSpecialChar = this.getConfig().getBoolean("password.validator.force-specials",false);
+        this.validatorNumber = this.getConfig().getBoolean("password.validator.force-numbers",true);
+        this.validatorMinLength = this.getConfig().getInt("password.validator.min-length",6);
+        this.validatorMaxLength = this.getConfig().getInt("password.validator.max-length",16);
+        this.setBlindEffect = this.getConfig().getBoolean("before-login.blind-effect",true);
     }
 
 
