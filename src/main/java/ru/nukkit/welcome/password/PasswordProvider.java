@@ -52,7 +52,7 @@ public enum PasswordProvider {
     }
 
     public static boolean checkPassword (Player player, String pwdStr){
-        return checkPassword(player.getName(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return checkPassword(player.getName().toLowerCase(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean setPassword (String playerName, String pwdStr){
@@ -60,7 +60,7 @@ public enum PasswordProvider {
     }
 
     public static boolean setPassword (Player player, String pwdStr){
-        return setPassword(player.getName(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return setPassword(player.getName().toLowerCase(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean hasPassword(String playerName) {
@@ -68,11 +68,11 @@ public enum PasswordProvider {
     }
 
     public static boolean hasPassword(Player player) {
-        return hasPassword(player.getName());
+        return hasPassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(Player player) {
-        return  removePassword(player.getName());
+        return  removePassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(String playerName) {
@@ -87,20 +87,20 @@ public enum PasswordProvider {
     public static boolean checkAutologin (Player player){
         if (!hasPassword(player)) return false;
         if (Welcome.getPlugin().isAutologinDisabled()) return false;
-        return passworder.checkAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress());
+        return passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
     }
 
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
         if (Welcome.getPlugin().isAutologinDisabled()) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress());
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
     }
 
     public static void removeAutologin(Player player) {
         if (Welcome.getPlugin().isAutologinDisabled()) return;
         if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName(), player.getUniqueId().toString(), player.getAddress(),0);
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),0);
     }
 }
