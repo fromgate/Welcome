@@ -60,7 +60,8 @@ public enum Message {
 	VLD_LETTERS("letters"),
 	VLD_SPEC_CHR("special chars"),
 	VLD_NUMBER("numbers"),
-    PWD_VALID_PATTERN("Password validator regex prepared: %1%");
+    PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
+	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4');
 
 	private static boolean debugMode = false;
 	private static String language = "english";
