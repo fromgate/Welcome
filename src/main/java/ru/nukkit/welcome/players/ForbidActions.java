@@ -24,6 +24,20 @@ public class ForbidActions implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         cancel(event.getPlayer(), event);
     }
+    
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onEntityDamage(EntityDamageEvent event) {
+        Entity player = event.getEntity();
+        if (player instanceof Player) {
+            cancel(((Player) player).getPlayer(), event);
+        }
+        if (event instanceof EntityDamageByEntityEvent) {
+            Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
+            if (damager instanceof Player) {
+                cancel((Player) event.getEntity(), event);
+            }
+        }
+    }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onSignChange(SignChangeEvent event) {
