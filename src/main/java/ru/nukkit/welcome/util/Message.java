@@ -21,12 +21,13 @@ public enum Message {
 	LNG_CONFIG ("[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%"),
 	WORD_UNKNOWN ("Unknown"),
 	PERMISSION_FAIL ("You have not enough permissions to execute this command",'c'),
-    PLAYER_COMMAD_ONLY ("You can use this command in-game only!",'c'),
-    CMD_REGISTERED("Command registered: %1%"),
+	PLAYER_COMMAD_ONLY ("You can use this command in-game only!",'c'),
+	CMD_REGISTERED("Command registered: %1%"),
 	CMD_REG_DESC("Register player on server"),
 	TYPE_LGN("Type /login <password> to login!",'6'),
 	TYPE_REG ("Type /register <password> <password> to login!",'6'),
 	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!",'c'),
+	TOO_MANY_ATTEMPTS("Too many login attempts!"),
 	LGN_ALREADY("You're already logged in!",'c'),
 	REG_ALREADY("You're already registerd!",'c'),
 	LGN_MISS_PWD("Missed password! Type /login <password>",'c'),
@@ -36,7 +37,7 @@ public enum Message {
 	REG_OK("You successfully registered! Welcome!"),
 	ERR_PWD_NOTMATCH("Entered passwords are not match!",'c'),
 	CMD_LGN_DESC("Login command"),
-    CMD_LGF_DESC("Logoff command"),
+	CMD_LGF_DESC("Logoff command"),
 	REG_LOG("Player %1% registered!"),
 	LGN_LOG("Player %1% logged-in!"),
 	UNREG_OK("You was removed from server. Next time you must register again!", 'c'),
@@ -60,7 +61,7 @@ public enum Message {
 	VLD_LETTERS("letters"),
 	VLD_SPEC_CHR("special chars"),
 	VLD_NUMBER("numbers"),
-    PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
+	PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
 	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4');
 
 	private static boolean debugMode = false;
