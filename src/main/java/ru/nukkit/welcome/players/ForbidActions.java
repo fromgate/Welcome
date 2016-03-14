@@ -1,6 +1,7 @@
 package ru.nukkit.welcome.players;
 
 import cn.nukkit.Player;
+import cn.nukkit.entity.Entity;
 import cn.nukkit.event.Cancellable;
 import cn.nukkit.event.EventHandler;
 import cn.nukkit.event.EventPriority;
@@ -8,6 +9,9 @@ import cn.nukkit.event.Listener;
 import cn.nukkit.event.block.BlockBreakEvent;
 import cn.nukkit.event.block.BlockPlaceEvent;
 import cn.nukkit.event.block.SignChangeEvent;
+import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
+import cn.nukkit.event.entity.EntityDamageByEntityEvent;
+import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.inventory.*;
 import cn.nukkit.event.player.*;
 import ru.nukkit.welcome.commands.Commander;
@@ -24,19 +28,19 @@ public class ForbidActions implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         cancel(event.getPlayer(), event);
     }
-    
+
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
-        Entity player = event.getEntity();
-        if (player instanceof Player) {
-            cancel(((Player) player).getPlayer(), event);
-        }
-        if (event instanceof EntityDamageByEntityEvent) {
+        Player player = null;
+        if (player instanceof Player) player = (Player) event.getEntity();
+        else if (event instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
-            if (damager instanceof Player) {
-                cancel((Player) event.getEntity(), event);
-            }
+            if (damager instanceof Player) player = (Player) damager;
+        } else if (event instanceof EntityDamageByChildEntityEvent) {
+            Entity damager = ((EntityDamageByChildEntityEvent) event).getDamager();
+            if (damager instanceof Player) player = (Player) damager;
         }
+        if (player!=null) cancel(player, event);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
@@ -173,6 +177,4 @@ public class ForbidActions implements Listener {
     private void cancel(Player player, Cancellable event) {
         if (!PlayerManager.isPlayerLoggedIn(player)) event.setCancelled();
     }
-
-
 }
