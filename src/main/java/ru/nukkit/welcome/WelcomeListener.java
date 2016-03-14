@@ -13,24 +13,23 @@ import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
 
 public class WelcomeListener implements Listener {
-    @EventHandler (ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onJoin (PlayerJoinEvent event){
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onJoin(PlayerJoinEvent event) {
         PlayerManager.enterServer(event.getPlayer());
     }
 
-    @EventHandler (ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onQuit (PlayerQuitEvent event){
-        PasswordProvider.updateAutologin (event.getPlayer());
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onQuit(PlayerQuitEvent event) {
+        PasswordProvider.updateAutologin(event.getPlayer());
     }
 
-    @EventHandler (ignoreCancelled = true,priority = EventPriority.NORMAL)
-    public void onPrelogin(PlayerPreLoginEvent event){
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    public void onPrelogin(PlayerPreLoginEvent event) {
         for (Player player : Server.getInstance().getOnlinePlayers().values()) {
             if (player.equals(event.getPlayer())) continue;
             if (player.getName().equalsIgnoreCase(event.getPlayer().getName())) {
-                event.setCancelled();
                 event.setKickMessage(Message.ALREADY_LOGGED_IN.getText(event.getPlayer().getName()));
-                return;
+                event.setCancelled();
             }
         }
     }
