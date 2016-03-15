@@ -30,6 +30,7 @@ public class WelcomeListener implements Listener {
             if (player.getName().equalsIgnoreCase(event.getPlayer().getName())) {
                 event.setKickMessage(Message.ALREADY_LOGGED_IN.getText(event.getPlayer().getName()));
                 event.setCancelled();
+                return;
             }
         }
     }

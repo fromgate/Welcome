@@ -32,7 +32,7 @@ public class ForbidActions implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onEntityDamage(EntityDamageEvent event) {
         Player player = null;
-        if (player instanceof Player) player = (Player) event.getEntity();
+        if (event.getEntity() instanceof Player) player = (Player) event.getEntity();
         else if (event instanceof EntityDamageByEntityEvent) {
             Entity damager = ((EntityDamageByEntityEvent) event).getDamager();
             if (damager instanceof Player) player = (Player) damager;
