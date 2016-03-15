@@ -21,6 +21,12 @@ password:
     force-numbers: true
     min-length: 6
     max-length: 16
+#Login settings
+login:
+  #Enable failed logins kick
+  enable-failed-logins-kick: true
+  #Max number of attempts
+  max-login-attempts: 5
 database:
 # Where to store you passwords
 # DATABASE - SQLite or MySQL database configured at DBLib plugin
