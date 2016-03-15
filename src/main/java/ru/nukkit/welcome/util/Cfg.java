@@ -39,6 +39,10 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path (value = "database.provider")
     public String passwordProvider = PasswordProvider.DATABASE.name();
 
+    //# Delay between reinitialization tries (on database connections lost)
+    @Path (value = "database.reinit-on-fail-time")
+    public String providerReinitTime = "30s";
+
     //# Remember user IP, UUID and Name. Next time (during the provided time limit)
     //# client with same parameters will be logged in automatically
     @Path (value = "autologin.disable")
@@ -89,6 +93,14 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
 
     public Long getWaitTime(){
         return TimeUtil.parseTime(timeWaitLogin);
+    }
+
+    public int getReinitTimeTicks(){
+        return TimeUtil.timeToTicks(TimeUtil.parseTime(providerReinitTime)).intValue();
+    }
+
+    public int getMessageRepeatTicks(){
+        return TimeUtil.timeToTicks(TimeUtil.parseTime(this.messageDelay)).intValue();
     }
 
 }

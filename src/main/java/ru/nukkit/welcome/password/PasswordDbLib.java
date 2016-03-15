@@ -45,7 +45,7 @@ public class PasswordDbLib implements Password {
     public boolean checkPassword(String playerName, String password) {
         if (!enabled) return false;
         if (playerName==null||playerName.isEmpty()) return false;
-        PasswordsTable pt = null;
+        PasswordsTable pt;
         try {
             pt = passDao.queryForId(playerName);
         } catch (Exception e) {
@@ -61,12 +61,11 @@ public class PasswordDbLib implements Password {
         if (playerName==null||playerName.isEmpty()) return false;
         if (password==null||password.isEmpty()) return false;
         PasswordsTable pt = new PasswordsTable (playerName,password);
-        if (pt!=null)
-            try {
-                passDao.create(pt);
-            } catch (Exception e) {
-                pt = null;
-            }
+        try {
+            passDao.create(pt);
+        } catch (Exception e) {
+            pt = null;
+        }
         if (pt == null) try {
             pt = passDao.queryForId(playerName);
             pt.setPassword(password);
@@ -94,8 +93,7 @@ public class PasswordDbLib implements Password {
         if (!enabled) return false;
         if (playerName==null||playerName.isEmpty()) return false;
         try {
-            PasswordsTable pt = null;
-            pt = passDao.queryForId(playerName);
+            PasswordsTable pt = passDao.queryForId(playerName);
             passDao.delete(pt);
         } catch (Exception e){
             PasswordProvider.setLock(playerName);
@@ -111,9 +109,8 @@ public class PasswordDbLib implements Password {
         String prevIp = "";
         String prevUUID = "";
         long prevTime=0;
-        LastloginTable llt = null;
         try {
-            llt = lastloginDao.queryForId(playerName);
+            LastloginTable llt = lastloginDao.queryForId(playerName);
             prevIp = llt.getIp();
             prevUUID = llt.getUuid();
             prevTime = llt.getTime();
@@ -139,11 +136,15 @@ public class PasswordDbLib implements Password {
             llt.setIp(ip);
             llt.setTime(currentTime);
             lastloginDao.update(llt);
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
         if (llt==null) try {
             lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));
-        } catch (Exception e){
+        } catch (Exception ignore){
         }
+    }
+
+    public void onDisable() {
+        if (connectionSource!=null) connectionSource.closeQuietly();
     }
 }

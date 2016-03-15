@@ -40,6 +40,9 @@ public class PasswordLock implements Password  {
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
     }
 
+    public void onDisable() {
+    }
+
     private void informPlayer(final String playerName){
         Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
             public void run() {

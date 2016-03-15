@@ -34,4 +34,9 @@ public class Welcome extends PluginBase {
         Commander.init(this);
     }
 
+    @Override
+    public void onDisable(){
+        PasswordProvider.onDisable();
+    }
+
 }

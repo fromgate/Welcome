@@ -65,6 +65,9 @@ public class PasswordYaml implements Password {
         save();
     }
 
+    public void onDisable() {
+    }
+
 
     private void save() {
         try {

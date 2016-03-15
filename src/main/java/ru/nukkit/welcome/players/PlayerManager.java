@@ -8,7 +8,6 @@ import ru.nukkit.welcome.password.PasswordProvider;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.util.LoginMeta;
 import ru.nukkit.welcome.util.Message;
-import ru.nukkit.welcome.util.TimeUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +57,7 @@ public class PlayerManager {
                 public void run() {
                     startWaitRegister(player);
                 }
-            }, TimeUtil.parseTime(Welcome.getCfg().messageDelay).intValue());
+            },Welcome.getCfg().getMessageRepeatTicks());
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
@@ -78,7 +77,7 @@ public class PlayerManager {
                 public void run() {
                     startWaitLogin(player);
                 }
-            }, TimeUtil.parseTime(Welcome.getCfg().messageDelay).intValue());
+            }, Welcome.getCfg().getMessageRepeatTicks());
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
@@ -160,6 +159,4 @@ public class PlayerManager {
         else message.print(player, params);
         return true;
     }
-
-
 }

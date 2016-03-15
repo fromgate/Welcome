@@ -3,7 +3,7 @@ package ru.nukkit.welcome.password;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.utils.TextFormat;
+import cn.nukkit.scheduler.TaskHandler;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
@@ -28,16 +28,14 @@ public enum PasswordProvider {
 
     private static Password passworder;
 
-
     public static void init(){
         PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
-        if (pp!=null) passworder = pp.getProvider();
-        if (pp==null||!passworder.isEnabled()) {
-            Welcome.getPlugin().getLogger().info("Failed to initialize: "+Welcome.getCfg().passwordProvider+". Check your database or configuration file. Server will be locked...");
+        passworder = pp==null ? null :  pp.getProvider();
+        if (passworder==null||!passworder.isEnabled()) {
             pp = PasswordProvider.LOCK;
-            passworder = PasswordProvider.LOCK.getProvider();
+            setLock(null);
         }
-        Welcome.getPlugin().getLogger().info(TextFormat.GREEN+"Password provider: "+pp.name()+" Hash algorithm: "+Welcome.getCfg().getHashAlgorithm());
+        Message.DB_INIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
     }
 
     public static PasswordProvider getByName(String pwdProv){
@@ -105,13 +103,36 @@ public enum PasswordProvider {
 
     public static void setLock(final String playerName){
         Message.LOCK_SET.log();
+        onDisable();
         passworder = PasswordProvider.LOCK.getProvider();
-        if (playerName == null||playerName.isEmpty()) return;
-        Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
+        if (playerName != null&&playerName.isEmpty())
+            Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
+                public void run() {
+                    Player player = Server.getInstance().getPlayerExact(playerName);
+                    if (player!=null) player.close("", Message.LOCK_INFORM.getText());
+                }
+            }, 1);
+        reInit();
+    }
+
+    private static TaskHandler task=null;
+    public static void reInit(){
+        if (task!=null) return;
+        Message.DB_RENIT_TRY.log();
+        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
+        Password pwd = (pp==null) ? null : pp.getProvider();
+        if (pwd != null&&pwd.isEnabled()){
+            passworder = pwd;
+            Message.DB_REINIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
+        } else task = Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable(){
             public void run() {
-                Player player = Server.getInstance().getPlayerExact(playerName);
-                if (player!=null) player.close("",Message.LOCK_INFORM.getText());
+                task = null;
+                reInit();
             }
-        },1);
+        }, Welcome.getCfg().getReinitTimeTicks());
+    }
+
+    public static void onDisable() {
+        if (passworder!=null) passworder.onDisable();
     }
 }

@@ -65,8 +65,12 @@ public enum Message {
 	VLD_NUMBER("numbers"),
 	PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
 	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4'),
-    LOCK_SET ("Server was locked according to internal errors. Please check your database connections and restart server."),
-    LOCK_INFORM("Server is locked. Please contact server admin",'c');
+    LOCK_SET ("Password provider failed. Please check your database connections.",'c'),
+    LOCK_INFORM("Server is locked. Please contact server admin",'c'),
+    DB_INIT ("Password provider: %1% Hash algorithm: %2%"),
+    DB_REINIT ("Password provider %1% successfully reinitialized"),
+    DB_RENIT_TRY("Trying to reinitialize password provider...",'c');
+
 
 	private static boolean debugMode = false;
 	private static String language = "english";
@@ -236,7 +240,7 @@ public enum Message {
 				if (fullFloat) s = loc.getLevel().getName()+"["+loc.getX()+", "+loc.getY()+", "+loc.getZ()+"]";
 				else s = loc.getLevel().getName()+"["+fmt.format(loc.getX())+", "+fmt.format(loc.getY())+", "+fmt.format(loc.getZ())+"]";
 			} else if (keys[i] instanceof Double || keys[i] instanceof Float) {
-				if (!fullFloat) s = fmt.format((Double) keys[i]);
+				if (!fullFloat) s = fmt.format(keys[i]);
 			}
 
 			String from = (new StringBuilder("%").append(count).append("%")).toString();
@@ -305,7 +309,7 @@ public enum Message {
 	private static void initMessages(){
 		copyLanguage();
 
-		Config lng = null;
+		Config lng;
 		try {
 			File f = new File (plugin.getDataFolder()+File.separator+language+".lng");
 			lng = new Config(f,Config.YAML);
@@ -315,7 +319,7 @@ public enum Message {
 			return;
 		}
 		for (Message key : Message.values())
-			key.initMessage((String) lng.get(key.name().toLowerCase(), key.message));
+			key.initMessage(lng.getString(key.name().toLowerCase(), key.message));
 	}
 
 	private static void saveMessages(){
@@ -328,7 +332,6 @@ public enum Message {
 		} catch (Exception e){
 			LNG_SAVE_FAIL.log();
 			if (debugMode) e.printStackTrace();
-			return;
 		}
 	}
 
