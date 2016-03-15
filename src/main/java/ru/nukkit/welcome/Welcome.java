@@ -6,18 +6,27 @@ import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.password.PasswordProvider;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.players.ForbidActions;
+import ru.nukkit.welcome.util.Cfg;
 import ru.nukkit.welcome.util.Message;
 import ru.nukkit.welcome.util.TimeUtil;
 
 public class Welcome extends PluginBase {
 
     private static Welcome instance;
-    private String passwordProvider;
+    private Cfg cfg = null;
+
+
+
 
     public static Welcome getPlugin() {
         return instance;
     }
+    public static Cfg getCfg(){
+        return getPlugin().cfg;
+    }
 
+    /*
+    private String passwordProvider;
     String timeWaitLogin;
     String hashMethod;
     boolean autologinDisabled;
@@ -27,25 +36,28 @@ public class Welcome extends PluginBase {
     boolean validatorNumber;
     int validatorMinLength;
     int validatorMaxLength;
+    */
 
     boolean setBlindEffect;
 
     @Override
     public void onEnable(){
         instance = this;
-        loadCfg();
+        cfg = new Cfg(this);
+        cfg.load();
         Message.init(this);
-        PasswordValidator.init(this.validatorSpecialChar,this.validatorCapitalLetter,this.validatorNumber, this.validatorMinLength, this.validatorMaxLength);
+        PasswordValidator.init(cfg.validatorSpecialChar,cfg.validatorCapitalLetter,cfg.validatorNumber, cfg.validatorMinLength, cfg.validatorMaxLength);
         PasswordProvider.init();
         this.getServer().getPluginManager().registerEvents(new WelcomeListener(),this);
         this.getServer().getPluginManager().registerEvents(new ForbidActions(), this);
         Commander.init(this);
     }
 
+    /*
     public void loadCfg(){
-        this.getDataFolder().mkdirs();
-        this.saveResource("config.yml");
-        this.reloadConfig();
+        if (cfg==null) cfg = new Cfg(this);
+        cfg.load();
+
         this.hashMethod = this.getConfig().getString("password.hash-algorithm", HashType.SHA256.name());
         this.timeWaitLogin = this.getConfig().getString("password.wait-time","3m");
         this.passwordProvider = this.getConfig().getString("database.provider",PasswordProvider.DATABASE.name());
@@ -57,26 +69,26 @@ public class Welcome extends PluginBase {
         this.validatorMinLength = this.getConfig().getInt("password.validator.min-length",6);
         this.validatorMaxLength = this.getConfig().getInt("password.validator.max-length",16);
         this.setBlindEffect = this.getConfig().getBoolean("before-login.blind-effect",true);
-    }
+    } */
 
 
     public HashType getHashAlgorithm() {
-        return HashType.getAlgorithm(this.hashMethod);
+        return HashType.getAlgorithm(cfg.hashMethod);
     }
     public String getPasswordProvider(){
-        return this.passwordProvider;
+        return cfg.passwordProvider;
     }
 
     public boolean isAutologinDisabled() {
-        return autologinDisabled;
+        return cfg.autologinDisabled;
     }
 
     public long getMaxAutoTime() {
-        return TimeUtil.parseTime(this.autoLoginMaxTime);
+        return TimeUtil.parseTime(cfg.autoLoginMaxTime);
     }
 
     public Long getWaitTime(){
-        return TimeUtil.parseTime(timeWaitLogin);
+        return TimeUtil.parseTime(cfg.timeWaitLogin);
     }
 
     public boolean useBlindEffect(){

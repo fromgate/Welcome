@@ -11,13 +11,14 @@ import ru.nukkit.welcome.util.Message;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.TreeMap;
 
 public class PlayerManager {
     private static Map<String, Long> waitLogin = new HashMap<String, Long>();
-    private static Map<Player, Integer> auth_attempts = new HashMap<Player, Integer>();
+    private static Map<String, Integer> authAttempts = new TreeMap<String, Integer>(String.CASE_INSENSITIVE_ORDER);
 
     public static void enterServer(Player player) {
+        if (authAttempts.containsKey(player.getName())) authAttempts.remove(player.getName());
         String playerName = player.getName();
         if (waitLogin.containsKey(playerName)) waitLogin.remove(playerName);
         if (player.hasMetadata("welcome-in-game")) player.removeMetadata("welcome-in-game", Welcome.getPlugin());
@@ -104,16 +105,15 @@ public class PlayerManager {
         if (password == null || password.isEmpty()) return Message.LGN_MISS_PWD.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
         if (!PasswordProvider.checkPassword(player, password)) {
-            if (Welcome.getPlugin().getConfig().getBoolean("login.enable-failed-logins-kick")) {
-                if (auth_attempts.get(player) != null) {
-                    auth_attempts.put(player, auth_attempts.get(player) + 1);
-                } else {
-                    auth_attempts.put(player, 1);
-                }
-                if (auth_attempts.get(player) >= Welcome.getPlugin().getConfig().getInt("login.max-login-attempts", 5)) {
-                    player.close("", Message.TOO_MANY_ATTEMPTS.getText('c'));
-                    auth_attempts.remove(player);
-                }
+            if (Welcome.getCfg().loginAtempts) {
+                String name = player.getName();
+                int attempt = authAttempts.containsKey(name) ? authAttempts.get(name) : 0;
+                attempt++;
+                if (authAttempts.get(name) >= Welcome.getCfg().loginAtemptsMax) {
+                    player.close("", Message.LGN_ATTEMPT_EXCEED.getText('c'));
+                    authAttempts.remove(name);
+                    return Message.LGN_ATTEMPT_EXCEED_LOG.log(name);
+                } else authAttempts.put(name,attempt);
             }
             return Message.ERR_PWD_WRONG.print(player);
         }
@@ -154,7 +154,5 @@ public class PlayerManager {
         player.addEffect(effect);
     }
 
-    public UUID getID(Player player) {
-        return null;
-    }
+
 }
