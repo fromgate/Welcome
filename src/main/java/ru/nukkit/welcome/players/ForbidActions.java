@@ -110,6 +110,11 @@ public class ForbidActions implements Listener {
         cancel(event.getPlayer(), event);
     }
 
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerToggleSneakEvent(PlayerToggleSneakEvent event) {
+        cancel(event.getPlayer(), event);
+    }
+
     private void cancel(Player player, Cancellable event) {
         if (!PlayerManager.isPlayerLoggedIn(player)) event.setCancelled();
     }
