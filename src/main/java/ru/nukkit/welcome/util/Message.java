@@ -7,6 +7,7 @@ import cn.nukkit.level.Location;
 import cn.nukkit.plugin.PluginBase;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.TextFormat;
+import ru.nukkit.welcome.Welcome;
 
 import java.io.*;
 import java.text.DecimalFormat;
@@ -24,8 +25,8 @@ public enum Message {
 	PLAYER_COMMAD_ONLY ("You can use this command in-game only!",'c'),
 	CMD_REGISTERED("Command registered: %1%"),
 	CMD_REG_DESC("Register player on server"),
-	TYPE_LGN("Type /login <password> to login!",'6'),
-	TYPE_REG ("Type /register <password> <password> to login!",'6'),
+	TYPE_LGN("Type /login <password> to login!"),
+	TYPE_REG ("Type /register <password> <password> to login!"),
 	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!",'c'),
 	LGN_ATTEMPT_EXCEED("Too many login attempts!",'c'),
 	LGN_ATTEMPT_EXCEED_LOG("Player %1% exceeded login attempts. Hacker?!"),
@@ -42,7 +43,7 @@ public enum Message {
 	REG_LOG("Player %1% registered!"),
 	LGN_LOG("Player %1% logged-in!"),
 	UNREG_OK("You was removed from server. Next time you must register again!", 'c'),
-	LOGOFF_OK("Logged off from server. Come back soon :)",'6'),
+	LOGOFF_OK("Logged off from server. Come back soon :)"),
 	CMD_UNREG_DESC("Unregister from server"),
 	CMD_RMV_DESC("Remove (unregister) provided player"),
 	RMV_NEED_PLAYER("Player name was not provided (/welcome remove <player>)"),
@@ -63,7 +64,9 @@ public enum Message {
 	VLD_SPEC_CHR("special chars"),
 	VLD_NUMBER("numbers"),
 	PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
-	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4');
+	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4'),
+    LOCK_SET ("Server was locked according to internal errors. Please check your database connections and restart server."),
+    LOCK_INFORM("Server is locked. Please contact server admin",'c');
 
 	private static boolean debugMode = false;
 	private static String language = "english";
@@ -279,11 +282,9 @@ public enum Message {
 	 */
 	public static void init(PluginBase plg){
 		plugin = plg;
-		language = plg.getConfig().getString("general.language","english");
-		plg.getConfig().set("general.language", language);
-		debugMode = plg.getConfig().getBoolean("general.debug-mode",false);
-		plg.getConfig().set("general.debug-mode",debugMode);
-		plg.saveConfig();
+		language = Welcome.getCfg().language;
+		debugMode = Welcome.getCfg().debugMode;
+
 		initMessages();
 		saveMessages();
 		LNG_CONFIG.debug(Message.values().length,language,true,debugMode);
@@ -352,4 +353,5 @@ public enum Message {
 		}
 		return sb.toString();
 	}
+
 }

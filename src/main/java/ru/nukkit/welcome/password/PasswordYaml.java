@@ -52,7 +52,7 @@ public class PasswordYaml implements Password {
         LoginState newLogin = new LoginState(uuid,ip,loginTime);
         if (!prevLogin.uuid.equalsIgnoreCase(newLogin.uuid)) return false;
         if (!prevLogin.ip.equalsIgnoreCase(newLogin.ip)) return false;
-        return (newLogin.time-prevLogin.time)<=Welcome.getPlugin().getMaxAutoTime();
+        return (newLogin.time-prevLogin.time)<=Welcome.getCfg().getMaxAutoTime();
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip) {
@@ -87,6 +87,7 @@ public class PasswordYaml implements Password {
             }
             cfg.save();
         } catch (Exception e){
+            PasswordProvider.setLock(null);
             e.printStackTrace();
         }
     }
@@ -119,6 +120,7 @@ public class PasswordYaml implements Password {
                 }
             }
         } catch (Exception e){
+            PasswordProvider.setLock(null);
             e.printStackTrace();
         }
     }
