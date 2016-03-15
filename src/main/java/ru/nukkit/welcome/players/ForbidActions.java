@@ -12,6 +12,8 @@ import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
+import cn.nukkit.event.inventory.InventoryPickupArrowEvent;
+import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.player.*;
 import ru.nukkit.welcome.commands.Commander;
 import ru.nukkit.welcome.util.Message;
@@ -40,6 +42,20 @@ public class ForbidActions implements Listener {
             if (damager instanceof Player) player = (Player) damager;
         }
         if (player != null) cancel(player, event);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onInventoryItemPickup(InventoryPickupItemEvent event) {
+        for (Player player : event.getViewers()) {
+            cancel(player, event);
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onInventoryArrowPickup(InventoryPickupArrowEvent event) {
+        for (Player player : event.getViewers()) {
+            cancel(player, event);
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
