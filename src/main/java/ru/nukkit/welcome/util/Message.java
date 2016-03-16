@@ -27,6 +27,7 @@ public enum Message {
 	CMD_REG_DESC("Register player on server"),
 	TYPE_LGN("Type /login <password> to login!"),
 	TYPE_REG ("Type /register <password> <password> to login!"),
+    TYPE_REG1 ("Type /register <password> to login!"),
 	KICK_TIMEOUT ("Time out! Next time type /login <password> to join the game!",'c'),
 	LGN_ATTEMPT_EXCEED("Too many login attempts!",'c'),
 	LGN_ATTEMPT_EXCEED_LOG("Player %1% exceeded login attempts. Hacker?!"),
@@ -65,12 +66,19 @@ public enum Message {
 	VLD_NUMBER("numbers"),
 	PWD_VALID_PATTERN("Password validator regex prepared: %1%"),
 	ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4'),
-    LOCK_SET ("Password provider failed. Please check your database connections.",'c'),
+    DB_LOCK("Password provider failed. Please check your database connections.",'c'),
+    DB_DBLIB_NOTFOUND("DbLib plugin not found. Please download it at: http://nukkit.ru/resources/dblib.14/"),
+    DB_DBLIB_FOUND("DbLib detected. You can enable database support, by setting \"database.provider: DATABASE\" in config.yml"),
     LOCK_INFORM("Server is locked. Please contact server admin",'c'),
     DB_INIT ("Password provider: %1% Hash algorithm: %2%"),
     DB_REINIT ("Password provider %1% successfully reinitialized"),
     DB_RENIT_TRY("Trying to reinitialize password provider...",'c'),
-	CFG_UPDATED("Config file updated. New variables added but we lost all comments...");
+	CFG_UPDATED("Config file updated. New variables added but we lost all comments..."),
+    REG_RESTRICED_IP("You cannot register again. Change back your player name and login.",'c'),
+    RELOAD_CMD_WARNING("Welcome plugin detected that command RELOAD was executed. Sorry, further plugin work cannot be guaranteed.",'c'),
+    JOIN_MSG_PRE ("Hello %1%! You must login to play here!",'e','6'),
+    JOIN_MSG_BC ("%1% joined the game!",'e','6');
+
 
 
 	private static boolean debugMode = false;

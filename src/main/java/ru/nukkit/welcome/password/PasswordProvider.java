@@ -36,6 +36,8 @@ public enum PasswordProvider {
             setLock(null);
         }
         Message.DB_INIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
+        if (pp==PasswordProvider.YAML&&Server.getInstance().getPluginManager().getPlugin("DbLib") != null)
+            Message.DB_DBLIB_FOUND.log();
     }
 
     public static PasswordProvider getByName(String pwdProv){
@@ -83,26 +85,28 @@ public enum PasswordProvider {
 
     public static boolean checkAutologin (Player player){
         if (!hasPassword(player)) return false;
-        if (Welcome.getCfg().autologinDisabled) return false;
+        if (!Welcome.getCfg().autologinEnable) return false;
         return passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
+    }
+
+    public static void updateAutologin(Player player, long time) {
+        if (!hasPassword(player)) return;
+        if (!PlayerManager.isPlayerLoggedIn(player)) return;
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),time);
     }
 
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
-        if (Welcome.getCfg().autologinDisabled) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),System.currentTimeMillis());
     }
 
-    public static void removeAutologin(Player player) {
-        if (Welcome.getCfg().autologinDisabled) return;
-        if (!hasPassword(player)) return;
-        if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),0);
+    public static void removeAutologin(String playerName) {
+        passworder.removeAutoLogin(playerName);
     }
 
     public static void setLock(final String playerName){
-        Message.LOCK_SET.log();
+        Message.DB_LOCK.log();
         onDisable();
         passworder = PasswordProvider.LOCK.getProvider();
         if (playerName != null&&playerName.isEmpty())
@@ -134,5 +138,12 @@ public enum PasswordProvider {
 
     public static void onDisable() {
         if (passworder!=null) passworder.onDisable();
+    }
+
+    public static boolean restrictedByIp(Player player) {
+        if (!Welcome.getCfg().registerRestrictions) return false;
+        Long lastLoginTime = passworder.lastLoginFromIp(player.getName(),player.getAddress());
+        if (lastLoginTime == null) return true;
+        return (System.currentTimeMillis()-lastLoginTime)<Welcome.getCfg().getRestrictIpTime();
     }
 }

@@ -25,6 +25,7 @@ public class PlayerManager {
         if (PasswordProvider.checkAutologin(player)) {
             setPlayerLoggedIn(player);
             tipOrPrint (player,Message.LGN_AUTO,'e', '6', player.getName());
+            Welcome.getCfg().broadcastLoginMessage(player);
             return;
         }
         setBlindEffect(player);
@@ -84,8 +85,13 @@ public class PlayerManager {
     public static boolean regCommand(Player player, String password1, String password2) {
         if (isPlayerRegistered(player)) return Message.REG_ALREADY.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
+        if (PasswordProvider.restrictedByIp(player)) {
+            player.close("",Message.REG_RESTRICED_IP.getText());
+            return true;
+        }
+        if (Welcome.getCfg().passwordConfirmation) password2 = password1;
         if (password1 == null || password1.isEmpty() || password2 == null || password2.isEmpty())
-            return Message.TYPE_REG.print(player, 'c');
+            return Welcome.getCfg().getTypeReg().print(player,'c');
         if (!password1.equals(password2)) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
         if (!PasswordValidator.validatePassword(password1)) {
             Message.ERR_PWD_VALIDATE.print(player, 'c');
@@ -93,12 +99,14 @@ public class PlayerManager {
             return true;
         }
         PasswordProvider.setPassword(player, password1);
+        clearBlindEffect(player);
         setPlayerLoggedIn(player);
         Message.REG_LOG.log(player.getName(), "NOCOLOR");
-        Message.REG_OK.print(player, '6');
+        if (Welcome.getCfg().useTips) Message.REG_OK.print(player, '6');
         PasswordProvider.updateAutologin(player);
-        clearBlindEffect(player);
-        return tipOrPrint (player,Message.REG_OK,'6');
+        tipOrPrint (player,Message.REG_OK,'6');
+        Welcome.getCfg().broadcastLoginMessage(player);
+        return true;
     }
 
     public static boolean loginCommand(Player player, String password) {
@@ -122,13 +130,15 @@ public class PlayerManager {
         Message.LGN_OK.print(player, '6');
         PasswordProvider.updateAutologin(player);
         clearBlindEffect(player);
-        return tipOrPrint (player, Message.LGN_OK, '6');
+        tipOrPrint (player, Message.LGN_OK, '6');
+        Welcome.getCfg().broadcastLoginMessage(player);
+        return true;
     }
 
     public static boolean logOff(Player player) {
         if (!isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
         setPlayerLoggedOff(player);
-        PasswordProvider.removeAutologin(player);
+        PasswordProvider.updateAutologin(player,0);
         return player.kick(Message.LOGOFF_OK.getText(), false);
     }
 

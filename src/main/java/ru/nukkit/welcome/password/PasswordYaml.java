@@ -45,6 +45,14 @@ public class PasswordYaml implements Password {
         return true;
     }
 
+    public Long lastLoginFromIp(String playerName, String ip) {
+        long time = 0;
+        for (LoginState ls : logins.values()){
+            if (ls.ip.equalsIgnoreCase(ip)&&ls.time>time) time = ls.time;
+        }
+        return time;
+    }
+
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         long loginTime = System.currentTimeMillis();
         LoginState prevLogin = this.logins.containsKey(playerName) ? this.logins.get(playerName) : null;
@@ -63,6 +71,11 @@ public class PasswordYaml implements Password {
         LoginState newLogin = new LoginState(uuid,ip,currentTime);
         logins.put(playerName,newLogin);
         save();
+    }
+
+    public boolean removeAutoLogin(String playerName) {
+        if (logins.containsKey(playerName)) logins.remove(playerName);
+        return true;
     }
 
     public void onDisable() {

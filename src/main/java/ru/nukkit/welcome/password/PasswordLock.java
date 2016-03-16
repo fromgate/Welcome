@@ -29,6 +29,10 @@ public class PasswordLock implements Password  {
         return false;
     }
 
+    public Long lastLoginFromIp(String playerNane, String ip) {
+        return null;
+    }
+
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         informPlayer (playerName);
         return false;
@@ -38,6 +42,10 @@ public class PasswordLock implements Password  {
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
+    }
+
+    public boolean removeAutoLogin(String playerName) {
+        return false;
     }
 
     public void onDisable() {

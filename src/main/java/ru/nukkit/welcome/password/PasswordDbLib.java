@@ -1,7 +1,6 @@
 package ru.nukkit.welcome.password;
 
 import cn.nukkit.Server;
-import cn.nukkit.utils.TextFormat;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.support.ConnectionSource;
@@ -10,6 +9,9 @@ import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.db.LastloginTable;
 import ru.nukkit.welcome.db.PasswordsTable;
+import ru.nukkit.welcome.util.Message;
+
+import java.util.List;
 
 public class PasswordDbLib implements Password {
 
@@ -22,7 +24,7 @@ public class PasswordDbLib implements Password {
     public PasswordDbLib(){
         enabled = false;
         if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null){
-            Welcome.getPlugin().getLogger().info(TextFormat.RED+"DbLib plugin not found");
+            Message.DB_DBLIB_NOTFOUND.log();
             return;
         }
         connectionSource = DbLib.getConnectionSource();
@@ -103,10 +105,20 @@ public class PasswordDbLib implements Password {
     }
 
 
-    public long lastLoginFromIp (String ip){
-        if (!enabled) return 0L;
-
-
+    public Long lastLoginFromIp (String playerName, String ip){
+        if (!enabled) return null; // Ошибка - регистрация запрещена
+        List<LastloginTable> result;
+        try {
+            result = lastloginDao.queryBuilder().where().eq("ip",ip).query();
+        } catch (Exception e){
+            PasswordProvider.setLock(null);
+            return null; // Ошибка - регистрация запрещена
+        }
+        long time = 0;
+        for (LastloginTable row : result){
+            if (row.getTime()>time) time=row.getTime();
+        }
+        return time;
     }
 
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
@@ -143,12 +155,26 @@ public class PasswordDbLib implements Password {
             llt.setIp(ip);
             llt.setTime(currentTime);
             lastloginDao.update(llt);
-        } catch (Exception ignore) {
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         if (llt==null) try {
             lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));
         } catch (Exception ignore){
         }
+    }
+
+    public boolean removeAutoLogin(String playerName) {
+        if (!enabled) return false;
+        if (playerName==null||playerName.isEmpty()) return false;
+        try {
+            LastloginTable pt = lastloginDao.queryForId(playerName);
+            lastloginDao.delete(pt);
+        } catch (Exception e){
+            PasswordProvider.setLock(playerName);
+            return false;
+        }
+        return true;
     }
 
     public void onDisable() {
