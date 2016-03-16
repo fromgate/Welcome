@@ -122,7 +122,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
             return;
         }
         Config cfg = new Config(file,Config.YAML);
-        if (cfg.get("login-attempts.max-attempts-allowed")==null) {
+        if (cfg.get("before-login.block-chat")==null) {
             save();
             Message.CFG_UPDATED.log();
         }

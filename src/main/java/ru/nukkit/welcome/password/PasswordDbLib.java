@@ -102,6 +102,13 @@ public class PasswordDbLib implements Password {
         return  true;
     }
 
+
+    public long lastLoginFromIp (String ip){
+        if (!enabled) return 0L;
+
+
+    }
+
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         if (!enabled) return false;
         long loginTime = System.currentTimeMillis();

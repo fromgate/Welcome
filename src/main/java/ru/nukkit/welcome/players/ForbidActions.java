@@ -66,11 +66,6 @@ public class ForbidActions implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
-        if (!PlayerManager.isPlayerLoggedIn(event.getPlayer())) event.setCancelled();
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerGameModeChangeEvent(PlayerGameModeChangeEvent event) {
         cancel(event.getPlayer(), event);
     }

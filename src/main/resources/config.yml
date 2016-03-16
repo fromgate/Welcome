@@ -50,9 +50,11 @@ autologin:
   time: 15m
 
 # Debuff effects for not-loged users
-# Blind effect if user is not logged-in
 before-login:
+# Blind effect if user is not logged-in
   blind-effect: true
+# Block ability to type chat messages
+  block-chat: true
 
 # Message configuration
 message:
