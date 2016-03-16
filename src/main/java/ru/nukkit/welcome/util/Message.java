@@ -365,5 +365,4 @@ public enum Message {
 		}
 		return sb.toString();
 	}
-
 }
