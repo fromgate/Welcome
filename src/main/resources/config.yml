@@ -38,7 +38,7 @@ database:
 # Where to store you passwords
 # DATABASE - SQLite or MySQL database configured at DBLib plugin
 # YAML - in yaml files
-  provider: DATABASE
+  provider: YAML
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts
   reinit-on-fail-time: 30s
