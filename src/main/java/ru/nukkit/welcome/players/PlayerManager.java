@@ -24,7 +24,7 @@ public class PlayerManager {
         if (player.hasMetadata("welcome-in-game")) player.removeMetadata("welcome-in-game", Welcome.getPlugin());
         if (PasswordProvider.checkAutologin(player)) {
             setPlayerLoggedIn(player);
-            Message.LGN_AUTO.tip(5, player, 'e', '6', player.getName());
+            tipOrPrint (player,Message.LGN_AUTO,'e', '6', player.getName());
             return;
         }
         setBlindEffect(player);
@@ -50,14 +50,14 @@ public class PlayerManager {
         if (isPlayerRegistered(player)) return;
         String name = player.getName();
         if (!waitLogin.containsKey(name))
-            waitLogin.put(name, System.currentTimeMillis() + Welcome.getPlugin().getWaitTime());
+            waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            Message.TYPE_REG.tip(5, player);
+            tipOrPrint (player,Message.TYPE_REG);
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitRegister(player);
                 }
-            }, 200);
+            },Welcome.getCfg().getMessageRepeatTicks());
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
@@ -70,14 +70,14 @@ public class PlayerManager {
         if (isPlayerLoggedIn(player)) return;
         String name = player.getName();
         if (!waitLogin.containsKey(name))
-            waitLogin.put(name, System.currentTimeMillis() + Welcome.getPlugin().getWaitTime()); //3 минуты - это всё потом в конфиг!
+            waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime()); //3 минуты - это всё потом в конфиг!
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            Message.TYPE_LGN.tip(5, player);
+            tipOrPrint (player,Message.TYPE_LGN);
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitLogin(player);
                 }
-            }, 200);
+            }, Welcome.getCfg().getMessageRepeatTicks());
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
@@ -98,7 +98,7 @@ public class PlayerManager {
         Message.REG_OK.print(player, '6');
         PasswordProvider.updateAutologin(player);
         clearBlindEffect(player);
-        return Message.REG_OK.tip(5, player, '6');
+        return tipOrPrint (player,Message.REG_OK,'6');
     }
 
     public static boolean loginCommand(Player player, String password) {
@@ -122,7 +122,7 @@ public class PlayerManager {
         Message.LGN_OK.print(player, '6');
         PasswordProvider.updateAutologin(player);
         clearBlindEffect(player);
-        return Message.LGN_OK.tip(5, player, '6');
+        return tipOrPrint (player, Message.LGN_OK, '6');
     }
 
     public static boolean logOff(Player player) {
@@ -140,13 +140,13 @@ public class PlayerManager {
     }
 
     private static void clearBlindEffect(Player player) {
-        if (!Welcome.getPlugin().useBlindEffect()) return;
+        if (!Welcome.getCfg().setBlindEffect) return;
         if (player.hasEffect(Effect.BLINDNESS))
             player.removeEffect(Effect.BLINDNESS);
     }
 
     private static void setBlindEffect(Player player) {
-        if (!Welcome.getPlugin().useBlindEffect()) return;
+        if (!Welcome.getCfg().setBlindEffect) return;
         Effect effect = Effect.getEffect(Effect.BLINDNESS);
         effect.setAmbient(false);
         effect.setDuration(Integer.MAX_VALUE);
@@ -154,5 +154,9 @@ public class PlayerManager {
         player.addEffect(effect);
     }
 
-
+    private static boolean tipOrPrint (Player player, Message message, Object... params){
+        if (Welcome.getCfg().useTips) message.tip(5, player, params);
+        else message.print(player, params);
+        return true;
+    }
 }

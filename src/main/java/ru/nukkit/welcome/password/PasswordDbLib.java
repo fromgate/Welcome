@@ -45,10 +45,11 @@ public class PasswordDbLib implements Password {
     public boolean checkPassword(String playerName, String password) {
         if (!enabled) return false;
         if (playerName==null||playerName.isEmpty()) return false;
-        PasswordsTable pt = null;
+        PasswordsTable pt;
         try {
             pt = passDao.queryForId(playerName);
         } catch (Exception e) {
+            PasswordProvider.setLock(playerName);
             return false;
         }
         if (pt.getPassword()==null) return false;
@@ -60,17 +61,17 @@ public class PasswordDbLib implements Password {
         if (playerName==null||playerName.isEmpty()) return false;
         if (password==null||password.isEmpty()) return false;
         PasswordsTable pt = new PasswordsTable (playerName,password);
-        if (pt!=null)
-            try {
-                passDao.create(pt);
-            } catch (Exception e) {
-                pt = null;
-            }
+        try {
+            passDao.create(pt);
+        } catch (Exception e) {
+            pt = null;
+        }
         if (pt == null) try {
             pt = passDao.queryForId(playerName);
             pt.setPassword(password);
             passDao.update(pt);
         } catch (Exception e) {
+            PasswordProvider.setLock(playerName);
             return false;
         }
         return true;
@@ -82,6 +83,7 @@ public class PasswordDbLib implements Password {
         try {
             return passDao.idExists(playerName);
         } catch (Exception e) {
+            PasswordProvider.setLock(playerName);
         }
         return  false;
 
@@ -91,13 +93,20 @@ public class PasswordDbLib implements Password {
         if (!enabled) return false;
         if (playerName==null||playerName.isEmpty()) return false;
         try {
-            PasswordsTable pt = null;
-            pt = passDao.queryForId(playerName);
+            PasswordsTable pt = passDao.queryForId(playerName);
             passDao.delete(pt);
         } catch (Exception e){
+            PasswordProvider.setLock(playerName);
             return false;
         }
         return  true;
+    }
+
+
+    public long lastLoginFromIp (String ip){
+        if (!enabled) return 0L;
+
+
     }
 
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
@@ -107,15 +116,15 @@ public class PasswordDbLib implements Password {
         String prevIp = "";
         String prevUUID = "";
         long prevTime=0;
-        LastloginTable llt = null;
         try {
-            llt = lastloginDao.queryForId(playerName);
+            LastloginTable llt = lastloginDao.queryForId(playerName);
             prevIp = llt.getIp();
             prevUUID = llt.getUuid();
             prevTime = llt.getTime();
         } catch (Exception e) {
+            PasswordProvider.setLock(playerName);
         }
-        if (loginTime-prevTime>Welcome.getPlugin().getMaxAutoTime()) return false;
+        if (loginTime-prevTime>Welcome.getCfg().getMaxAutoTime()) return false;
         if (prevIp.isEmpty()||prevUUID.isEmpty()) return false;
         if (!prevUUID.equalsIgnoreCase(uuid)) return false;
         return prevIp.equalsIgnoreCase(ip);
@@ -134,10 +143,15 @@ public class PasswordDbLib implements Password {
             llt.setIp(ip);
             llt.setTime(currentTime);
             lastloginDao.update(llt);
-        } catch (Exception e) {
+        } catch (Exception ignore) {
         }
         if (llt==null) try {
             lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));
-        } catch (Exception e){}
+        } catch (Exception ignore){
+        }
+    }
+
+    public void onDisable() {
+        if (connectionSource!=null) connectionSource.closeQuietly();
     }
 }

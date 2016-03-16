@@ -2,13 +2,16 @@ package ru.nukkit.welcome.password;
 
 
 import cn.nukkit.Player;
-import cn.nukkit.utils.TextFormat;
+import cn.nukkit.Server;
+import cn.nukkit.scheduler.TaskHandler;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.players.PlayerManager;
+import ru.nukkit.welcome.util.Message;
 
 public enum PasswordProvider {
     YAML (PasswordYaml.class),
-    DATABASE (PasswordDbLib.class);
+    DATABASE (PasswordDbLib.class),
+    LOCK (PasswordLock.class);
 
     Class<? extends  Password> clazz;
     PasswordProvider(Class<? extends Password> clazz) {
@@ -25,20 +28,14 @@ public enum PasswordProvider {
 
     private static Password passworder;
 
-
     public static void init(){
-        PasswordProvider pp = getByName(Welcome.getPlugin().getPasswordProvider());
-        if (pp == null){
-            pp = PasswordProvider.YAML;
-            Welcome.getPlugin().getLogger().info("Failed to determine password provider: "+Welcome.getPlugin().getPasswordProvider()+" YAML will be used...");
+        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
+        passworder = pp==null ? null :  pp.getProvider();
+        if (passworder==null||!passworder.isEnabled()) {
+            pp = PasswordProvider.LOCK;
+            setLock(null);
         }
-        passworder = pp.getProvider();
-        if (!passworder.isEnabled()) {
-            Welcome.getPlugin().getLogger().info("Failed to initialize: "+Welcome.getPlugin().getPasswordProvider()+" YAML will be used...");
-            pp = PasswordProvider.YAML;
-            passworder = PasswordProvider.YAML.getProvider();
-        }
-        Welcome.getPlugin().getLogger().info(TextFormat.GREEN+"Password provider: "+pp.name()+" Hash algorithm: "+Welcome.getPlugin().getHashAlgorithm().name());
+        Message.DB_INIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
     }
 
     public static PasswordProvider getByName(String pwdProv){
@@ -48,19 +45,19 @@ public enum PasswordProvider {
     }
 
     public static boolean checkPassword (String playerName, String pwdStr){
-        return passworder.checkPassword(playerName,Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return passworder.checkPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean checkPassword (Player player, String pwdStr){
-        return checkPassword(player.getName().toLowerCase(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return checkPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean setPassword (String playerName, String pwdStr){
-        return passworder.setPassword(playerName,Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return passworder.setPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean setPassword (Player player, String pwdStr){
-        return setPassword(player.getName().toLowerCase(),Welcome.getPlugin().getHashAlgorithm().getHash(pwdStr));
+        return setPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
     }
 
     public static boolean hasPassword(String playerName) {
@@ -80,27 +77,62 @@ public enum PasswordProvider {
     }
 
     public static String hashPassword (String password){
-        return Welcome.getPlugin().getHashAlgorithm().getHash(password);
+        return Welcome.getCfg().getHashAlgorithm().getHash(password);
     }
 
 
     public static boolean checkAutologin (Player player){
         if (!hasPassword(player)) return false;
-        if (Welcome.getPlugin().isAutologinDisabled()) return false;
+        if (Welcome.getCfg().autologinDisabled) return false;
         return passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
     }
 
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
-        if (Welcome.getPlugin().isAutologinDisabled()) return;
+        if (Welcome.getCfg().autologinDisabled) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
         passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
     }
 
     public static void removeAutologin(Player player) {
-        if (Welcome.getPlugin().isAutologinDisabled()) return;
+        if (Welcome.getCfg().autologinDisabled) return;
         if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
         passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),0);
+    }
+
+    public static void setLock(final String playerName){
+        Message.LOCK_SET.log();
+        onDisable();
+        passworder = PasswordProvider.LOCK.getProvider();
+        if (playerName != null&&playerName.isEmpty())
+            Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
+                public void run() {
+                    Player player = Server.getInstance().getPlayerExact(playerName);
+                    if (player!=null) player.close("", Message.LOCK_INFORM.getText());
+                }
+            }, 1);
+        reInit();
+    }
+
+    private static TaskHandler task=null;
+    public static void reInit(){
+        if (task!=null) return;
+        Message.DB_RENIT_TRY.log();
+        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
+        Password pwd = (pp==null) ? null : pp.getProvider();
+        if (pwd != null&&pwd.isEnabled()){
+            passworder = pwd;
+            Message.DB_REINIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
+        } else task = Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable(){
+            public void run() {
+                task = null;
+                reInit();
+            }
+        }, Welcome.getCfg().getReinitTimeTicks());
+    }
+
+    public static void onDisable() {
+        if (passworder!=null) passworder.onDisable();
     }
 }
