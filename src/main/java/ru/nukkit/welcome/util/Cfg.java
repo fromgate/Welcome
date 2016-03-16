@@ -1,8 +1,13 @@
 package ru.nukkit.welcome.util;
 
 import cn.nukkit.plugin.Plugin;
+import cn.nukkit.utils.Config;
+import cn.nukkit.utils.SimpleConfig;
 import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.password.PasswordProvider;
+
+import java.io.File;
+import java.lang.reflect.Field;
 
 public class Cfg extends cn.nukkit.utils.SimpleConfig {
     public Cfg(Plugin plugin) {
@@ -81,6 +86,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path (value = "before-login.blind-effect")
     public boolean setBlindEffect = true;
 
+    @Path (value = "before-login.block-chat")
+    public boolean blockChat = true;
+
 
     /////////////////////////////////////////////////////////////////////////////////
     public HashType getHashAlgorithm() {
@@ -101,6 +109,23 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
 
     public int getMessageRepeatTicks(){
         return TimeUtil.timeToTicks(TimeUtil.parseTime(this.messageDelay)).intValue();
+    }
+
+    public void update(){
+        File file;
+        try {
+            Field field = SimpleConfig.class.getDeclaredField("configFile");
+            field.setAccessible(true);
+            file = (File) field.get((SimpleConfig) this);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return;
+        }
+        Config cfg = new Config(file,Config.YAML);
+        if (cfg.get("login-attempts.max-attempts-allowed")==null) {
+            save();
+            Message.CFG_UPDATED.log();
+        }
     }
 
 }

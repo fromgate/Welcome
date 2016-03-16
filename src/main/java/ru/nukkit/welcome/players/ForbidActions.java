@@ -12,9 +12,11 @@ import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
+import cn.nukkit.event.inventory.InventoryOpenEvent;
 import cn.nukkit.event.inventory.InventoryPickupArrowEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.player.*;
+import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.commands.Commander;
 import ru.nukkit.welcome.util.Message;
 
@@ -59,6 +61,21 @@ public class ForbidActions implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onInventoryOpenEvent(InventoryOpenEvent event) {
+        cancel(event.getPlayer(), event);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerBedLeaveEvent(PlayerBedLeaveEvent event) {
+        if (!PlayerManager.isPlayerLoggedIn(event.getPlayer())) event.setCancelled();
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onPlayerGameModeChangeEvent(PlayerGameModeChangeEvent event) {
+        cancel(event.getPlayer(), event);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onCraftItemEvent(CraftItemEvent event) {
         cancel(event.getPlayer(), event);
     }
@@ -70,13 +87,11 @@ public class ForbidActions implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerChatEvent(PlayerChatEvent event) {
-        cancel(event.getPlayer(), event);
-        if (event.isCancelled()) Message.debugMessage("PlayerChatEvent is cancelled:", event.getMessage());
+        if (Welcome.getCfg().blockChat) cancel(event.getPlayer(), event);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
-        Message.debugMessage("PlayerManager.isPlayerLoggedIn(event.getPlayer()) : " + PlayerManager.isPlayerLoggedIn(event.getPlayer()));
         if (PlayerManager.isPlayerLoggedIn(event.getPlayer())) return;
         String cmd = Commander.getCommandByAlias(event.getMessage().substring(1).split(" ")[0]);
         Message.debugMessage("cmd: " + (cmd == null ? "null" : cmd));

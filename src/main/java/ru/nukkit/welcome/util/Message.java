@@ -69,7 +69,8 @@ public enum Message {
     LOCK_INFORM("Server is locked. Please contact server admin",'c'),
     DB_INIT ("Password provider: %1% Hash algorithm: %2%"),
     DB_REINIT ("Password provider %1% successfully reinitialized"),
-    DB_RENIT_TRY("Trying to reinitialize password provider...",'c');
+    DB_RENIT_TRY("Trying to reinitialize password provider...",'c'),
+	CFG_UPDATED("Config file updated. New variables added but we lost all comments...");
 
 
 	private static boolean debugMode = false;

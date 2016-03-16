@@ -1,11 +1,14 @@
 # Welcome
-# plugin for Nukkit
+#
+# Authorization plugin for Nukkit
 # created by fromgate
 # http://nukkit.ru/resources/welcome.17/
+#
 #
 general:
 # Plugin language. Supported: english, russian
   language: english
+
 # Enable/Disable debug messages. Don't touch this ;)
   debug-mode: false
 password:
@@ -14,6 +17,7 @@ password:
 # Time to wait until user login.
 # If time passed - user will be kicked out from the server
   wait-time: 3m
+
 # Password validator options
   validator:
     force-capitals: false
@@ -21,23 +25,43 @@ password:
     force-numbers: true
     min-length: 6
     max-length: 16
+
 #Login settings
 login:
-  #Enable failed logins kick
+#Enable failed logins kick
   enable-failed-logins-kick: true
-  #Max number of attempts
+#Max number of attempts
   max-login-attempts: 5
+
+# Database configuration
 database:
 # Where to store you passwords
 # DATABASE - SQLite or MySQL database configured at DBLib plugin
 # YAML - in yaml files
   provider: DATABASE
-autologin:
-# Remember user IP, UUID and Name. Next time (during the provide time limit)
+# If database connection failed, it will be reinitilized
+# Time between reinitialization attempts
+  reinit-on-fail-time: 30s
+
+# Store user IP, UUID and Name. Next time (during the provide time limit)
 # client with same parameters will be logged in automatically
+autologin:
   disable: true
   time: 15m
+
 # Debuff effects for not-loged users
+# Blind effect if user is not logged-in
 before-login:
-# Blinde effect if user is not logged-in
   blind-effect: true
+
+# Message configuration
+message:
+# Use tips (true) or simple text messages
+  allow-tips: true
+# Delay between repeated message
+  delay-between-repeats: 10s
+
+# Prevent password brute: kick player if exceed max allowed attempts counter
+login-attempts:
+  kick-on-exceed: true
+  max-attempts-allowed: 5

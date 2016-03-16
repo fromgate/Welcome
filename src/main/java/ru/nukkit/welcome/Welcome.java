@@ -25,8 +25,8 @@ public class Welcome extends PluginBase {
         instance = this;
         cfg = new Cfg(this);
         cfg.load();
-        cfg.save();
         Message.init(this);
+        cfg.update();
         PasswordValidator.init(cfg.validatorSpecialChar,cfg.validatorCapitalLetter,cfg.validatorNumber, cfg.validatorMinLength, cfg.validatorMaxLength);
         PasswordProvider.init();
         this.getServer().getPluginManager().registerEvents(new WelcomeListener(),this);
