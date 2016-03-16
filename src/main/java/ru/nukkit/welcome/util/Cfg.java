@@ -45,7 +45,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     //# DATABASE - SQLite or MySQL database configured at DBLib plugin
     //# YAML - in yaml files
     @Path (value = "database.provider")
-    public String passwordProvider = PasswordProvider.DATABASE.name();
+    public String passwordProvider = PasswordProvider.YAML.name();
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path (value = "database.reinit-on-fail-time")
