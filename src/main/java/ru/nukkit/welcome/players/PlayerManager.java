@@ -117,7 +117,7 @@ public class PlayerManager {
                 String name = player.getName();
                 int attempt = authAttempts.containsKey(name) ? authAttempts.get(name) : 0;
                 attempt++;
-                if (authAttempts.get(name) >= Welcome.getCfg().loginAtemptsMax) {
+                if (attempt >= Welcome.getCfg().loginAtemptsMax) {
                     player.close("", Message.LGN_ATTEMPT_EXCEED.getText('c'));
                     authAttempts.remove(name);
                     return Message.LGN_ATTEMPT_EXCEED_LOG.log(name);

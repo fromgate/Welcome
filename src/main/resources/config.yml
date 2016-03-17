@@ -6,8 +6,10 @@
 #
 #
 general:
-# Plugin language. Supported: english, russian
-  language: english
+# Plugin language.
+# Supported: eng, rus
+# Set to default to get nukkit server settings
+  language: default
 # Enable/Disable debug messages. Don't touch this ;)
   debug-mode: false
 

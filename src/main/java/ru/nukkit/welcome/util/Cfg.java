@@ -18,9 +18,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
         plugin.saveResource("config.yml");
     }
 
-    //# Plugin language. Supported: english, russian
+    //# Plugin language. Supported: default, eng, rus
     @Path (value = "general.language")
-    public String language = "english";
+    public String language = "default";
 
     //# Enable/Disable debug messages. Don't touch this ;)
     @Path (value = "general.debug-mode")
