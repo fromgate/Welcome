@@ -27,3 +27,6 @@ permissions:
   welcome.create:
     description: Allows to use command /welcome create
     default: op
+  welcome.changepassword.other:
+    description: Allows to use command /welcome setpassword
+    default: op
