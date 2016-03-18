@@ -14,3 +14,6 @@
 
 ## Database support
 Welcome plugin can store data in YAML-files and in MySQL or SQLite database. Database support provided by plugin [DbLib](http://nukkit.ru/resources/dblib.14/).
+
+## Welcome translation
+I need help with translating Welcome plugin. You can feel free to made a pull request or you can join to [**translation project at crowdin**](https://crowdin.com/project/welcome/invite).
