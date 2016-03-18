@@ -3,9 +3,7 @@ package ru.nukkit.welcome.password;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
-import cn.nukkit.network.protocol.TelemetryEventPacket;
 import cn.nukkit.scheduler.TaskHandler;
-import cn.nukkit.utils.TextFormat;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
