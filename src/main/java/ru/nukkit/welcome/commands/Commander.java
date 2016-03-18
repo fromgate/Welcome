@@ -23,8 +23,10 @@ public class Commander {
         addNewCommand(new CmdReg());
         addNewCommand(new CmdUnreg());
         addNewCommand(new CmdChangePwd());
-        addNewCommand(new CmdRemove(),Message.CMD_WLC_DESC);
-        addNewCommand(new CmdHelp());
+        addNewCommand(new CmdWelRemove(),Message.CMD_WLC_DESC);
+        addNewCommand(new CmdWelCreate());
+        addNewCommand(new CmdWelCpw());
+        addNewCommand(new CmdWelHelp());
 	}
 
 	public static PluginBase getPlugin(){

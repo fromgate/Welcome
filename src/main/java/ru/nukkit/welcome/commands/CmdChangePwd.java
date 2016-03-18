@@ -11,7 +11,6 @@ public class CmdChangePwd extends Cmd{
     //changepwd <old> <new> <new>
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
-        if (player == null) return false;
         if (args.length<3) return Message.CPW_USAGE.print(player,'c');
         if (!PlayerManager.isPlayerLoggedIn(player))  return Message.ERR_NOT_LOGGED.print(player);
         if (!PasswordProvider.checkPassword(player,args[0])) return Message.ERR_PWD_WRONG.print(player);

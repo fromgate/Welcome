@@ -141,9 +141,6 @@ public class PasswordDbLib implements Password {
         if (!prevUUID.equalsIgnoreCase(uuid)) return false;
         return prevIp.equalsIgnoreCase(ip);
     }
-    public void updateAutoLogin(String playerName, String uuid, String ip) {
-        updateAutoLogin(playerName,uuid,ip,System.currentTimeMillis());
-    }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
         if (!enabled) return;

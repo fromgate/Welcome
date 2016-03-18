@@ -98,7 +98,7 @@ public enum PasswordProvider {
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),System.currentTimeMillis());
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),Welcome.getCfg().autologinEnable ? System.currentTimeMillis() : 0);
     }
 
     public static void removeAutologin(String playerName) {
