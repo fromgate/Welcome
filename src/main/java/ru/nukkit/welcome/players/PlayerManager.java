@@ -137,8 +137,8 @@ public class PlayerManager {
 
     public static boolean logOff(Player player) {
         if (!isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
-        setPlayerLoggedOff(player);
         PasswordProvider.updateAutologin(player,0);
+        setPlayerLoggedOff(player);
         return player.kick(Message.LOGOFF_OK.getText(), false);
     }
 

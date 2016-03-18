@@ -3,7 +3,9 @@ package ru.nukkit.welcome.password;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import cn.nukkit.network.protocol.TelemetryEventPacket;
 import cn.nukkit.scheduler.TaskHandler;
+import cn.nukkit.utils.TextFormat;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
@@ -98,7 +100,7 @@ public enum PasswordProvider {
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),Welcome.getCfg().autologinEnable ? System.currentTimeMillis() : 0);
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),System.currentTimeMillis());
     }
 
     public static void removeAutologin(String playerName) {
