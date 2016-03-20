@@ -101,6 +101,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path (value = "before-login.block-chat")
     public boolean blockChat = true;
 
+    @Path (value = "before-login.block-item-pickup")
+    public boolean blockPickup = true;
+
     @Path (value = "register.password-confirmation")
     public boolean passwordConfirmation = true;
 
@@ -162,7 +165,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
             return;
         }
         Config cfg = new Config(file,Config.YAML);
-        if (cfg.get("register.ip-restriction.time")==null) {
+        if (cfg.get("before-login.block-item-pickup")==null) {
             save();
             Message.CFG_UPDATED.log();
         }

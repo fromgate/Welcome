@@ -31,7 +31,7 @@ public enum Message {
     LGN_ATTEMPT_EXCEED("Too many login attempts!",'c'),
     LGN_ATTEMPT_EXCEED_LOG("Player %1% exceeded login attempts. Hacker?!"),
     LGN_ALREADY("You're already logged in!",'c'),
-    REG_ALREADY("You're already registerd!",'c'),
+    REG_ALREADY("You're already registered!",'c'),
     LGN_MISS_PWD("Missed password! Type /login <password>",'c'),
     UNREG_MISS_PWD("Missed password! Type /unreg <password>",'c'),
     ERR_PWD_WRONG("Wrong password!",'c'),
@@ -330,6 +330,11 @@ public enum Message {
         }
         plugin.saveResource("lang/" +language+".lng",language+".lng",true);
         Config lng = new Config(f,Config.YAML);
+        /* Reserved for future API update ;)
+        InputStream is = plugin.getClass().getResourceAsStream("/lang/"+language+".lng");
+        lng.load(is);
+        */
+
         for (Message key : Message.values())
             key.initMessage(lng.getString(key.name().toLowerCase(), key.message));
     }

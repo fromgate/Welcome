@@ -153,7 +153,6 @@ public class PasswordDbLib implements Password {
             llt.setTime(currentTime);
             lastloginDao.update(llt);
         } catch (Exception e) {
-            e.printStackTrace();
         }
         if (llt==null) try {
             lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));

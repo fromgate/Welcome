@@ -47,19 +47,19 @@ public enum PasswordProvider {
     }
 
     public static boolean checkPassword (String playerName, String pwdStr){
-        return passworder.checkPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.checkPassword(playerName,hashPassword(pwdStr));
     }
 
     public static boolean checkPassword (Player player, String pwdStr){
-        return checkPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.checkPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
     }
 
     public static boolean setPassword (String playerName, String pwdStr){
-        return passworder.setPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.setPassword(playerName,hashPassword(pwdStr));
     }
 
     public static boolean setPassword (Player player, String pwdStr){
-        return setPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.setPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
     }
 
     public static boolean hasPassword(String playerName) {
@@ -67,11 +67,11 @@ public enum PasswordProvider {
     }
 
     public static boolean hasPassword(Player player) {
-        return hasPassword(player.getName().toLowerCase());
+        return passworder.hasPassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(Player player) {
-        return  removePassword(player.getName().toLowerCase());
+        return  passworder.removePassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(String playerName) {
