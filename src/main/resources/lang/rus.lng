@@ -51,6 +51,7 @@ already_logged_in: Игрок %1% уже находится на сервере!
 db_lock: Ошибка хранилища паролей. Проверите работу сервера базы данных.
 db_dblib_notfound: 'Плагин DbLib не найден. Скачайте его тут: http://nukkit.ru/resources/dblib.14/'
 db_dblib_found: 'Обнаружен DbLib. Рекомендуется включить поддержку баз данных в config.yml: "database.provider: DATABASE"'
+db_nedis_notfound: 'Плагин Nedis не найден. Скачайте его тут: http://nukkit.ru/resources/nedis.76/'
 lock_inform: Сервер закрыт. Обратитесь к администрации сервера
 db_init: 'Тип хранилища паролей: %1% Алгоритм шифрования: %2%'
 db_reinit: Работа хранилища паролей %1% успешно восстановлена

@@ -51,6 +51,7 @@ already_logged_in: Player %1% is already logged on server!
 db_lock: Password provider failed. Please check your database connections.
 db_dblib_notfound: 'DbLib plugin not found. Please download it at: http://nukkit.ru/resources/dblib.14/'
 db_dblib_found: 'DbLib detected. You can enable database support, by setting "database.provider: DATABASE" in config.yml'
+db_nedis_notfound: 'Nedis plugin not found. Please download it at: http://nukkit.ru/resources/nedis.76/'
 lock_inform: Server is locked. Please contact server admin
 db_init: 'Password provider: %1% Hash algorithm: %2%'
 db_reinit: Password provider %1% successfully reinitialized
