@@ -36,8 +36,10 @@ password:
 # Database configuration
 database:
 # Where to store you passwords
-# DATABASE - SQLite or MySQL database configured at DBLib plugin
-# YAML - in yaml files
+# YAML - yaml files
+# DATABASE - SQLite or MySQL database provided by DBLib plugin
+# SERVERAUTH - MySQL (or even SQLite) using table format of ServerAuth PocketMine plugin
+# REDIS - Redis database (plugin Nedis required)
   provider: YAML
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts

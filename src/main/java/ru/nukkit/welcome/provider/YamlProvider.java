@@ -1,7 +1,8 @@
-package ru.nukkit.welcome.password;
+package ru.nukkit.welcome.provider;
 
 import cn.nukkit.utils.Config;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.password.PasswordManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -9,11 +10,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class PasswordYaml implements Password {
+public class YamlProvider implements PasswordProvider {
     private Map<String,String> passwords;
     private Map<String,LoginState> logins;
 
-    public PasswordYaml(){
+    public YamlProvider(){
         this.passwords = new HashMap<String, String>();
         logins = new HashMap<String, LoginState>();
         load();
@@ -103,7 +104,7 @@ public class PasswordYaml implements Password {
             }
             cfg.save();
         } catch (Exception e){
-            PasswordProvider.setLock(null);
+            PasswordManager.setLock(null);
             e.printStackTrace();
         }
     }
@@ -136,7 +137,7 @@ public class PasswordYaml implements Password {
                 }
             }
         } catch (Exception e){
-            PasswordProvider.setLock(null);
+            PasswordManager.setLock(null);
             e.printStackTrace();
         }
     }

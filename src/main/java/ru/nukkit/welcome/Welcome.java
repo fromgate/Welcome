@@ -2,7 +2,7 @@ package ru.nukkit.welcome;
 
 import cn.nukkit.plugin.PluginBase;
 import ru.nukkit.welcome.commands.Commander;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.players.ForbidActions;
 import ru.nukkit.welcome.util.Cfg;
@@ -28,7 +28,7 @@ public class Welcome extends PluginBase {
         Message.init(this);
         cfg.update();
         PasswordValidator.init(cfg.validatorSpecialChar,cfg.validatorCapitalLetter,cfg.validatorNumber, cfg.validatorMinLength, cfg.validatorMaxLength);
-        PasswordProvider.init();
+        PasswordManager.init();
         this.getServer().getPluginManager().registerEvents(new WelcomeListener(),this);
         this.getServer().getPluginManager().registerEvents(new ForbidActions(), this);
         Commander.init(this);
@@ -36,7 +36,7 @@ public class Welcome extends PluginBase {
 
     @Override
     public void onDisable(){
-        PasswordProvider.onDisable();
+        PasswordManager.onDisable();
     }
 
 }

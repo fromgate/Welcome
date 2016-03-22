@@ -3,7 +3,7 @@ package ru.nukkit.welcome.commands;
 import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.command.CommandSender;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
@@ -17,7 +17,7 @@ public class CmdWelCpw extends Cmd {
             sender.sendMessage(PasswordValidator.getInfo());
             return true;
         }
-        if (!PasswordProvider.setPassword(args[1],args[2])) return Message.CPWO_FAIL.print(sender,args[1]);
+        if (!PasswordManager.setPassword(args[1],args[2])) return Message.CPWO_FAIL.print(sender,args[1]);
         Player otherPlayer = Server.getInstance().getPlayerExact(args[2]);
         if (otherPlayer!=null&&PlayerManager.isPlayerLoggedIn(otherPlayer))
             (player == null ? Message.CPWO_OK_INFORM_CONSOLE : Message.CPWO_OK_INFORM).print(sender, sender.getName(), args[2]);

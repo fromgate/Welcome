@@ -10,7 +10,7 @@ import cn.nukkit.event.player.PlayerJoinEvent;
 import cn.nukkit.event.player.PlayerPreLoginEvent;
 import cn.nukkit.event.player.PlayerQuitEvent;
 import cn.nukkit.event.server.ServerCommandEvent;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
 
@@ -26,7 +26,7 @@ public class WelcomeListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onQuit(PlayerQuitEvent event) {
-        PasswordProvider.updateAutologin(event.getPlayer());
+        PasswordManager.updateAutologin(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)

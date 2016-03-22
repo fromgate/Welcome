@@ -1,9 +1,9 @@
 name: Welcome
 main: ru.nukkit.welcome.Welcome
-version: "0.1.3"
+version: "0.1.4"
 author: fromgate, nukkit.ru
 api: ["1.0.0"]
-softdepend: [DbLib]
+softdepend: [DbLib, Nedis]
 description: User authentication plugin
 permissions:
   welcome.login:

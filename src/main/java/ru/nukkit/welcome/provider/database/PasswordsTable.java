@@ -1,4 +1,4 @@
-package ru.nukkit.welcome.db;
+package ru.nukkit.welcome.provider.database;
 
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;

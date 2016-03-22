@@ -1,7 +1,7 @@
-package ru.nukkit.welcome.password;
+package ru.nukkit.welcome.provider;
 
 
-public interface Password {
+public interface PasswordProvider {
     boolean isEnabled();
     boolean checkPassword (String playerName, String password);
     boolean setPassword (String playerName, String password);

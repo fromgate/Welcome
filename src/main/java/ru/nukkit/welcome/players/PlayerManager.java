@@ -4,7 +4,7 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.potion.Effect;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.util.LoginMeta;
 import ru.nukkit.welcome.util.Message;
@@ -22,14 +22,14 @@ public class PlayerManager {
         String playerName = player.getName();
         if (waitLogin.containsKey(playerName)) waitLogin.remove(playerName);
         if (player.hasMetadata("welcome-in-game")) player.removeMetadata("welcome-in-game", Welcome.getPlugin());
-        if (PasswordProvider.checkAutologin(player)) {
+        if (PasswordManager.checkAutologin(player)) {
             setPlayerLoggedIn(player);
             tipOrPrint (player,Message.LGN_AUTO,'e', '6', player.getName());
             Welcome.getCfg().broadcastLoginMessage(player);
             return;
         }
         setBlindEffect(player);
-        if (!PasswordProvider.hasPassword(player)) startWaitRegister(player);
+        if (!PasswordManager.hasPassword(player)) startWaitRegister(player);
         else startWaitLogin(player);
     }
 
@@ -63,7 +63,7 @@ public class PlayerManager {
     }
 
     private static boolean isPlayerRegistered(Player player) {
-        return PasswordProvider.hasPassword(player);
+        return PasswordManager.hasPassword(player);
     }
 
     private static void startWaitLogin(final Player player) {
@@ -85,7 +85,7 @@ public class PlayerManager {
     public static boolean regCommand(Player player, String password1, String password2) {
         if (isPlayerRegistered(player)) return Message.REG_ALREADY.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
-        if (PasswordProvider.restrictedByIp(player)) {
+        if (PasswordManager.restrictedByIp(player)) {
             player.close("",Message.REG_RESTRICED_IP.getText());
             return true;
         }
@@ -98,12 +98,12 @@ public class PlayerManager {
             player.sendMessage(PasswordValidator.getInfo());
             return true;
         }
-        PasswordProvider.setPassword(player, password1);
+        PasswordManager.setPassword(player, password1);
         clearBlindEffect(player);
         setPlayerLoggedIn(player);
         Message.REG_LOG.log(player.getName(), "NOCOLOR");
         if (Welcome.getCfg().useTips) Message.REG_OK.print(player, '6');
-        PasswordProvider.updateAutologin(player);
+        PasswordManager.updateAutologin(player);
         tipOrPrint (player,Message.REG_OK,'6');
         Welcome.getCfg().broadcastLoginMessage(player);
         return true;
@@ -112,7 +112,7 @@ public class PlayerManager {
     public static boolean loginCommand(Player player, String password) {
         if (password == null || password.isEmpty()) return Message.LGN_MISS_PWD.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
-        if (!PasswordProvider.checkPassword(player, password)) {
+        if (!PasswordManager.checkPassword(player, password)) {
             if (Welcome.getCfg().loginAtempts) {
                 String name = player.getName();
                 int attempt = authAttempts.containsKey(name) ? authAttempts.get(name) : 0;
@@ -128,7 +128,7 @@ public class PlayerManager {
         setPlayerLoggedIn(player);
         Message.LGN_LOG.log(player.getName(), "NOCOLOR");
         Message.LGN_OK.print(player, '6');
-        PasswordProvider.updateAutologin(player);
+        PasswordManager.updateAutologin(player);
         clearBlindEffect(player);
         tipOrPrint (player, Message.LGN_OK, '6');
         Welcome.getCfg().broadcastLoginMessage(player);
@@ -137,15 +137,15 @@ public class PlayerManager {
 
     public static boolean logOff(Player player) {
         if (!isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
-        PasswordProvider.updateAutologin(player,0);
+        PasswordManager.updateAutologin(player,0);
         setPlayerLoggedOff(player);
         return player.kick(Message.LOGOFF_OK.getText(), false);
     }
 
     public static boolean unregCommand(Player player, String password) {
         if (password == null || password.isEmpty()) return Message.UNREG_MISS_PWD.print(player);
-        if (!PasswordProvider.checkPassword(player, password)) return Message.ERR_PWD_WRONG.print(player);
-        PasswordProvider.removePassword(player);
+        if (!PasswordManager.checkPassword(player, password)) return Message.ERR_PWD_WRONG.print(player);
+        PasswordManager.removePassword(player);
         return player.kick(Message.UNREG_OK.getText(), false);
     }
 

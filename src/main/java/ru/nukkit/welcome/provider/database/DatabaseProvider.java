@@ -1,4 +1,4 @@
-package ru.nukkit.welcome.password;
+package ru.nukkit.welcome.provider.database;
 
 import cn.nukkit.Server;
 import com.j256.ormlite.dao.Dao;
@@ -7,13 +7,15 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.db.LastloginTable;
-import ru.nukkit.welcome.db.PasswordsTable;
+import ru.nukkit.welcome.provider.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
+import ru.nukkit.welcome.provider.database.LastloginTable;
+import ru.nukkit.welcome.provider.database.PasswordsTable;
 import ru.nukkit.welcome.util.Message;
 
 import java.util.List;
 
-public class PasswordDbLib implements Password {
+public class DatabaseProvider implements PasswordProvider {
 
     private boolean enabled;
 
@@ -21,7 +23,7 @@ public class PasswordDbLib implements Password {
     Dao<PasswordsTable, String> passDao;
     Dao<LastloginTable, String> lastloginDao;
 
-    public PasswordDbLib(){
+    public DatabaseProvider(){
         enabled = false;
         if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null){
             Message.DB_DBLIB_NOTFOUND.log();
@@ -51,7 +53,7 @@ public class PasswordDbLib implements Password {
         try {
             pt = passDao.queryForId(playerName);
         } catch (Exception e) {
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
             return false;
         }
         if (pt.getPassword()==null) return false;
@@ -62,7 +64,7 @@ public class PasswordDbLib implements Password {
         if (!enabled) return false;
         if (playerName==null||playerName.isEmpty()) return false;
         if (password==null||password.isEmpty()) return false;
-        PasswordsTable pt = new PasswordsTable (playerName,password);
+        PasswordsTable pt = new PasswordsTable(playerName,password);
         try {
             passDao.create(pt);
         } catch (Exception e) {
@@ -73,7 +75,7 @@ public class PasswordDbLib implements Password {
             pt.setPassword(password);
             passDao.update(pt);
         } catch (Exception e) {
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
             return false;
         }
         return true;
@@ -85,7 +87,7 @@ public class PasswordDbLib implements Password {
         try {
             return passDao.idExists(playerName);
         } catch (Exception e) {
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
         }
         return  false;
 
@@ -98,7 +100,7 @@ public class PasswordDbLib implements Password {
             PasswordsTable pt = passDao.queryForId(playerName);
             passDao.delete(pt);
         } catch (Exception e){
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
             return false;
         }
         return  true;
@@ -111,7 +113,7 @@ public class PasswordDbLib implements Password {
         try {
             result = lastloginDao.queryBuilder().where().eq("ip",ip).query();
         } catch (Exception e){
-            PasswordProvider.setLock(null);
+            PasswordManager.setLock(null);
             return null; // Ошибка - регистрация запрещена
         }
         long time = 0;
@@ -134,7 +136,7 @@ public class PasswordDbLib implements Password {
             prevUUID = llt.getUuid();
             prevTime = llt.getTime();
         } catch (Exception e) {
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
         }
         if (loginTime-prevTime>Welcome.getCfg().getMaxAutoTime()) return false;
         if (prevIp.isEmpty()||prevUUID.isEmpty()) return false;
@@ -167,7 +169,7 @@ public class PasswordDbLib implements Password {
             LastloginTable pt = lastloginDao.queryForId(playerName);
             lastloginDao.delete(pt);
         } catch (Exception e){
-            PasswordProvider.setLock(playerName);
+            PasswordManager.setLock(playerName);
             return false;
         }
         return true;

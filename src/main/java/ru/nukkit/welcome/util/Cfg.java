@@ -7,7 +7,7 @@ import cn.nukkit.utils.Config;
 import cn.nukkit.utils.SimpleConfig;
 import cn.nukkit.utils.TextFormat;
 import ru.nukkit.welcome.password.HashType;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -45,7 +45,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     //# DATABASE - SQLite or MySQL database configured at DBLib plugin
     //# YAML - in yaml files
     @Path (value = "database.provider")
-    public String passwordProvider = PasswordProvider.YAML.name();
+    public String passwordProvider = PasswordManager.YAML.name();
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path (value = "database.reinit-on-fail-time")

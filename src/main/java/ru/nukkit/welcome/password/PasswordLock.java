@@ -2,9 +2,10 @@ package ru.nukkit.welcome.password;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.util.Message;
 
-public class PasswordLock implements Password  {
+public class PasswordLock implements PasswordProvider {
     public boolean isEnabled() {
         return true;
     }

@@ -5,20 +5,27 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.scheduler.TaskHandler;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.provider.PasswordProvider;
+import ru.nukkit.welcome.provider.YamlProvider;
+import ru.nukkit.welcome.provider.database.DatabaseProvider;
 import ru.nukkit.welcome.players.PlayerManager;
+import ru.nukkit.welcome.provider.redis.RedisProvider;
+import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
 import ru.nukkit.welcome.util.Message;
 
-public enum PasswordProvider {
-    YAML (PasswordYaml.class),
-    DATABASE (PasswordDbLib.class),
+public enum PasswordManager {
+    YAML (YamlProvider.class),
+    DATABASE (DatabaseProvider.class),
+    SERVERAUTH (ServerauthProvider.class),
+    REDIS (RedisProvider.class),
     LOCK (PasswordLock.class);
 
-    Class<? extends  Password> clazz;
-    PasswordProvider(Class<? extends Password> clazz) {
+    Class<? extends PasswordProvider> clazz;
+    PasswordManager(Class<? extends PasswordProvider> clazz) {
         this.clazz = clazz;
     }
 
-    public Password getProvider(){
+    public PasswordProvider getProvider(){
         try {
             return clazz.getConstructor().newInstance();
         } catch (Exception e) {
@@ -26,22 +33,22 @@ public enum PasswordProvider {
         }
     }
 
-    private static Password passworder;
+    private static PasswordProvider passworder;
 
     public static void init(){
-        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
+        PasswordManager pp = getByName(Welcome.getCfg().passwordProvider);
         passworder = pp==null ? null :  pp.getProvider();
         if (passworder==null||!passworder.isEnabled()) {
-            pp = PasswordProvider.LOCK;
+            pp = PasswordManager.LOCK;
             setLock(null);
         }
         Message.DB_INIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
-        if (pp==PasswordProvider.YAML&&Server.getInstance().getPluginManager().getPlugin("DbLib") != null)
+        if (pp== PasswordManager.YAML&&Server.getInstance().getPluginManager().getPlugin("DbLib") != null)
             Message.DB_DBLIB_FOUND.log();
     }
 
-    public static PasswordProvider getByName(String pwdProv){
-        for (PasswordProvider pp : PasswordProvider.values())
+    public static PasswordManager getByName(String pwdProv){
+        for (PasswordManager pp : PasswordManager.values())
             if (pp.name().equalsIgnoreCase(pwdProv)) return pp;
         return null;
     }
@@ -108,7 +115,7 @@ public enum PasswordProvider {
     public static void setLock(final String playerName){
         Message.DB_LOCK.log();
         onDisable();
-        passworder = PasswordProvider.LOCK.getProvider();
+        passworder = PasswordManager.LOCK.getProvider();
         if (playerName != null&&playerName.isEmpty())
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
@@ -123,8 +130,8 @@ public enum PasswordProvider {
     public static void reInit(){
         if (task!=null) return;
         Message.DB_RENIT_TRY.log();
-        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
-        Password pwd = (pp==null) ? null : pp.getProvider();
+        PasswordManager pp = getByName(Welcome.getCfg().passwordProvider);
+        PasswordProvider pwd = (pp==null) ? null : pp.getProvider();
         if (pwd != null&&pwd.isEnabled()){
             passworder = pwd;
             Message.DB_REINIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());

@@ -67,6 +67,7 @@ public enum Message {
     ALREADY_LOGGED_IN("Player %1% is already logged on server!",'c','4'),
     DB_LOCK("Password provider failed. Please check your database connections.",'c'),
     DB_DBLIB_NOTFOUND("DbLib plugin not found. Please download it at: http://nukkit.ru/resources/dblib.14/"),
+    DB_NEDIS_NOTFOUND("Nedis plugin not found. Please download it at: http://nukkit.ru/resources/nedis.76/"),
     DB_DBLIB_FOUND("DbLib detected. You can enable database support, by setting \"database.provider: DATABASE\" in config.yml"),
     LOCK_INFORM("Server is locked. Please contact server admin",'c'),
     DB_INIT ("Password provider: %1% Hash algorithm: %2%"),
