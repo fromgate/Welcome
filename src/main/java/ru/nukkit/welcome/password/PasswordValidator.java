@@ -18,7 +18,7 @@ public class PasswordValidator{
         if (forceNumber) patternBuilder.append("(?=.*[0-9])");
         patternBuilder.append("(?=\\S+$).{" + minLength + "," + maxLength + "}");
         pattern = patternBuilder.toString();
-        Message.PWD_VALID_PATTERN.log(pattern);
+        Message.PWD_VALID_PATTERN.debug(pattern);
         List<Message> req = new ArrayList<Message>();
         req.add(useCapitals ? Message.VLD_CAPITAL : Message.VLD_LETTERS);
         if (useChar) req.add(Message.VLD_SPEC_CHR);

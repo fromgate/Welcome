@@ -5,20 +5,27 @@ import cn.nukkit.Player;
 import cn.nukkit.Server;
 import cn.nukkit.scheduler.TaskHandler;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.provider.PasswordProvider;
+import ru.nukkit.welcome.provider.YamlProvider;
+import ru.nukkit.welcome.provider.database.DatabaseProvider;
 import ru.nukkit.welcome.players.PlayerManager;
+import ru.nukkit.welcome.provider.redis.RedisProvider;
+import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
 import ru.nukkit.welcome.util.Message;
 
-public enum PasswordProvider {
-    YAML (PasswordYaml.class),
-    DATABASE (PasswordDbLib.class),
+public enum PasswordManager {
+    YAML (YamlProvider.class),
+    DATABASE (DatabaseProvider.class),
+    SERVERAUTH (ServerauthProvider.class),
+    REDIS (RedisProvider.class),
     LOCK (PasswordLock.class);
 
-    Class<? extends  Password> clazz;
-    PasswordProvider(Class<? extends Password> clazz) {
+    Class<? extends PasswordProvider> clazz;
+    PasswordManager(Class<? extends PasswordProvider> clazz) {
         this.clazz = clazz;
     }
 
-    public Password getProvider(){
+    public PasswordProvider getProvider(){
         try {
             return clazz.getConstructor().newInstance();
         } catch (Exception e) {
@@ -26,38 +33,40 @@ public enum PasswordProvider {
         }
     }
 
-    private static Password passworder;
+    private static PasswordProvider passworder;
 
     public static void init(){
-        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
+        PasswordManager pp = getByName(Welcome.getCfg().passwordProvider);
         passworder = pp==null ? null :  pp.getProvider();
         if (passworder==null||!passworder.isEnabled()) {
-            pp = PasswordProvider.LOCK;
+            pp = PasswordManager.LOCK;
             setLock(null);
         }
         Message.DB_INIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
+        if (pp== PasswordManager.YAML&&Server.getInstance().getPluginManager().getPlugin("DbLib") != null)
+            Message.DB_DBLIB_FOUND.log();
     }
 
-    public static PasswordProvider getByName(String pwdProv){
-        for (PasswordProvider pp : PasswordProvider.values())
+    public static PasswordManager getByName(String pwdProv){
+        for (PasswordManager pp : PasswordManager.values())
             if (pp.name().equalsIgnoreCase(pwdProv)) return pp;
         return null;
     }
 
     public static boolean checkPassword (String playerName, String pwdStr){
-        return passworder.checkPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.checkPassword(playerName,hashPassword(pwdStr));
     }
 
     public static boolean checkPassword (Player player, String pwdStr){
-        return checkPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.checkPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
     }
 
     public static boolean setPassword (String playerName, String pwdStr){
-        return passworder.setPassword(playerName,Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.setPassword(playerName,hashPassword(pwdStr));
     }
 
     public static boolean setPassword (Player player, String pwdStr){
-        return setPassword(player.getName().toLowerCase(),Welcome.getCfg().getHashAlgorithm().getHash(pwdStr));
+        return passworder.setPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
     }
 
     public static boolean hasPassword(String playerName) {
@@ -65,11 +74,11 @@ public enum PasswordProvider {
     }
 
     public static boolean hasPassword(Player player) {
-        return hasPassword(player.getName().toLowerCase());
+        return passworder.hasPassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(Player player) {
-        return  removePassword(player.getName().toLowerCase());
+        return  passworder.removePassword(player.getName().toLowerCase());
     }
 
     public static boolean removePassword(String playerName) {
@@ -83,28 +92,30 @@ public enum PasswordProvider {
 
     public static boolean checkAutologin (Player player){
         if (!hasPassword(player)) return false;
-        if (Welcome.getCfg().autologinDisabled) return false;
+        if (!Welcome.getCfg().autologinEnable) return false;
         return passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
+    }
+
+    public static void updateAutologin(Player player, long time) {
+        if (!hasPassword(player)) return;
+        if (!PlayerManager.isPlayerLoggedIn(player)) return;
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),time);
     }
 
     public static void updateAutologin(Player player) {
         if (!hasPassword(player)) return;
-        if (Welcome.getCfg().autologinDisabled) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
+        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),System.currentTimeMillis());
     }
 
-    public static void removeAutologin(Player player) {
-        if (Welcome.getCfg().autologinDisabled) return;
-        if (!hasPassword(player)) return;
-        if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(),0);
+    public static void removeAutologin(String playerName) {
+        passworder.removeAutoLogin(playerName);
     }
 
     public static void setLock(final String playerName){
-        Message.LOCK_SET.log();
+        Message.DB_LOCK.log();
         onDisable();
-        passworder = PasswordProvider.LOCK.getProvider();
+        passworder = PasswordManager.LOCK.getProvider();
         if (playerName != null&&playerName.isEmpty())
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
@@ -119,8 +130,8 @@ public enum PasswordProvider {
     public static void reInit(){
         if (task!=null) return;
         Message.DB_RENIT_TRY.log();
-        PasswordProvider pp = getByName(Welcome.getCfg().passwordProvider);
-        Password pwd = (pp==null) ? null : pp.getProvider();
+        PasswordManager pp = getByName(Welcome.getCfg().passwordProvider);
+        PasswordProvider pwd = (pp==null) ? null : pp.getProvider();
         if (pwd != null&&pwd.isEnabled()){
             passworder = pwd;
             Message.DB_REINIT.log(pp.name(),Welcome.getCfg().getHashAlgorithm());
@@ -134,5 +145,12 @@ public enum PasswordProvider {
 
     public static void onDisable() {
         if (passworder!=null) passworder.onDisable();
+    }
+
+    public static boolean restrictedByIp(Player player) {
+        if (!Welcome.getCfg().registerRestrictions) return false;
+        Long lastLoginTime = passworder.lastLoginFromIp(player.getName(),player.getAddress());
+        if (lastLoginTime == null) return true;
+        return (System.currentTimeMillis()-lastLoginTime)<Welcome.getCfg().getRestrictIpTime();
     }
 }

@@ -107,7 +107,7 @@ public abstract class Cmd {
 	}
 
     public String getHelpString(){
-        return TextFormat.clean("/"+this.getCommand()+(this.subCommands.length>0? " "+Commander.unsplit(this.subCommands) : "")+" - "+this.getDescription());
+        return this.getDescription();
     }
 
 }

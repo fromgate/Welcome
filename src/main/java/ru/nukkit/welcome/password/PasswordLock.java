@@ -2,9 +2,10 @@ package ru.nukkit.welcome.password;
 
 import cn.nukkit.Player;
 import cn.nukkit.Server;
+import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.util.Message;
 
-public class PasswordLock implements Password  {
+public class PasswordLock implements PasswordProvider {
     public boolean isEnabled() {
         return true;
     }
@@ -29,6 +30,10 @@ public class PasswordLock implements Password  {
         return false;
     }
 
+    public Long lastLoginFromIp(String playerNane, String ip) {
+        return null;
+    }
+
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         informPlayer (playerName);
         return false;
@@ -38,6 +43,10 @@ public class PasswordLock implements Password  {
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
+    }
+
+    public boolean removeAutoLogin(String playerName) {
+        return false;
     }
 
     public void onDisable() {

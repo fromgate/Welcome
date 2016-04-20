@@ -1,0 +1,75 @@
+lng_load_fail: Failed to load languages from file. Default message used
+lng_save_fail: Failed to save lang file
+lng_print_fail: 'Failed to print message to ''null'': "%1%"'
+lng_config: '[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%'
+word_unknown: Unknown
+permission_fail: You have not enough permissions to execute this command
+player_commad_only: You can use this command in-game only!
+cmd_registered: 'Command registered: %1%'
+cmd_reg_desc: /register <password> [password] - register player on server
+type_lgn: Type /login <password> to login!
+type_reg: Type /register <password> <password> to login!
+type_reg1: Type /register <password> to login!
+kick_timeout: Time out! Next time type /login <password> to join the game!
+lgn_attempt_exceed: Too many login attempts!
+lgn_attempt_exceed_log: Player %1% exceeded login attempts. Hacker?!
+lgn_already: You're already logged in!
+reg_already: You're already registerd!
+lgn_miss_pwd: Missed password! Type /login <password>
+unreg_miss_pwd: Missed password! Type /unreg <password>
+err_pwd_wrong: Wrong password!
+lgn_ok: You successfully logged-in! Welcome!
+reg_ok: You successfully registered! Welcome!
+err_pwd_notmatch: Entered passwords are not match!
+cmd_lgn_desc: /login <password> - login to server
+cmd_lgf_desc: /logoff - logoff from server (to prevent autologin time)
+reg_log: Player %1% registered!
+lgn_log: Player %1% logged-in!
+unreg_ok: You was removed from server. Next time you must register again!
+logoff_ok: Logged off from server. Come back soon :)
+cmd_unreg_desc: /unregister <password> - unregister from server
+cmd_rmv_desc: /welcome remove <player> - remove (unregister) provided player
+rmv_need_player: Player name was not provided (/welcome remove <player>)
+rmv_fail: 'Failed to remove player: %1%'
+rmv_ok: Player %1% removed!
+lgn_auto: Welcome back, %1%!
+cpw_desc: /changepassword <password> <newPassword> <newPassword> - change password
+cpw_usage: /changepassword <password> <newPassword> <newPassword>
+err_not_logged: You're not logged in! Operation declined.
+cpw_ok: Your password was successfully changed
+cmd_help_desc: /welcome help - Show help
+hlp_title: '%1% | Nukkit authorization system'
+cmd_wlc_desc: /welcome - Welcome plugin command
+err_pwd_validate: Your password is not valid!
+pwd_valid_info: 'Password must contain: %1% Length: %2%-%3%'
+vld_capital: capital letters
+vld_letters: letters
+vld_spec_chr: special chars
+vld_number: numbers
+pwd_valid_pattern: 'Password validator regex prepared: %1%'
+already_logged_in: Player %1% is already logged on server!
+db_lock: Password provider failed. Please check your database connections.
+db_dblib_notfound: 'DbLib plugin not found. Please download it at: http://nukkit.ru/resources/dblib.14/'
+db_dblib_found: 'DbLib detected. You can enable database support, by setting "database.provider: DATABASE" in config.yml'
+db_nedis_notfound: 'Nedis plugin not found. Please download it at: http://nukkit.ru/resources/nedis.76/'
+lock_inform: Server is locked. Please contact server admin
+db_init: 'Password provider: %1% Hash algorithm: %2%'
+db_reinit: Password provider %1% successfully reinitialized
+db_renit_try: Trying to reinitialize password provider...
+cfg_updated: Config file updated. New variables added but we lost all comments...
+reg_restriced_ip: You cannot register again. Change back your player name and login.
+reload_cmd_warning: Welcome plugin detected that command RELOAD was executed. Sorry, further plugin work cannot be guaranteed.
+join_msg_pre: Hello %1%! You must login to play here!
+join_msg_bc: '%1% joined the game!'
+cmd_crt_desc: /welcome create <player> <password> - Create (register) new player with provided password
+crt_need_player: Player name and password was not provided (/welcome create <player> <password>)
+crt_already_registered: Player %1% already registered!
+crt_pwd_invalid: Provided password is not valid!
+crt_fail: Failed to register player %1%
+crt_ok: Player %1% successfully registered!
+cpwo_desc: /welcome setpassword <player> <newPassword> - change password of another player
+cpwo_usage: You need to provide player name and new password (/welcome cpw <player> <password>)
+cpwo_ok: Password of player %1% was changed
+cpwo_ok_inform: Your password was changed by %1%, new password is %2%
+cpwo_ok_inform_console: Your password was changed, new password is %2%
+cpwo_fail: Failed to change password of player %1%

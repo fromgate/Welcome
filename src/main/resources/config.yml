@@ -6,18 +6,25 @@
 #
 #
 general:
-# Plugin language. Supported: english, russian
-  language: english
-
+# Plugin language.
+# Supported: eng, rus
+# Set to default to get nukkit server settings
+  language: default
 # Enable/Disable debug messages. Don't touch this ;)
   debug-mode: false
+
+message:
+# Enable tips messages (true) or just send message in chat (false)
+  allow-tips: true
+# Delay between repeat the message
+  delay-between-repeats: 10s
+
 password:
 # Password hash algorithm. Supported values: MD5, SHA1, SHA256, SHA512
   hash-algorithm: SHA256
 # Time to wait until user login.
 # If time passed - user will be kicked out from the server
   wait-time: 3m
-
 # Password validator options
   validator:
     force-capitals: false
@@ -26,28 +33,38 @@ password:
     min-length: 6
     max-length: 16
 
-#Login settings
-login:
-#Enable failed logins kick
-  enable-failed-logins-kick: true
-#Max number of attempts
-  max-login-attempts: 5
-
 # Database configuration
 database:
 # Where to store you passwords
-# DATABASE - SQLite or MySQL database configured at DBLib plugin
-# YAML - in yaml files
+# YAML - yaml files
+# DATABASE - SQLite or MySQL database provided by DBLib plugin
+# SERVERAUTH - MySQL (or even SQLite) using table format of ServerAuth PocketMine plugin
+# REDIS - Redis database (plugin Nedis required)
   provider: YAML
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts
   reinit-on-fail-time: 30s
 
+login:
 # Store user IP, UUID and Name. Next time (during the provide time limit)
-# client with same parameters will be logged in automatically
-autologin:
-  disable: true
-  time: 15m
+# client with same parameters will be logged in automagically
+  auto:
+    enable: true
+    time: 15m
+
+  attempts:
+#Enable failed logins kick
+    kick-on-exceed: true
+#Max number of attempts
+    max-attempts-allowed: 5
+
+  join-message:
+# Enable custom join messages
+    enable: true
+# Message that will see only player, before login
+    pre-login: '&eHello &6%player%&e! You must login to play here!'
+# Message that will see everyone after player logged-in
+    after-login: '&e&6%player%&e joined the game!'
 
 # Debuff effects for not-loged users
 before-login:
@@ -56,14 +73,11 @@ before-login:
 # Block ability to type chat messages
   block-chat: true
 
-# Message configuration
-message:
-# Use tips (true) or simple text messages
-  allow-tips: true
-# Delay between repeated message
-  delay-between-repeats: 10s
-
-# Prevent password brute: kick player if exceed max allowed attempts counter
-login-attempts:
-  kick-on-exceed: true
-  max-attempts-allowed: 5
+register:
+# Enable password-confirmation (/register <password> <password>)
+  password-confirmation: true
+# Do not allow to register new players if their IP is equal
+# to IP of previously played player (during the defined time)
+  ip-restriction:
+    enable: true
+    time: 3h

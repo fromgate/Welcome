@@ -16,6 +16,7 @@ import cn.nukkit.event.inventory.InventoryOpenEvent;
 import cn.nukkit.event.inventory.InventoryPickupArrowEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.player.*;
+import cn.nukkit.inventory.PlayerInventory;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.commands.Commander;
 import ru.nukkit.welcome.util.Message;
@@ -48,16 +49,18 @@ public class ForbidActions implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onInventoryItemPickup(InventoryPickupItemEvent event) {
-        for (Player player : event.getViewers()) {
-            cancel(player, event);
-        }
+        if (!Welcome.getCfg().blockPickup) return;
+        Player player = event.getInventory().getHolder() instanceof Player ? (Player) event.getInventory().getHolder() : null;
+        if (player == null) return;
+        cancel(player, event);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onInventoryArrowPickup(InventoryPickupArrowEvent event) {
-        for (Player player : event.getViewers()) {
-            cancel(player, event);
-        }
+        if (!Welcome.getCfg().blockPickup) return;
+        Player player = event.getInventory().getHolder() instanceof Player ? (Player) event.getInventory().getHolder() : null;
+        if (player == null) return;
+        cancel(player, event);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

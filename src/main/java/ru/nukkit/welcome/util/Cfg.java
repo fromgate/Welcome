@@ -1,10 +1,13 @@
 package ru.nukkit.welcome.util;
 
+import cn.nukkit.Player;
+import cn.nukkit.Server;
 import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.SimpleConfig;
+import cn.nukkit.utils.TextFormat;
 import ru.nukkit.welcome.password.HashType;
-import ru.nukkit.welcome.password.PasswordProvider;
+import ru.nukkit.welcome.password.PasswordManager;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -15,9 +18,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
         plugin.saveResource("config.yml");
     }
 
-    //# Plugin language. Supported: english, russian
+    //# Plugin language. Supported: default, eng, rus
     @Path (value = "general.language")
-    public String language = "english";
+    public String language = "default";
 
     //# Enable/Disable debug messages. Don't touch this ;)
     @Path (value = "general.debug-mode")
@@ -42,7 +45,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     //# DATABASE - SQLite or MySQL database configured at DBLib plugin
     //# YAML - in yaml files
     @Path (value = "database.provider")
-    public String passwordProvider = PasswordProvider.DATABASE.name();
+    public String passwordProvider = PasswordManager.YAML.name();
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path (value = "database.reinit-on-fail-time")
@@ -50,20 +53,29 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
 
     //# Remember user IP, UUID and Name. Next time (during the provided time limit)
     //# client with same parameters will be logged in automatically
-    @Path (value = "autologin.disable")
-    public boolean autologinDisabled = false;
+    @Path (value = "login.auto.enable")
+    public boolean autologinEnable = true;
 
-    @Path (value = "autologin.time")
+    @Path (value = "login.auto.time")
     public String autoLoginMaxTime = "15m";
 
     //#Login settings
     //#Enable failed logins kick, when exceeded number of allowed attempts
-    @Path (value = "login-attempts.kick-on-exceed")
+    @Path (value = "login.attempts.kick-on-exceed")
     public boolean loginAtempts = true;
 
     //#Max number of attempts
-    @Path (value = "login-attempts.max-attempts-allowed")
+    @Path (value = "login.attempts.max-attempts-allowed")
     public int loginAtemptsMax = 5;
+
+    @Path (value = "login.join-message.enable")
+    public boolean joinMessageEnable = true;
+
+    @Path (value = "login.join-message.pre-login")
+    public String joinMessagePre = Message.JOIN_MSG_PRE.getText("%player%").replace("§","&");
+
+    @Path (value = "login.join-message.after-login")
+    public String joinMessageAfter = Message.JOIN_MSG_BC.getText("%player%").replace("§","&");
 
     //# Password validator options
     @Path (value = "password.validator.force-capitals")
@@ -89,6 +101,17 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path (value = "before-login.block-chat")
     public boolean blockChat = true;
 
+    @Path (value = "before-login.block-item-pickup")
+    public boolean blockPickup = true;
+
+    @Path (value = "register.password-confirmation")
+    public boolean passwordConfirmation = true;
+
+    @Path (value = "register.ip-restriction.enable")
+    public boolean registerRestrictions = true;
+
+    @Path (value = "register.ip-restriction.time")
+    public String registerRestrictionTime = "3h";
 
     /////////////////////////////////////////////////////////////////////////////////
     public HashType getHashAlgorithm() {
@@ -111,6 +134,26 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
         return TimeUtil.timeToTicks(TimeUtil.parseTime(this.messageDelay)).intValue();
     }
 
+    public long getRestrictIpTime(){
+        return TimeUtil.parseTime(registerRestrictionTime);
+    }
+
+    public Message getTypeReg(){
+        return this.passwordConfirmation ? Message.TYPE_REG : Message.TYPE_REG1;
+    }
+
+    public void sendPreLoginMessage(Player player){
+        if (this.joinMessageEnable)
+            player.sendMessage(TextFormat.colorize(this.joinMessagePre.replace("%player%",player.getName())));
+    }
+
+    public void broadcastLoginMessage(Player player){
+        if (this.joinMessageEnable)
+            for (Player p : Server.getInstance().getOnlinePlayers().values())
+                p.sendMessage(TextFormat.colorize(this.joinMessageAfter.replace("%player%",player.getName())));
+    }
+
+
     public void update(){
         File file;
         try {
@@ -122,7 +165,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
             return;
         }
         Config cfg = new Config(file,Config.YAML);
-        if (cfg.get("before-login.block-chat")==null) {
+        if (cfg.get("before-login.block-item-pickup")==null) {
             save();
             Message.CFG_UPDATED.log();
         }

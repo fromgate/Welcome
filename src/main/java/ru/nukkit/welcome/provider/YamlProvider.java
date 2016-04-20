@@ -1,7 +1,8 @@
-package ru.nukkit.welcome.password;
+package ru.nukkit.welcome.provider;
 
 import cn.nukkit.utils.Config;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.password.PasswordManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -9,11 +10,11 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public class PasswordYaml implements Password {
+public class YamlProvider implements PasswordProvider {
     private Map<String,String> passwords;
     private Map<String,LoginState> logins;
 
-    public PasswordYaml(){
+    public YamlProvider(){
         this.passwords = new HashMap<String, String>();
         logins = new HashMap<String, LoginState>();
         load();
@@ -45,6 +46,14 @@ public class PasswordYaml implements Password {
         return true;
     }
 
+    public Long lastLoginFromIp(String playerName, String ip) {
+        long time = 0;
+        for (LoginState ls : logins.values()){
+            if (ls.ip.equalsIgnoreCase(ip)&&ls.time>time) time = ls.time;
+        }
+        return time;
+    }
+
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         long loginTime = System.currentTimeMillis();
         LoginState prevLogin = this.logins.containsKey(playerName) ? this.logins.get(playerName) : null;
@@ -63,6 +72,11 @@ public class PasswordYaml implements Password {
         LoginState newLogin = new LoginState(uuid,ip,currentTime);
         logins.put(playerName,newLogin);
         save();
+    }
+
+    public boolean removeAutoLogin(String playerName) {
+        if (logins.containsKey(playerName)) logins.remove(playerName);
+        return true;
     }
 
     public void onDisable() {
@@ -90,7 +104,7 @@ public class PasswordYaml implements Password {
             }
             cfg.save();
         } catch (Exception e){
-            PasswordProvider.setLock(null);
+            PasswordManager.setLock(null);
             e.printStackTrace();
         }
     }
@@ -123,7 +137,7 @@ public class PasswordYaml implements Password {
                 }
             }
         } catch (Exception e){
-            PasswordProvider.setLock(null);
+            PasswordManager.setLock(null);
             e.printStackTrace();
         }
     }
