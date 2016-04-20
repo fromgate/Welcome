@@ -195,10 +195,10 @@ public enum Message {
      * Message.MSG_BROADCAST.broadcast ("pluginname.broadcast"); // send message to all players with permission "pluginname.broadcast"
      * Message.MSG_BROADCAST.broadcast (null); // send message to all players
      */
-    public boolean broadcast (String permission, Object... s){
-        for (Player player : plugin.getServer().getOnlinePlayers().values()){
-            if (permission==null || player.hasPermission(permission)) print (player,s);
-        }
+    public boolean broadcast(String permission, Object... s) {
+        plugin.getServer().getOnlinePlayers().values().forEach((player) -> {
+            if (permission == null || player.hasPermission(permission)) print(player, s);
+        });
         return true;
     }
 
