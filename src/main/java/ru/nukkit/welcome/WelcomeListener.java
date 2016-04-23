@@ -32,7 +32,7 @@ public class WelcomeListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onPrelogin(PlayerPreLoginEvent event) {
         for (Player player : Server.getInstance().getOnlinePlayers().values()) {
-            if (player.equals(event.getPlayer())) continue;
+            if (player.equals((Player) event.getPlayer())) continue;
             if (player.getName().equalsIgnoreCase(event.getPlayer().getName())) {
                 event.setKickMessage(Message.ALREADY_LOGGED_IN.getText(event.getPlayer().getName()));
                 event.setCancelled();

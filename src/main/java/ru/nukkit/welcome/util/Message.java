@@ -69,6 +69,7 @@ public enum Message {
     DB_DBLIB_NOTFOUND("DbLib plugin not found. Please download it at: http://nukkit.ru/resources/dblib.14/"),
     DB_NEDIS_NOTFOUND("Nedis plugin not found. Please download it at: http://nukkit.ru/resources/nedis.76/"),
     DB_DBLIB_FOUND("DbLib detected. You can enable database support, by setting \"database.provider: DATABASE\" in config.yml"),
+    DB_HASH_WARNING("You using %1% hash algorithm. Default algorithm for this data model is %2%."),
     LOCK_INFORM("Server is locked. Please contact server admin",'c'),
     DB_INIT ("Password provider: %1% Hash algorithm: %2%"),
     DB_REINIT ("Password provider %1% successfully reinitialized"),
@@ -89,12 +90,15 @@ public enum Message {
     CPWO_OK("Password of player %1% was changed"),
     CPWO_OK_INFORM("Your password was changed by %1%, new password is %2%"),
     CPWO_OK_INFORM_CONSOLE("Your password was changed, new password is %2%"),
-    CPWO_FAIL("Failed to change password of player %1%");
+    CPWO_FAIL("Failed to change password of player %1%"),
+    DB_UNKNOWN("Unknown database provider: %1%. Check your config file",'c','4'),
+    DB_INIT_FAIL("Failed to init database provider: %1%. Check your config file",'c','4');
 
     private static boolean debugMode = false;
     private static String language = "english";
     private static char c1 = 'a';
     private static char c2 = '2';
+    private static boolean saveLanguage = false;
 
     private static PluginBase plugin = null;
 
@@ -309,8 +313,10 @@ public enum Message {
         if (language.equalsIgnoreCase("default")) language = Server.getInstance().getLanguage().getLang();
         else if (language.length() > 3) language= language.substring(0,3);
         debugMode = Welcome.getCfg().debugMode;
+        saveLanguage = Welcome.getCfg().saveLanguage;
+
         initMessages();
-        saveMessages();
+        if (saveLanguage) saveMessages();
         LNG_CONFIG.debug(Message.values().length,language,true,debugMode);
     }
 
@@ -322,20 +328,23 @@ public enum Message {
         debugMode = debug;
     }
 
+    public static boolean isDebug(){
+        return debugMode;
+    }
+
 
     private static void initMessages(){
         File f = new File (plugin.getDataFolder()+File.separator+language+".lng");
-        if (!f.delete()){
-            System.gc();
-            f.delete();
-        }
-        plugin.saveResource("lang/" +language+".lng",language+".lng",true);
-        Config lng = new Config(f,Config.YAML);
-        /* Reserved for future API update ;)
-        InputStream is = plugin.getClass().getResourceAsStream("/lang/"+language+".lng");
-        lng.load(is);
-        */
-
+        Config lng = null;
+        if (!f.exists()){
+            lng = new Config(f,Config.YAML);
+            InputStream is = plugin.getClass().getResourceAsStream("/lang/"+language+".lng");
+            lng.load(is);
+            if (!f.delete()){
+                System.gc();
+                f.delete();
+            }
+        } else lng = new Config(f,Config.YAML);
         for (Message key : Message.values())
             key.initMessage(lng.getString(key.name().toLowerCase(), key.message));
     }
@@ -373,5 +382,13 @@ public enum Message {
             sb.append(o.toString());
         }
         return sb.toString();
+    }
+
+    /**
+     * Print exception message, only if debug mode enabled
+     * @param exception
+     */
+    public static void debugException(Exception exception){
+        if (debugMode) exception.printStackTrace();
     }
 }

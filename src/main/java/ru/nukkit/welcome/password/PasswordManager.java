@@ -11,12 +11,14 @@ import ru.nukkit.welcome.provider.database.DatabaseProvider;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.provider.redis.RedisProvider;
 import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
+import ru.nukkit.welcome.provider.serverauth.SimpleauthProvider;
 import ru.nukkit.welcome.util.Message;
 
 public enum PasswordManager {
     YAML (YamlProvider.class),
     DATABASE (DatabaseProvider.class),
     SERVERAUTH (ServerauthProvider.class),
+    SIMPLEAUTH (SimpleauthProvider.class),
     REDIS (RedisProvider.class),
     LOCK (PasswordLock.class);
 
@@ -29,6 +31,7 @@ public enum PasswordManager {
         try {
             return clazz.getConstructor().newInstance();
         } catch (Exception e) {
+            if (Message.isDebug()) e.printStackTrace();
             return null;
         }
     }
@@ -39,6 +42,8 @@ public enum PasswordManager {
         PasswordManager pp = getByName(Welcome.getCfg().passwordProvider);
         passworder = pp==null ? null :  pp.getProvider();
         if (passworder==null||!passworder.isEnabled()) {
+            Message m = passworder==null ? Message.DB_UNKNOWN : Message.DB_INIT;
+            m.log(Welcome.getCfg().passwordProvider);
             pp = PasswordManager.LOCK;
             setLock(null);
         }
@@ -54,19 +59,19 @@ public enum PasswordManager {
     }
 
     public static boolean checkPassword (String playerName, String pwdStr){
-        return passworder.checkPassword(playerName,hashPassword(pwdStr));
+        return passworder.checkPassword(playerName,hashPassword(playerName, pwdStr));
     }
 
     public static boolean checkPassword (Player player, String pwdStr){
-        return passworder.checkPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
+        return passworder.checkPassword(player.getName().toLowerCase(),hashPassword(player.getName(), pwdStr));
     }
 
     public static boolean setPassword (String playerName, String pwdStr){
-        return passworder.setPassword(playerName,hashPassword(pwdStr));
+        return passworder.setPassword(playerName,hashPassword(playerName, pwdStr));
     }
 
     public static boolean setPassword (Player player, String pwdStr){
-        return passworder.setPassword(player.getName().toLowerCase(),hashPassword(pwdStr));
+        return passworder.setPassword(player.getName().toLowerCase(),hashPassword(player.getName(), pwdStr));
     }
 
     public static boolean hasPassword(String playerName) {
@@ -85,8 +90,8 @@ public enum PasswordManager {
         return  passworder.removePassword(playerName);
     }
 
-    public static String hashPassword (String password){
-        return Welcome.getCfg().getHashAlgorithm().getHash(password);
+    public static String hashPassword (String userName, String password){
+        return Welcome.getCfg().getHashAlgorithm().getHash(userName, password);
     }
 
 
@@ -150,7 +155,7 @@ public enum PasswordManager {
     public static boolean restrictedByIp(Player player) {
         if (!Welcome.getCfg().registerRestrictions) return false;
         Long lastLoginTime = passworder.lastLoginFromIp(player.getName(),player.getAddress());
-        if (lastLoginTime == null) return true;
+        if (lastLoginTime == null) return false;
         return (System.currentTimeMillis()-lastLoginTime)<Welcome.getCfg().getRestrictIpTime();
     }
 }

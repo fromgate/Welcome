@@ -73,3 +73,5 @@ cpwo_ok: Password of player %1% was changed
 cpwo_ok_inform: Your password was changed by %1%, new password is %2%
 cpwo_ok_inform_console: Your password was changed, new password is %2%
 cpwo_fail: Failed to change password of player %1%
+db_unknown: 'Unknown database provider: %1%. Check your config file'
+db_init_fail: 'Failed to init database provider: %1%. Check your config file'

@@ -10,6 +10,7 @@ import com.j256.ormlite.table.DatabaseTableConfig;
 import com.j256.ormlite.table.TableUtils;
 import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.util.Message;
@@ -18,45 +19,54 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ServerauthProvider implements PasswordProvider {
+public class SimpleauthProvider implements PasswordProvider {
     private boolean enabled;
-    private ServerauthCfg cfg;
+    private SimpleauthCfg cfg;
 
     private ConnectionSource connectionSource;
     Dao<ServerauthTable, String> dao;
     DatabaseTableConfig<ServerauthTable> tableCfg;
 
-    public ServerauthProvider(){
+    public SimpleauthProvider(){
         enabled = false;
+
         if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null){
             Message.DB_DBLIB_NOTFOUND.log();
             return;
         }
-        cfg = new ServerauthCfg(new File(Welcome.getPlugin().getDataFolder()+File.separator+"serverauth.yml"));
+        if (Welcome.getCfg().getHashAlgorithm()!= HashType.SIMPLEAUTH)
+            Message.DB_HASH_WARNING.log(Welcome.getCfg().getHashAlgorithm().name(),HashType.SIMPLEAUTH.name());
+        cfg = new SimpleauthCfg(new File(Welcome.getPlugin().getDataFolder()+File.separator+"simpleauth.yml"));
         cfg.load();
         cfg.save();
 
 
         List<DatabaseFieldConfig> fieldConfigs = new ArrayList<DatabaseFieldConfig>();
         DatabaseFieldConfig field = new DatabaseFieldConfig("user");
+        field.setColumnName("name");
         field.setCanBeNull(false);
         field.setId(true);
         field.setDataType(DataType.STRING);
         fieldConfigs.add(field);
         field = new DatabaseFieldConfig("password");
+        field.setColumnName("hash");
         field.setDataType(DataType.STRING);
         field.setCanBeNull(false);
         fieldConfigs.add(field);
         field = new DatabaseFieldConfig("ip");
+        field.setColumnName("lastip");
         field.setDataType(DataType.STRING);
         fieldConfigs.add(field);
         field = new DatabaseFieldConfig("firstlogin");
+        field.setColumnName("registerdate");
         field.setDataType(DataType.STRING);
         fieldConfigs.add(field);
         field = new DatabaseFieldConfig("lastlogin");
+        field.setColumnName("logindate");
         field.setDataType(DataType.STRING);
         fieldConfigs.add(field);
         tableCfg = new DatabaseTableConfig(ServerauthTable.class,cfg.tableName,fieldConfigs);
+
 
         connectionSource = cfg.useDefault ? DbLib.getConnectionSource() :
                 DbLib.getConnectionSource (new StringBuilder("jdbc:mysql://").append(cfg.host).append(":").
@@ -72,6 +82,8 @@ public class ServerauthProvider implements PasswordProvider {
             Message.debugException(e);
             return;
         }
+
+
         enabled = true;
     }
 
@@ -91,7 +103,8 @@ public class ServerauthProvider implements PasswordProvider {
             PasswordManager.setLock(playerName);
             return false;
         }
-        if (st.getPassword()==null) return false;
+        Message.debugMessage("Getting hash from table: ", st==null ? "table is null" : st.getPassword()==null ? "password is null" : "ok");
+        if (st==null||st.getPassword()==null) return false;
         return  password.equals(st.getPassword());
     }
 
@@ -148,7 +161,7 @@ public class ServerauthProvider implements PasswordProvider {
         if (!enabled) return null; // Ошибка - регистрация запрещена
         List<ServerauthTable> result;
         try {
-            result = dao.queryBuilder().where().eq("ip",ip).query();
+            result = dao.queryBuilder().where().eq("lastip",ip).query();
         } catch (Exception e){
             Message.debugException(e);
             PasswordManager.setLock(null);

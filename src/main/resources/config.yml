@@ -12,6 +12,8 @@ general:
   language: default
 # Enable/Disable debug messages. Don't touch this ;)
   debug-mode: false
+# Save (translation) into file.
+  save-translation: false
 
 message:
 # Enable tips messages (true) or just send message in chat (false)
@@ -20,7 +22,13 @@ message:
   delay-between-repeats: 10s
 
 password:
-# Password hash algorithm. Supported values: MD5, SHA1, SHA256, SHA512
+# Password hash algorithm. Supported values:
+# MD5
+# SHA1
+# SHA256
+# SHA512
+# WHIRLPOOL
+# SIMPLEAUTH - PocketMine plugin SimpleAuth's hash algorithm. Don't recommended for normal usage ;)
   hash-algorithm: SHA256
 # Time to wait until user login.
 # If time passed - user will be kicked out from the server
@@ -39,6 +47,8 @@ database:
 # YAML - yaml files
 # DATABASE - SQLite or MySQL database provided by DBLib plugin
 # SERVERAUTH - MySQL (or even SQLite) using table format of ServerAuth PocketMine plugin
+# SIMPLEAUTH - MySQL (or evne SQLite) using table format of SimpleAuth PocketMine plugin
+#              (don't forget to use SIMPLEAUTH hash algorithm)
 # REDIS - Redis database (plugin Nedis required)
   provider: YAML
 # If database connection failed, it will be reinitilized
