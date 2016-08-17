@@ -17,3 +17,4 @@ Welcome plugin can store data in YAML-files and in MySQL or SQLite database. Dat
 
 ## Welcome translation
 I need help with translating Welcome plugin. You can feel free to made a pull request or you can join to [**translation project at crowdin**](https://crowdin.com/project/welcome/invite).
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/welcome/localized.svg)](https://crowdin.com/project/welcome)
