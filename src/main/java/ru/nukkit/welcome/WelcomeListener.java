@@ -27,6 +27,7 @@ public class WelcomeListener implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onQuit(PlayerQuitEvent event) {
         PasswordManager.updateAutologin(event.getPlayer());
+        PlayerManager.clearBlindEffect(event.getPlayer());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
@@ -42,13 +43,13 @@ public class WelcomeListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onServerReloadCmd (ServerCommandEvent event){
+    public void onServerReloadCmd(ServerCommandEvent event) {
         if (!event.getCommand().matches("(?i)reload.*")) return;
         Message.RELOAD_CMD_WARNING.log();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
-    public void onReloadCmd (PlayerCommandPreprocessEvent event){
+    public void onReloadCmd(PlayerCommandPreprocessEvent event) {
         if (!event.getMessage().matches("(?i)\\/reload.*")) return;
         Message.RELOAD_CMD_WARNING.print(event.getPlayer());
         Message.RELOAD_CMD_WARNING.log();

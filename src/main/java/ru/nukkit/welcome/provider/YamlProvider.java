@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.Set;
 
 public class YamlProvider implements PasswordProvider {
-    private Map<String,String> passwords;
-    private Map<String,LoginState> logins;
+    private Map<String, String> passwords;
+    private Map<String, LoginState> logins;
 
-    public YamlProvider(){
+    public YamlProvider() {
         this.passwords = new HashMap<String, String>();
         logins = new HashMap<String, LoginState>();
         load();
@@ -30,7 +30,7 @@ public class YamlProvider implements PasswordProvider {
     }
 
     public boolean setPassword(String playerName, String password) {
-        passwords.put(playerName,password);
+        passwords.put(playerName, password);
         save();
         return true;
     }
@@ -48,8 +48,8 @@ public class YamlProvider implements PasswordProvider {
 
     public Long lastLoginFromIp(String playerName, String ip) {
         long time = 0;
-        for (LoginState ls : logins.values()){
-            if (ls.ip.equalsIgnoreCase(ip)&&ls.time>time) time = ls.time;
+        for (LoginState ls : logins.values()) {
+            if (ls.ip.equalsIgnoreCase(ip) && ls.time > time) time = ls.time;
         }
         return time;
     }
@@ -57,20 +57,20 @@ public class YamlProvider implements PasswordProvider {
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         long loginTime = System.currentTimeMillis();
         LoginState prevLogin = this.logins.containsKey(playerName) ? this.logins.get(playerName) : null;
-        if (prevLogin==null) return false;
-        LoginState newLogin = new LoginState(uuid,ip,loginTime);
+        if (prevLogin == null) return false;
+        LoginState newLogin = new LoginState(uuid, ip, loginTime);
         if (!prevLogin.uuid.equalsIgnoreCase(newLogin.uuid)) return false;
         if (!prevLogin.ip.equalsIgnoreCase(newLogin.ip)) return false;
-        return (newLogin.time-prevLogin.time)<=Welcome.getCfg().getMaxAutoTime();
+        return (newLogin.time - prevLogin.time) <= Welcome.getCfg().getMaxAutoTime();
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip) {
-        updateAutoLogin (playerName,uuid,ip,System.currentTimeMillis());
+        updateAutoLogin(playerName, uuid, ip, System.currentTimeMillis());
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
-        LoginState newLogin = new LoginState(uuid,ip,currentTime);
-        logins.put(playerName,newLogin);
+        LoginState newLogin = new LoginState(uuid, ip, currentTime);
+        logins.put(playerName, newLogin);
         save();
     }
 
@@ -89,21 +89,21 @@ public class YamlProvider implements PasswordProvider {
             dir.mkdirs();
             File f = new File(dir, "passwords.yml");
             if (f.exists()) f.delete();
-            Config cfg = new Config (f,Config.YAML);
+            Config cfg = new Config(f, Config.YAML);
             for (String password : passwords.keySet())
                 cfg.set(password, passwords.get(password));
             cfg.save();
             f = new File(dir, "lastlogin.yml");
             if (f.exists()) f.delete();
-            cfg = new Config (f,Config.YAML);
-            for (String key : this.logins.keySet()){
+            cfg = new Config(f, Config.YAML);
+            for (String key : this.logins.keySet()) {
                 LoginState ls = this.logins.get(key);
-                cfg.set(key+".uuid",ls.uuid);
-                cfg.set(key+".ip",ls.ip);
-                cfg.set(key+".time",ls.time);
+                cfg.set(key + ".uuid", ls.uuid);
+                cfg.set(key + ".ip", ls.ip);
+                cfg.set(key + ".time", ls.time);
             }
             cfg.save();
-        } catch (Exception e){
+        } catch (Exception e) {
             PasswordManager.setLock(null);
             e.printStackTrace();
         }
@@ -115,39 +115,40 @@ public class YamlProvider implements PasswordProvider {
             dir.mkdirs();
             File f = new File(dir, "passwords.yml");
             if (!f.exists()) f.createNewFile();
-            Config cfg = new Config(f,Config.YAML);
+            Config cfg = new Config(f, Config.YAML);
             passwords = new HashMap<String, String>();
-            for (String key : cfg.getAll().keySet()){
+            for (String key : cfg.getAll().keySet()) {
                 passwords.put(key, cfg.getString(key));
             }
             f = new File(dir, "lastlogin.yml");
             if (!f.exists()) f.createNewFile();
-            cfg = new Config(f,Config.YAML);
+            cfg = new Config(f, Config.YAML);
             logins = new HashMap<String, LoginState>();
             Set<String> usedKeys = new HashSet<String>();
-            for (String key : cfg.getAll().keySet()){
-                if (key.contains(".")){
+            for (String key : cfg.getAll().keySet()) {
+                if (key.contains(".")) {
                     String k = key.split(".")[0];
                     if (usedKeys.contains(k)) continue;
                     usedKeys.add(k);
-                    String uuid = cfg.getString(key+".uuid");
-                    String ip = cfg.getString(key+".uuid");
-                    long time = cfg.getLong(key+".time");
-                    this.logins.put(k,new LoginState(uuid,ip,time));
+                    String uuid = cfg.getString(key + ".uuid");
+                    String ip = cfg.getString(key + ".uuid");
+                    long time = cfg.getLong(key + ".time");
+                    this.logins.put(k, new LoginState(uuid, ip, time));
                 }
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             PasswordManager.setLock(null);
             e.printStackTrace();
         }
     }
 
     public class LoginState {
-        LoginState(String uuid, String ip, long time){
+        LoginState(String uuid, String ip, long time) {
             this.uuid = uuid;
             this.ip = ip;
             this.time = time;
         }
+
         String uuid;
         String ip;
         long time;

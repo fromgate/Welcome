@@ -1,16 +1,17 @@
 package ru.nukkit.welcome.provider.serverauth;
 
 public class ServerauthTable {
-    public ServerauthTable(){}
+    public ServerauthTable() {
+    }
 
-    public ServerauthTable(String name, String password){
+    public ServerauthTable(String name, String password) {
         this.user = name;
         this.password = password;
         this.firstlogin = String.valueOf(System.currentTimeMillis());
         this.lastlogin = String.valueOf(System.currentTimeMillis());
     }
 
-   // @DatabaseField(id=true, canBeNull = false, columnName = "user")
+    // @DatabaseField(id=true, canBeNull = false, columnName = "user")
     String user;
 
     //@DatabaseField(canBeNull = false, columnName = "password")

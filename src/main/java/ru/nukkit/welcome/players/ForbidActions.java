@@ -12,11 +12,11 @@ import cn.nukkit.event.entity.EntityDamageByChildEntityEvent;
 import cn.nukkit.event.entity.EntityDamageByEntityEvent;
 import cn.nukkit.event.entity.EntityDamageEvent;
 import cn.nukkit.event.inventory.CraftItemEvent;
-import cn.nukkit.event.inventory.InventoryOpenEvent;
 import cn.nukkit.event.inventory.InventoryPickupArrowEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
+import cn.nukkit.event.inventory.InventoryTransactionEvent;
 import cn.nukkit.event.player.*;
-import cn.nukkit.inventory.PlayerInventory;
+import cn.nukkit.inventory.Inventory;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.commands.Commander;
 import ru.nukkit.welcome.util.Message;
@@ -48,6 +48,16 @@ public class ForbidActions implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
+    public void onInventory(InventoryTransactionEvent event) {
+        for (Inventory inv : event.getTransaction().getInventories()) {
+            Player player = inv.getHolder() instanceof Player ? (Player) inv.getHolder() : null;
+            if (player == null) continue;
+            cancel(player, event);
+            if (event.isCancelled()) return;
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onInventoryItemPickup(InventoryPickupItemEvent event) {
         if (!Welcome.getCfg().blockPickup) return;
         Player player = event.getInventory().getHolder() instanceof Player ? (Player) event.getInventory().getHolder() : null;
@@ -61,11 +71,6 @@ public class ForbidActions implements Listener {
         Player player = event.getInventory().getHolder() instanceof Player ? (Player) event.getInventory().getHolder() : null;
         if (player == null) return;
         cancel(player, event);
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
-    public void onInventoryOpenEvent(InventoryOpenEvent event) {
-        cancel(event.getPlayer(), event);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)

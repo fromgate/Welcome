@@ -11,22 +11,22 @@ public class PasswordLock implements PasswordProvider {
     }
 
     public boolean checkPassword(String playerName, String password) {
-        informPlayer (playerName);
+        informPlayer(playerName);
         return false;
     }
 
     public boolean setPassword(String playerName, String password) {
-        informPlayer (playerName);
+        informPlayer(playerName);
         return false;
     }
 
     public boolean hasPassword(String playerName) {
-        informPlayer (playerName);
+        informPlayer(playerName);
         return false;
     }
 
     public boolean removePassword(String playerName) {
-        informPlayer (playerName);
+        informPlayer(playerName);
         return false;
     }
 
@@ -35,7 +35,7 @@ public class PasswordLock implements PasswordProvider {
     }
 
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
-        informPlayer (playerName);
+        informPlayer(playerName);
         return false;
     }
 
@@ -52,12 +52,12 @@ public class PasswordLock implements PasswordProvider {
     public void onDisable() {
     }
 
-    private void informPlayer(final String playerName){
+    private void informPlayer(final String playerName) {
         Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
             public void run() {
                 Player player = Server.getInstance().getPlayerExact(playerName);
-                if (player!=null) player.close("",Message.LOCK_INFORM.getText());
+                if (player != null) player.close("", Message.LOCK_INFORM.getText());
             }
-        },1);
+        }, 1);
     }
 }

@@ -16,26 +16,27 @@ public class Welcome extends PluginBase {
     public static Welcome getPlugin() {
         return instance;
     }
-    public static Cfg getCfg(){
+
+    public static Cfg getCfg() {
         return getPlugin().cfg;
     }
 
     @Override
-    public void onEnable(){
+    public void onEnable() {
         instance = this;
         cfg = new Cfg(this);
         cfg.load();
         Message.init(this);
         cfg.update();
-        PasswordValidator.init(cfg.validatorSpecialChar,cfg.validatorCapitalLetter,cfg.validatorNumber, cfg.validatorMinLength, cfg.validatorMaxLength);
+        PasswordValidator.init(cfg.validatorSpecialChar, cfg.validatorCapitalLetter, cfg.validatorNumber, cfg.validatorMinLength, cfg.validatorMaxLength);
         PasswordManager.init();
-        this.getServer().getPluginManager().registerEvents(new WelcomeListener(),this);
+        this.getServer().getPluginManager().registerEvents(new WelcomeListener(), this);
         this.getServer().getPluginManager().registerEvents(new ForbidActions(), this);
         Commander.init(this);
     }
 
     @Override
-    public void onDisable(){
+    public void onDisable() {
         PasswordManager.onDisable();
     }
 

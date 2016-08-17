@@ -5,13 +5,13 @@ import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import ru.nukkit.welcome.util.Message;
 
-@CmdDefine(command = "welcome", alias = "wel", subCommands ={"help"} , permission = "welcome.help", description = Message.CMD_HELP_DESC, allowConsole = true)
-public class CmdWelHelp extends Cmd{
+@CmdDefine(command = "welcome", alias = "wel", subCommands = {"help"}, permission = "welcome.help", description = Message.CMD_HELP_DESC, allowConsole = true)
+public class CmdWelHelp extends Cmd {
 
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
-        int pageNum = args.length>1&&args[1].matches("\\d+") ? Integer.parseInt(args[1]) : 1;
-        Commander.printHelp(sender,pageNum);
+        int pageNum = args.length > 1 && args[1].matches("\\d+") ? Integer.parseInt(args[1]) : 1;
+        Commander.printHelp(sender, pageNum);
         return true;
     }
 }

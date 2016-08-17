@@ -3,47 +3,46 @@ package ru.nukkit.welcome.password.simpleauth;
 
 /**
  * The Whirlpool hashing function.
- *
- * <P>
+ * <p>
+ * <p>
  * <b>References</b>
- *
- * <P>
+ * <p>
+ * <p>
  * The Whirlpool algorithm was developed by
  * <a href="mailto:pbarreto@scopus.com.br">Paulo S. L. M. Barreto</a> and
  * <a href="mailto:vincent.rijmen@cryptomathic.com">Vincent Rijmen</a>.
- *
+ * <p>
  * See
- *      P.S.L.M. Barreto, V. Rijmen,
- *      ``The Whirlpool hashing function,''
- *      First NESSIE workshop, 2000 (tweaked version, 2003),
- *      <https://www.cosic.esat.kuleuven.ac.be/nessie/workshop/submissions/whirlpool.zip>
+ * P.S.L.M. Barreto, V. Rijmen,
+ * ``The Whirlpool hashing function,''
+ * First NESSIE workshop, 2000 (tweaked version, 2003),
+ * <https://www.cosic.esat.kuleuven.ac.be/nessie/workshop/submissions/whirlpool.zip>
  *
- * @author    Paulo S.L.M. Barreto
- * @author    Vincent Rijmen.
- *
+ * @author Paulo S.L.M. Barreto
+ * @author Vincent Rijmen.
  * @version 3.0 (2003.03.12)
- *
+ * <p>
  * =============================================================================
- *
+ * <p>
  * Differences from version 2.1:
- *
+ * <p>
  * - Suboptimal diffusion matrix replaced by cir(1, 1, 4, 1, 8, 5, 2, 9).
- *
+ * <p>
  * =============================================================================
- *
+ * <p>
  * Differences from version 2.0:
- *
+ * <p>
  * - Generation of ISO/IEC 10118-3 test vectors.
  * - Bug fix: nonzero carry was ignored when tallying the data length
- *      (this bug apparently only manifested itself when feeding data
- *      in pieces rather than in a single chunk at once).
- *
+ * (this bug apparently only manifested itself when feeding data
+ * in pieces rather than in a single chunk at once).
+ * <p>
  * Differences from version 1.0:
- *
+ * <p>
  * - Original S-box replaced by the tweaked, hardware-efficient version.
- *
+ * <p>
  * =============================================================================
- *
+ * <p>
  * THIS SOFTWARE IS PROVIDED BY THE AUTHORS ''AS IS'' AND ANY EXPRESS
  * OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -55,7 +54,6 @@ package ru.nukkit.welcome.password.simpleauth;
  * WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
  * OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
  */
 
 import java.util.Arrays;
@@ -99,11 +97,11 @@ public class Whirlpool {
                     "\u163A\u6909\u70B6\ud0Ed\ucc42\u98A4\u285c\uF886";
 
     private static long[][] C = new long[8][256];
-    private static long[]  rc = new long[R + 1];
+    private static long[] rc = new long[R + 1];
 
     static {
         for (int x = 0; x < 256; x++) {
-            char c = sbox.charAt(x/2);
+            char c = sbox.charAt(x / 2);
             long v1 = ((x & 1) == 0) ? c >>> 8 : c & 0xff;
             long v2 = v1 << 1;
             if (v2 >= 0x100L) {
@@ -124,7 +122,7 @@ public class Whirlpool {
              */
             C[0][x] =
                     (v1 << 56) | (v1 << 48) | (v4 << 40) | (v1 << 32) |
-                            (v8 << 24) | (v5 << 16) | (v2 <<  8) | (v9      );
+                            (v8 << 24) | (v5 << 16) | (v2 << 8) | (v9);
             /*
              * build the remaining circulant tables C[t][x] = C[0][x] rotr t
              */
@@ -138,9 +136,9 @@ public class Whirlpool {
          */
         rc[0] = 0L; /* not used (assigment kept only to properly initialize all variables) */
         for (int r = 1; r <= R; r++) {
-            int i = 8*(r - 1);
+            int i = 8 * (r - 1);
             rc[r] =
-                    (C[0][i    ] & 0xff00000000000000L) ^
+                    (C[0][i] & 0xff00000000000000L) ^
                             (C[1][i + 1] & 0x00ff000000000000L) ^
                             (C[2][i + 2] & 0x0000ff0000000000L) ^
                             (C[3][i + 3] & 0x000000ff00000000L) ^
@@ -174,9 +172,9 @@ public class Whirlpool {
     /**
      * The hashing state.
      */
-    protected long[] hash  = new long[8];
-    protected long[] K     = new long[8]; // the round key
-    protected long[] L     = new long[8];
+    protected long[] hash = new long[8];
+    protected long[] K = new long[8]; // the round key
+    protected long[] L = new long[8];
     protected long[] block = new long[8]; // mu(buffer)
     protected long[] state = new long[8]; // the cipher state
 
@@ -192,14 +190,14 @@ public class Whirlpool {
          */
         for (int i = 0, j = 0; i < 8; i++, j += 8) {
             block[i] =
-                    (((long)buffer[j    ]        ) << 56) ^
-                            (((long)buffer[j + 1] & 0xffL) << 48) ^
-                            (((long)buffer[j + 2] & 0xffL) << 40) ^
-                            (((long)buffer[j + 3] & 0xffL) << 32) ^
-                            (((long)buffer[j + 4] & 0xffL) << 24) ^
-                            (((long)buffer[j + 5] & 0xffL) << 16) ^
-                            (((long)buffer[j + 6] & 0xffL) <<  8) ^
-                            (((long)buffer[j + 7] & 0xffL)      );
+                    (((long) buffer[j]) << 56) ^
+                            (((long) buffer[j + 1] & 0xffL) << 48) ^
+                            (((long) buffer[j + 2] & 0xffL) << 40) ^
+                            (((long) buffer[j + 3] & 0xffL) << 32) ^
+                            (((long) buffer[j + 4] & 0xffL) << 24) ^
+                            (((long) buffer[j + 5] & 0xffL) << 16) ^
+                            (((long) buffer[j + 6] & 0xffL) << 8) ^
+                            (((long) buffer[j + 7] & 0xffL));
         }
         /*
          * compute and apply K^0 to the cipher state:
@@ -217,7 +215,7 @@ public class Whirlpool {
             for (int i = 0; i < 8; i++) {
                 L[i] = 0L;
                 for (int t = 0, s = 56; t < 8; t++, s -= 8) {
-                    L[i] ^= C[t][(int)(K[(i - t) & 7] >>> s) & 0xff];
+                    L[i] ^= C[t][(int) (K[(i - t) & 7] >>> s) & 0xff];
                 }
             }
             for (int i = 0; i < 8; i++) {
@@ -230,7 +228,7 @@ public class Whirlpool {
             for (int i = 0; i < 8; i++) {
                 L[i] = K[i];
                 for (int t = 0, s = 56; t < 8; t++, s -= 8) {
-                    L[i] ^= C[t][(int)(state[(i - t) & 7] >>> s) & 0xff];
+                    L[i] ^= C[t][(int) (state[(i - t) & 7] >>> s) & 0xff];
                 }
             }
             for (int i = 0; i < 8; i++) {
@@ -249,7 +247,7 @@ public class Whirlpool {
      * Initialize the hashing state.
      */
     public void NESSIEinit() {
-        Arrays.fill(bitLength, (byte)0);
+        Arrays.fill(bitLength, (byte) 0);
         bufferBits = bufferPos = 0;
         buffer[0] = 0; // it's only necessary to cleanup buffer[bufferPos].
         Arrays.fill(hash, 0L); // initial value
@@ -277,14 +275,14 @@ public class Whirlpool {
                         bufferPos
         */
         int sourcePos = 0; // index of leftmost source byte containing data (1 to 8 bits).
-        int sourceGap = (8 - ((int)sourceBits & 7)) & 7; // space on source[sourcePos].
+        int sourceGap = (8 - ((int) sourceBits & 7)) & 7; // space on source[sourcePos].
         int bufferRem = bufferBits & 7; // occupied bits on buffer[bufferPos].
         int b;
         // tally the length of the added data:
         long value = sourceBits;
         for (int i = 31, carry = 0; i >= 0; i--) {
-            carry += (bitLength[i] & 0xff) + ((int)value & 0xff);
-            bitLength[i] = (byte)carry;
+            carry += (bitLength[i] & 0xff) + ((int) value & 0xff);
+            bitLength[i] = (byte) carry;
             carry >>>= 8;
             value >>>= 8;
         }
@@ -305,7 +303,7 @@ public class Whirlpool {
                 // reset buffer:
                 bufferBits = bufferPos = 0;
             }
-            buffer[bufferPos] = (byte)((b << (8 - bufferRem)) & 0xff);
+            buffer[bufferPos] = (byte) ((b << (8 - bufferRem)) & 0xff);
             bufferBits += bufferRem;
             // proceed to remaining data:
             sourceBits -= 8;
@@ -335,8 +333,8 @@ public class Whirlpool {
                 // reset buffer:
                 bufferBits = bufferPos = 0;
             }
-            buffer[bufferPos] = (byte)((b << (8 - bufferRem)) & 0xff);
-            bufferBits += (int)sourceBits;
+            buffer[bufferPos] = (byte) ((b << (8 - bufferRem)) & 0xff);
+            bufferBits += (int) sourceBits;
         }
     }
 
@@ -369,14 +367,14 @@ public class Whirlpool {
         // return the completed message digest:
         for (int i = 0, j = 0; i < 8; i++, j += 8) {
             long h = hash[i];
-            digest[j    ] = (byte)(h >>> 56);
-            digest[j + 1] = (byte)(h >>> 48);
-            digest[j + 2] = (byte)(h >>> 40);
-            digest[j + 3] = (byte)(h >>> 32);
-            digest[j + 4] = (byte)(h >>> 24);
-            digest[j + 5] = (byte)(h >>> 16);
-            digest[j + 6] = (byte)(h >>>  8);
-            digest[j + 7] = (byte)(h       );
+            digest[j] = (byte) (h >>> 56);
+            digest[j + 1] = (byte) (h >>> 48);
+            digest[j + 2] = (byte) (h >>> 40);
+            digest[j + 3] = (byte) (h >>> 32);
+            digest[j + 4] = (byte) (h >>> 24);
+            digest[j + 5] = (byte) (h >>> 16);
+            digest[j + 6] = (byte) (h >>> 8);
+            digest[j + 7] = (byte) (h);
         }
     }
 
@@ -391,20 +389,20 @@ public class Whirlpool {
         if (source.length() > 0) {
             byte[] data = new byte[source.length()];
             for (int i = 0; i < source.length(); i++) {
-                data[i] = (byte)source.charAt(i);
+                data[i] = (byte) source.charAt(i);
             }
-            NESSIEadd(data, 8*data.length);
+            NESSIEadd(data, 8 * data.length);
         }
     }
 
     public static String display(byte[] array) {
-        char[] val = new char[2*array.length];
+        char[] val = new char[2 * array.length];
         //String hex = "0123456789ABCDEF";
         String hex = "0123456789abcdef";
         for (int i = 0; i < array.length; i++) {
             int b = array[i] & 0xff;
-            val[2*i] = hex.charAt(b >>> 4);
-            val[2*i + 1] = hex.charAt(b & 15);
+            val[2 * i] = hex.charAt(b >>> 4);
+            val[2 * i + 1] = hex.charAt(b & 15);
         }
         return String.valueOf(val);
     }

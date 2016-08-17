@@ -24,7 +24,7 @@ public class PlayerManager {
         if (player.hasMetadata("welcome-in-game")) player.removeMetadata("welcome-in-game", Welcome.getPlugin());
         if (PasswordManager.checkAutologin(player)) {
             setPlayerLoggedIn(player);
-            tipOrPrint (player,Message.LGN_AUTO,'e', '6', player.getName());
+            tipOrPrint(player, Message.LGN_AUTO, 'e', '6', player.getName());
             Welcome.getCfg().broadcastLoginMessage(player);
             return;
         }
@@ -53,12 +53,12 @@ public class PlayerManager {
         if (!waitLogin.containsKey(name))
             waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            tipOrPrint (player,Message.TYPE_REG);
+            tipOrPrint(player, Message.TYPE_REG);
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitRegister(player);
                 }
-            },Welcome.getCfg().getMessageRepeatTicks());
+            }, Welcome.getCfg().getMessageRepeatTicks());
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
@@ -73,7 +73,7 @@ public class PlayerManager {
         if (!waitLogin.containsKey(name))
             waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime()); //3 минуты - это всё потом в конфиг!
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            tipOrPrint (player,Message.TYPE_LGN);
+            tipOrPrint(player, Message.TYPE_LGN);
             Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitLogin(player);
@@ -86,12 +86,12 @@ public class PlayerManager {
         if (isPlayerRegistered(player)) return Message.REG_ALREADY.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
         if (PasswordManager.restrictedByIp(player)) {
-            player.close("",Message.REG_RESTRICED_IP.getText());
+            player.close("", Message.REG_RESTRICED_IP.getText());
             return true;
         }
         if (Welcome.getCfg().passwordConfirmation) password2 = password1;
         if (password1 == null || password1.isEmpty() || password2 == null || password2.isEmpty())
-            return Welcome.getCfg().getTypeReg().print(player,'c');
+            return Welcome.getCfg().getTypeReg().print(player, 'c');
         if (!password1.equals(password2)) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
         if (!PasswordValidator.validatePassword(password1)) {
             Message.ERR_PWD_VALIDATE.print(player, 'c');
@@ -104,13 +104,14 @@ public class PlayerManager {
         Message.REG_LOG.log(player.getName(), "NOCOLOR");
         if (Welcome.getCfg().useTips) Message.REG_OK.print(player, '6');
         PasswordManager.updateAutologin(player);
-        tipOrPrint (player,Message.REG_OK,'6');
+        tipOrPrint(player, Message.REG_OK, '6');
         Welcome.getCfg().broadcastLoginMessage(player);
         return true;
     }
 
     public static boolean loginCommand(Player player, String password) {
         if (password == null || password.isEmpty()) return Message.LGN_MISS_PWD.print(player);
+        if (!isPlayerRegistered(player)) return Message.LGN_NEED_REG.print(player);
         if (isPlayerLoggedIn(player)) return Message.LGN_ALREADY.print(player);
         if (!PasswordManager.checkPassword(player, password)) {
             if (Welcome.getCfg().loginAtempts) {
@@ -121,7 +122,7 @@ public class PlayerManager {
                     player.close("", Message.LGN_ATTEMPT_EXCEED.getText('c'));
                     authAttempts.remove(name);
                     return Message.LGN_ATTEMPT_EXCEED_LOG.log(name);
-                } else authAttempts.put(name,attempt);
+                } else authAttempts.put(name, attempt);
             }
             return Message.ERR_PWD_WRONG.print(player);
         }
@@ -130,14 +131,14 @@ public class PlayerManager {
         Message.LGN_OK.print(player, '6');
         PasswordManager.updateAutologin(player);
         clearBlindEffect(player);
-        tipOrPrint (player, Message.LGN_OK, '6');
+        tipOrPrint(player, Message.LGN_OK, '6');
         Welcome.getCfg().broadcastLoginMessage(player);
         return true;
     }
 
     public static boolean logOff(Player player) {
         if (!isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
-        PasswordManager.updateAutologin(player,0);
+        PasswordManager.updateAutologin(player, 0);
         setPlayerLoggedOff(player);
         return player.kick(Message.LOGOFF_OK.getText(), false);
     }
@@ -149,13 +150,13 @@ public class PlayerManager {
         return player.kick(Message.UNREG_OK.getText(), false);
     }
 
-    private static void clearBlindEffect(Player player) {
+    public static void clearBlindEffect(Player player) {
         if (!Welcome.getCfg().setBlindEffect) return;
         if (player.hasEffect(Effect.BLINDNESS))
             player.removeEffect(Effect.BLINDNESS);
     }
 
-    private static void setBlindEffect(Player player) {
+    public static void setBlindEffect(Player player) {
         if (!Welcome.getCfg().setBlindEffect) return;
         Effect effect = Effect.getEffect(Effect.BLINDNESS);
         effect.setAmbient(false);
@@ -164,7 +165,7 @@ public class PlayerManager {
         player.addEffect(effect);
     }
 
-    private static boolean tipOrPrint (Player player, Message message, Object... params){
+    private static boolean tipOrPrint(Player player, Message message, Object... params) {
         if (Welcome.getCfg().useTips) message.tip(5, player, params);
         else message.print(player, params);
         return true;

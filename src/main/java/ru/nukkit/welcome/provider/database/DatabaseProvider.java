@@ -7,10 +7,8 @@ import com.j256.ormlite.support.ConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.password.PasswordManager;
-import ru.nukkit.welcome.provider.database.LastloginTable;
-import ru.nukkit.welcome.provider.database.PasswordsTable;
+import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.util.Message;
 
 import java.util.List;
@@ -23,18 +21,18 @@ public class DatabaseProvider implements PasswordProvider {
     Dao<PasswordsTable, String> passDao;
     Dao<LastloginTable, String> lastloginDao;
 
-    public DatabaseProvider(){
+    public DatabaseProvider() {
         enabled = false;
-        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null){
+        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null) {
             Message.DB_DBLIB_NOTFOUND.log();
             return;
         }
         connectionSource = DbLib.getConnectionSource();
         if (connectionSource == null) return;
         try {
-            passDao =  DaoManager.createDao(connectionSource, PasswordsTable.class);
+            passDao = DaoManager.createDao(connectionSource, PasswordsTable.class);
             TableUtils.createTableIfNotExists(connectionSource, PasswordsTable.class);
-            lastloginDao = DaoManager.createDao(connectionSource,LastloginTable.class);
+            lastloginDao = DaoManager.createDao(connectionSource, LastloginTable.class);
             TableUtils.createTableIfNotExists(connectionSource, LastloginTable.class);
         } catch (Exception e) {
             return;
@@ -48,7 +46,7 @@ public class DatabaseProvider implements PasswordProvider {
 
     public boolean checkPassword(String playerName, String password) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         PasswordsTable pt;
         try {
             pt = passDao.queryForId(playerName);
@@ -56,15 +54,15 @@ public class DatabaseProvider implements PasswordProvider {
             PasswordManager.setLock(playerName);
             return false;
         }
-        if (pt.getPassword()==null) return false;
-        return  password.equals(pt.getPassword());
+        if (pt.getPassword() == null) return false;
+        return password.equals(pt.getPassword());
     }
 
     public boolean setPassword(String playerName, String password) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
-        if (password==null||password.isEmpty()) return false;
-        PasswordsTable pt = new PasswordsTable(playerName,password);
+        if (playerName == null || playerName.isEmpty()) return false;
+        if (password == null || password.isEmpty()) return false;
+        PasswordsTable pt = new PasswordsTable(playerName, password);
         try {
             passDao.create(pt);
         } catch (Exception e) {
@@ -83,42 +81,42 @@ public class DatabaseProvider implements PasswordProvider {
 
     public boolean hasPassword(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             return passDao.idExists(playerName);
         } catch (Exception e) {
             PasswordManager.setLock(playerName);
         }
-        return  false;
+        return false;
 
     }
 
     public boolean removePassword(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             PasswordsTable pt = passDao.queryForId(playerName);
             passDao.delete(pt);
-        } catch (Exception e){
+        } catch (Exception e) {
             PasswordManager.setLock(playerName);
             return false;
         }
-        return  true;
+        return true;
     }
 
 
-    public Long lastLoginFromIp (String playerName, String ip){
+    public Long lastLoginFromIp(String playerName, String ip) {
         if (!enabled) return null; // Ошибка - регистрация запрещена
         List<LastloginTable> result;
         try {
-            result = lastloginDao.queryBuilder().where().eq("ip",ip).query();
-        } catch (Exception e){
+            result = lastloginDao.queryBuilder().where().eq("ip", ip).query();
+        } catch (Exception e) {
             PasswordManager.setLock(null);
             return null; // Ошибка - регистрация запрещена
         }
         long time = 0;
-        for (LastloginTable row : result){
-            if (row.getTime()>time) time=row.getTime();
+        for (LastloginTable row : result) {
+            if (row.getTime() > time) time = row.getTime();
         }
         return time;
     }
@@ -126,10 +124,10 @@ public class DatabaseProvider implements PasswordProvider {
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         if (!enabled) return false;
         long loginTime = System.currentTimeMillis();
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         String prevIp = "";
         String prevUUID = "";
-        long prevTime=0;
+        long prevTime = 0;
         try {
             LastloginTable llt = lastloginDao.queryForId(playerName);
             prevIp = llt.getIp();
@@ -138,15 +136,15 @@ public class DatabaseProvider implements PasswordProvider {
         } catch (Exception e) {
             PasswordManager.setLock(playerName);
         }
-        if (loginTime-prevTime>Welcome.getCfg().getMaxAutoTime()) return false;
-        if (prevIp.isEmpty()||prevUUID.isEmpty()) return false;
+        if (loginTime - prevTime > Welcome.getCfg().getMaxAutoTime()) return false;
+        if (prevIp.isEmpty() || prevUUID.isEmpty()) return false;
         if (!prevUUID.equalsIgnoreCase(uuid)) return false;
         return prevIp.equalsIgnoreCase(ip);
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
         if (!enabled) return;
-        if (playerName==null||playerName.isEmpty()) return;
+        if (playerName == null || playerName.isEmpty()) return;
         LastloginTable llt = null;
         try {
             llt = lastloginDao.queryForId(playerName);
@@ -156,19 +154,19 @@ public class DatabaseProvider implements PasswordProvider {
             lastloginDao.update(llt);
         } catch (Exception e) {
         }
-        if (llt==null) try {
-            lastloginDao.create(new LastloginTable(playerName,uuid,ip,currentTime));
-        } catch (Exception ignore){
+        if (llt == null) try {
+            lastloginDao.create(new LastloginTable(playerName, uuid, ip, currentTime));
+        } catch (Exception ignore) {
         }
     }
 
     public boolean removeAutoLogin(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             LastloginTable pt = lastloginDao.queryForId(playerName);
             lastloginDao.delete(pt);
-        } catch (Exception e){
+        } catch (Exception e) {
             PasswordManager.setLock(playerName);
             return false;
         }
@@ -176,6 +174,6 @@ public class DatabaseProvider implements PasswordProvider {
     }
 
     public void onDisable() {
-        if (connectionSource!=null) connectionSource.closeQuietly();
+        if (connectionSource != null) connectionSource.closeQuietly();
     }
 }

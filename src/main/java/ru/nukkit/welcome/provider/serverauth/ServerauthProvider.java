@@ -26,13 +26,13 @@ public class ServerauthProvider implements PasswordProvider {
     Dao<ServerauthTable, String> dao;
     DatabaseTableConfig<ServerauthTable> tableCfg;
 
-    public ServerauthProvider(){
+    public ServerauthProvider() {
         enabled = false;
-        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null){
+        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null) {
             Message.DB_DBLIB_NOTFOUND.log();
             return;
         }
-        cfg = new ServerauthCfg(new File(Welcome.getPlugin().getDataFolder()+File.separator+"serverauth.yml"));
+        cfg = new ServerauthCfg(new File(Welcome.getPlugin().getDataFolder() + File.separator + "serverauth.yml"));
         cfg.load();
         cfg.save();
 
@@ -56,18 +56,18 @@ public class ServerauthProvider implements PasswordProvider {
         field = new DatabaseFieldConfig("lastlogin");
         field.setDataType(DataType.STRING);
         fieldConfigs.add(field);
-        tableCfg = new DatabaseTableConfig(ServerauthTable.class,cfg.tableName,fieldConfigs);
+        tableCfg = new DatabaseTableConfig(ServerauthTable.class, cfg.tableName, fieldConfigs);
 
         connectionSource = cfg.useDefault ? DbLib.getConnectionSource() :
-                DbLib.getConnectionSource (new StringBuilder("jdbc:mysql://").append(cfg.host).append(":").
+                DbLib.getConnectionSource(new StringBuilder("jdbc:mysql://").append(cfg.host).append(":").
                         append(cfg.port).append("/").
-                        append(cfg.db).toString(),cfg.username,cfg.password);
+                        append(cfg.db).toString(), cfg.username, cfg.password);
 
-        if (connectionSource==null) return;
+        if (connectionSource == null) return;
 
         try {
-            dao = DaoManager.createDao(connectionSource,tableCfg);
-            TableUtils.createTableIfNotExists(connectionSource,ServerauthTable.class);
+            dao = DaoManager.createDao(connectionSource, tableCfg);
+            TableUtils.createTableIfNotExists(connectionSource, tableCfg);
         } catch (Exception e) {
             Message.debugException(e);
             return;
@@ -82,24 +82,24 @@ public class ServerauthProvider implements PasswordProvider {
 
     public boolean checkPassword(String playerName, String password) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         ServerauthTable st;
         try {
             st = dao.queryForId(playerName);
-        } catch (Exception e){
+        } catch (Exception e) {
             Message.debugException(e);
             PasswordManager.setLock(playerName);
             return false;
         }
-        if (st.getPassword()==null) return false;
-        return  password.equals(st.getPassword());
+        if (st.getPassword() == null) return false;
+        return password.equals(st.getPassword());
     }
 
     public boolean setPassword(String playerName, String password) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
-        if (password==null||password.isEmpty()) return false;
-        ServerauthTable st = new ServerauthTable(playerName,password);
+        if (playerName == null || playerName.isEmpty()) return false;
+        if (password == null || password.isEmpty()) return false;
+        ServerauthTable st = new ServerauthTable(playerName, password);
         try {
             dao.create(st);
         } catch (Exception e) {
@@ -120,44 +120,44 @@ public class ServerauthProvider implements PasswordProvider {
 
     public boolean hasPassword(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             return dao.idExists(playerName);
         } catch (Exception e) {
             Message.debugException(e);
             PasswordManager.setLock(playerName);
         }
-        return  false;
+        return false;
     }
 
     public boolean removePassword(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             ServerauthTable pt = dao.queryForId(playerName);
             dao.delete(pt);
-        } catch (Exception e){
+        } catch (Exception e) {
             Message.debugException(e);
             PasswordManager.setLock(playerName);
             return false;
         }
-        return  true;
+        return true;
     }
 
     public Long lastLoginFromIp(String playerName, String ip) {
         if (!enabled) return null; // Ошибка - регистрация запрещена
         List<ServerauthTable> result;
         try {
-            result = dao.queryBuilder().where().eq("ip",ip).query();
-        } catch (Exception e){
+            result = dao.queryBuilder().where().eq("ip", ip).query();
+        } catch (Exception e) {
             Message.debugException(e);
             PasswordManager.setLock(null);
             return null; // Ошибка - регистрация запрещена
         }
         long time = 0;
-        for (ServerauthTable row : result){
+        for (ServerauthTable row : result) {
             long lastTime = Long.parseLong(row.getLastlogin());
-            if (lastTime>time) time=lastTime;
+            if (lastTime > time) time = lastTime;
         }
         return time;
     }
@@ -165,7 +165,7 @@ public class ServerauthProvider implements PasswordProvider {
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         if (!enabled) return false;
         long loginTime = System.currentTimeMillis();
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         ServerauthTable st = null;
         try {
             st = dao.queryForId(playerName);
@@ -175,17 +175,17 @@ public class ServerauthProvider implements PasswordProvider {
         }
         if (st == null) return false;
         String prevIp = st.getIp();
-        if (prevIp==null||prevIp.isEmpty()) return false;
+        if (prevIp == null || prevIp.isEmpty()) return false;
         String prevTimeStr = st.getLastlogin();
-        if (prevTimeStr==null||prevTimeStr.isEmpty()) return false;
+        if (prevTimeStr == null || prevTimeStr.isEmpty()) return false;
         long prevTime = Long.parseLong(prevTimeStr);
-        if (loginTime-prevTime>Welcome.getCfg().getMaxAutoTime()) return false;
+        if (loginTime - prevTime > Welcome.getCfg().getMaxAutoTime()) return false;
         return prevIp.equalsIgnoreCase(ip);
     }
 
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
         if (!enabled) return;
-        if (playerName==null||playerName.isEmpty()) return;
+        if (playerName == null || playerName.isEmpty()) return;
         try {
             if (!dao.idExists(playerName)) return;
             ServerauthTable st = dao.queryForId(playerName);
@@ -200,12 +200,12 @@ public class ServerauthProvider implements PasswordProvider {
 
     public boolean removeAutoLogin(String playerName) {
         if (!enabled) return false;
-        if (playerName==null||playerName.isEmpty()) return false;
+        if (playerName == null || playerName.isEmpty()) return false;
         try {
             ServerauthTable st = dao.queryForId(playerName);
             st.setLastlogin("0");
             dao.update(st);
-        } catch (Exception e){
+        } catch (Exception e) {
             Message.debugException(e);
             PasswordManager.setLock(playerName);
             return false;
@@ -214,6 +214,6 @@ public class ServerauthProvider implements PasswordProvider {
     }
 
     public void onDisable() {
-        if (connectionSource!=null) connectionSource.closeQuietly();
+        if (connectionSource != null) connectionSource.closeQuietly();
     }
 }

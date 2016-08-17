@@ -14,7 +14,7 @@ public class CommandExecutor extends Command {
 
     @Override
     public boolean execute(CommandSender commandSender, String s, String[] strings) {
-        Message.debugMessage(commandSender.getName(),s, new ArrayList<String>(Arrays.asList(strings)).toString());
-        return Commander.execute(commandSender,s,strings);
+        Message.debugMessage(commandSender.getName(), s, new ArrayList<String>(Arrays.asList(strings)).toString());
+        return Commander.execute(commandSender, s, strings);
     }
 }

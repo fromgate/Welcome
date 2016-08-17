@@ -9,17 +9,17 @@ public class RedisCfg extends SimpleConfig {
         super(file);
     }
 
-    @Path (value = "redis.prefix")
+    @Path(value = "redis.prefix")
     public String prefix = "welcome_";
 
-    @Path (value = "redis.use-default-server")
+    @Path(value = "redis.use-default-server")
     public boolean useDefault = true;
 
     @Path(value = "redis.custom.host")
     public String host = "localhost";
 
     @Path(value = "redis.custom.port")
-    public int port=6379;
+    public int port = 6379;
 
     @Path(value = "redis.custom.extra-config.timeout")
     public int timeout = 0;

@@ -5,7 +5,7 @@ import cn.nukkit.command.CommandSender;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
 
-@CmdDefine(command = "logoff", subCommands = {} , permission = "welcome.login" , description = Message.CMD_LGF_DESC)
+@CmdDefine(command = "logoff", subCommands = {}, permission = "welcome.login", description = Message.CMD_LGF_DESC)
 public class CmdLogOff extends Cmd {
 
     @Override

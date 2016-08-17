@@ -3,10 +3,10 @@ package ru.nukkit.welcome.provider.database;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
-@DatabaseTable (tableName = "lastlogin")
+@DatabaseTable(tableName = "lastlogin")
 public class LastloginTable {
 
-    @DatabaseField(id=true)
+    @DatabaseField(id = true)
     private String name;
 
     @DatabaseField(canBeNull = false)
