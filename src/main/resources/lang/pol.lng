@@ -1,6 +1,7 @@
+---
 lng_load_fail: Failed to load languages from file. Default message used
 lng_save_fail: Nie można zapisać pliku lang.
-lng_print_fail:
+lng_print_fail: |-
   Failed to print message to 'null': "%1%"
 lng_config: '[MESSAGES] Komunikaty: %1% | Język: %2% | Zapisz plik z tłumaczeniem: %1% | Tryb debug: %3%'
 word_unknown: Nieznane
