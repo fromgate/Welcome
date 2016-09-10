@@ -53,7 +53,7 @@ public class PlayerManager {
         if (!waitLogin.containsKey(name))
             waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            tipOrPrint(player, ServerAuth.getAPI().getCfg().getTypeReg());
+            tipOrPrint(player, Welcome.getPlugin().getCfg().getTypeReg());
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitRegister(player);
