@@ -53,7 +53,7 @@ public class PlayerManager {
         if (!waitLogin.containsKey(name))
             waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
         if (System.currentTimeMillis() < waitLogin.get(name)) {
-            tipOrPrint(player, Message.TYPE_REG);
+            tipOrPrint(player, ServerAuth.getAPI().getCfg().getTypeReg());
             Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
                 public void run() {
                     startWaitRegister(player);
@@ -89,7 +89,7 @@ public class PlayerManager {
             player.close("", Message.REG_RESTRICED_IP.getText());
             return true;
         }
-        if (Welcome.getCfg().passwordConfirmation) password2 = password1;
+        if (!Welcome.getCfg().passwordConfirmation) password2 = password1;
         if (password1 == null || password1.isEmpty() || password2 == null || password2.isEmpty())
             return Welcome.getCfg().getTypeReg().print(player, 'c');
         if (!password1.equals(password2)) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
@@ -146,6 +146,7 @@ public class PlayerManager {
     public static boolean unregCommand(Player player, String password) {
         if (password == null || password.isEmpty()) return Message.UNREG_MISS_PWD.print(player);
         if (!PasswordManager.checkPassword(player, password)) return Message.ERR_PWD_WRONG.print(player);
+        PasswordManager.removeAutologin(player.getName());
         PasswordManager.removePassword(player);
         return player.kick(Message.UNREG_OK.getText(), false);
     }
