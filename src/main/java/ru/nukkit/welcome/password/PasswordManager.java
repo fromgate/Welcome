@@ -12,15 +12,17 @@ import ru.nukkit.welcome.provider.database.DatabaseProvider;
 import ru.nukkit.welcome.provider.redis.RedisProvider;
 import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
 import ru.nukkit.welcome.provider.serverauth.SimpleauthProvider;
+import ru.nukkit.welcome.provider.sql2o.Sql2oProvider;
 import ru.nukkit.welcome.util.Message;
 
 public enum PasswordManager {
     YAML(YamlProvider.class),
-    DATABASE(DatabaseProvider.class),
+    DATABASE(Sql2oProvider.class),
     SERVERAUTH(ServerauthProvider.class),
     SIMPLEAUTH(SimpleauthProvider.class),
     REDIS(RedisProvider.class),
-    LOCK(PasswordLock.class);
+    LOCK(PasswordLock.class),
+    DATABASE_OLD(DatabaseProvider.class);
 
     Class<? extends PasswordProvider> clazz;
 
