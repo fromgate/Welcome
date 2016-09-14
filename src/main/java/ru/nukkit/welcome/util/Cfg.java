@@ -38,7 +38,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path("message.delay-between-repeats")
     public String messageDelay = "10s";
 
-    @Path ("password.type-password-in-chat")
+    @Path("password.type-password-in-chat")
     public boolean typeInChat = false;
 
     //# Password hash algorithm. Supported values: MD5, SHA1, SHA256, SHA512

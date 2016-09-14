@@ -104,7 +104,7 @@ public class PlayerManager {
                     return;
                 }
                 if (!Welcome.getCfg().passwordConfirmation) pwd2 = pwd1;
-                if (pwd1 == null || pwd1.isEmpty() || pwd2 == null || pwd2.isEmpty()){
+                if (pwd1 == null || pwd1.isEmpty() || pwd2 == null || pwd2.isEmpty()) {
                     Welcome.getCfg().getTypeReg().print(player, 'c');
                     return;
                 }

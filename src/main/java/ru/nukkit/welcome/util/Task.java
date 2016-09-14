@@ -5,7 +5,7 @@ import cn.nukkit.scheduler.AsyncTask;
 
 public abstract class Task extends AsyncTask {
 
-    public void start(){
+    public void start() {
         Server.getInstance().getScheduler().scheduleAsyncTask(this);
     }
 }

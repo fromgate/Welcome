@@ -90,7 +90,7 @@ public class ForbidActions implements Listener {
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerChatEvent(PlayerChatEvent event) {
         Player player = event.getPlayer();
-        if (event.getMessage() == null||event.getMessage().trim().isEmpty()) return;
+        if (event.getMessage() == null || event.getMessage().trim().isEmpty()) return;
         if (PlayerManager.isPlayerLoggedIn(player)) return;
         if (Welcome.getCfg().typeInChat) {
             String[] ln = event.getMessage().split(" ");
