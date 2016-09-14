@@ -3,6 +3,7 @@ package ru.nukkit.welcome.commands;
 import cn.nukkit.Player;
 import cn.nukkit.command.CommandSender;
 import ru.nukkit.welcome.password.PasswordManager;
+import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.util.Message;
 
@@ -13,6 +14,14 @@ public class CmdChangePwd extends Cmd {
     public boolean execute(CommandSender sender, Player player, String[] args) {
         if (args.length < 3) return Message.CPW_USAGE.print(player, 'c');
         if (!PlayerManager.isPlayerLoggedIn(player)) return Message.ERR_NOT_LOGGED.print(player);
+
+        if (!PasswordValidator.validatePassword(args[0])) {
+            Message.ERR_PWD_VALIDATE.print(player, 'c');
+            player.sendMessage(PasswordValidator.getInfo());
+            return true;
+        }
+
+
         if (!PasswordManager.checkPassword(player, args[0])) return Message.ERR_PWD_WRONG.print(player);
         if (!args[1].equals(args[2])) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
         PasswordManager.setPassword(player, args[1]);

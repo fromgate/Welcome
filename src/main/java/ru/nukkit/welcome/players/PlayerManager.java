@@ -104,22 +104,22 @@ public class PlayerManager {
                     return;
                 }
                 if (!Welcome.getCfg().passwordConfirmation) pwd2 = pwd1;
-                if (password1 == null || password1.isEmpty() || password2 == null || password2.isEmpty()){
+                if (pwd1 == null || pwd1.isEmpty() || pwd2 == null || pwd2.isEmpty()){
                     Welcome.getCfg().getTypeReg().print(player, 'c');
                     return;
                 }
 
-                if (!password1.equals(password2)) {
+                if (!pwd2.equals(pwd2)) {
                     Message.ERR_PWD_NOTMATCH.print(player, 'c');
                     return;
                 }
-                if (!PasswordValidator.validatePassword(password1)) {
+                if (!PasswordValidator.validatePassword(pwd1)) {
                     Message.ERR_PWD_VALIDATE.print(player, 'c');
                     player.sendMessage(PasswordValidator.getInfo());
                     return;
                 }
 
-                PasswordManager.setPassword(player, password1);
+                PasswordManager.setPassword(player, pwd1);
                 clearBlindEffect(player);
                 setPlayerLoggedIn(player);
                 Message.REG_LOG.log(player.getName(), "NOCOLOR");
