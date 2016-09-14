@@ -26,8 +26,10 @@ public class WelcomeListener implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
     public void onQuit(PlayerQuitEvent event) {
-        PasswordManager.updateAutologin(event.getPlayer());
         PlayerManager.clearBlindEffect(event.getPlayer());
+        PasswordManager.updateAutologinAsync(event.getPlayer().getName(),
+                event.getPlayer().getUniqueId(),
+                event.getPlayer().getAddress());
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)

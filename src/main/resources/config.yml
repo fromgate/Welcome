@@ -22,6 +22,10 @@ message:
   delay-between-repeats: 10s
 
 password:
+# Password input method:
+# true - type in chat (without command)
+# false - use commands (/register and /login)
+  type-password-in-chat: true
 # Password hash algorithm. Supported values:
 # MD5
 # SHA1

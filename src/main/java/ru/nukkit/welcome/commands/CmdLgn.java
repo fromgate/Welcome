@@ -10,6 +10,7 @@ public class CmdLgn extends Cmd {
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
         if (player == null) return false;
-        return PlayerManager.loginCommand(player, args.length > 0 ? args[0] : "");
+        PlayerManager.loginCommand(player, args.length > 0 ? args[0] : "");
+        return true;
     }
 }

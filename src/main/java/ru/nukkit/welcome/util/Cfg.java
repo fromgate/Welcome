@@ -6,6 +6,7 @@ import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.SimpleConfig;
 import cn.nukkit.utils.TextFormat;
+import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.password.PasswordManager;
 
@@ -36,6 +37,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
 
     @Path("message.delay-between-repeats")
     public String messageDelay = "10s";
+
+    @Path ("password.type-password-in-chat")
+    public boolean typeInChat = false;
 
     //# Password hash algorithm. Supported values: MD5, SHA1, SHA256, SHA512
     @Path("password.hash-algorithm")
@@ -144,7 +148,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     }
 
     public Message getTypeReg() {
-        return this.passwordConfirmation ? Message.TYPE_REG : Message.TYPE_REG1;
+        return Welcome.getCfg().typeInChat ?
+                (this.passwordConfirmation ? Message.TYPE_REG_CHAT : Message.TYPE_REG1_CHAT)
+                : (this.passwordConfirmation ? Message.TYPE_REG : Message.TYPE_REG1);
     }
 
     public void sendPreLoginMessage(Player player) {
@@ -170,7 +176,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
             return;
         }
         Config cfg = new Config(file, Config.YAML);
-        if (cfg.get("general.save-translation") == null) {
+        if (!cfg.exists("password.type-password-in-chat")) {
             save();
             Message.CFG_UPDATED.log();
         }

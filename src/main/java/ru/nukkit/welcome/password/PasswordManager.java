@@ -9,20 +9,23 @@ import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.provider.YamlProvider;
 import ru.nukkit.welcome.provider.database.DatabaseProvider;
+import ru.nukkit.welcome.provider.database_old.DatabaseOrmliteProvider;
 import ru.nukkit.welcome.provider.redis.RedisProvider;
 import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
 import ru.nukkit.welcome.provider.serverauth.SimpleauthProvider;
-import ru.nukkit.welcome.provider.sql2o.Sql2oProvider;
 import ru.nukkit.welcome.util.Message;
+import ru.nukkit.welcome.util.Task;
+
+import java.util.UUID;
 
 public enum PasswordManager {
     YAML(YamlProvider.class),
-    DATABASE(Sql2oProvider.class),
+    DATABASE(DatabaseProvider.class),
     SERVERAUTH(ServerauthProvider.class),
     SIMPLEAUTH(SimpleauthProvider.class),
     REDIS(RedisProvider.class),
     LOCK(PasswordLock.class),
-    DATABASE_OLD(DatabaseProvider.class);
+    DATABASE_OLD(DatabaseOrmliteProvider.class);
 
     Class<? extends PasswordProvider> clazz;
 
@@ -114,6 +117,16 @@ public enum PasswordManager {
         if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
         passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(), System.currentTimeMillis());
+    }
+
+    public static void updateAutologinAsync(final String playerName, final UUID uuid, final String ip) {
+        new Task() {
+            @Override
+            public void onRun() {
+                if (!hasPassword(playerName)) return;
+                passworder.updateAutoLogin(playerName.toLowerCase(), uuid.toString(), ip, System.currentTimeMillis());
+            }
+        }.start();
     }
 
     public static void removeAutologin(String playerName) {

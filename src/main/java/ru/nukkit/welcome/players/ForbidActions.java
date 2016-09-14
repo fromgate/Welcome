@@ -19,7 +19,6 @@ import cn.nukkit.event.player.*;
 import cn.nukkit.inventory.Inventory;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.commands.Commander;
-import ru.nukkit.welcome.util.Message;
 
 public class ForbidActions implements Listener {
 
@@ -90,16 +89,28 @@ public class ForbidActions implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerChatEvent(PlayerChatEvent event) {
-        if (Welcome.getCfg().blockChat) cancel(event.getPlayer(), event);
+        Player player = event.getPlayer();
+        if (event.getMessage() == null||event.getMessage().trim().isEmpty()) return;
+        if (PlayerManager.isPlayerLoggedIn(player)) return;
+        if (Welcome.getCfg().typeInChat) {
+            String[] ln = event.getMessage().split(" ");
+            if (PlayerManager.isPlayerRegistered(player)) {
+                PlayerManager.loginCommand(player, ln[0]);
+            } else {
+                PlayerManager.regCommand(player, ln[0], ln.length >= 2 ? ln[1] : "");
+            }
+
+            event.setCancelled();
+        } else if (Welcome.getCfg().blockChat) event.setCancelled();
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         if (PlayerManager.isPlayerLoggedIn(event.getPlayer())) return;
         String cmd = Commander.getCommandByAlias(event.getMessage().substring(1).split(" ")[0]);
-        Message.debugMessage("cmd: " + (cmd == null ? "null" : cmd));
-        if (cmd != null && (cmd.equalsIgnoreCase("register") || cmd.equalsIgnoreCase("login")))
+        if (!Welcome.getCfg().typeInChat && cmd != null && cmd.matches("(?i)register|reg|login|lgn|l")) {
             return; // Разрешаем только команды для регистрации
+        }
         event.setCancelled();
     }
 

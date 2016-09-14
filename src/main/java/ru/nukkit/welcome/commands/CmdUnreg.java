@@ -11,7 +11,8 @@ public class CmdUnreg extends Cmd {
     @Override
     public boolean execute(CommandSender sender, Player player, String[] args) {
         if (player == null) return false;
-        return PlayerManager.unregCommand(player, args.length > 0 ? args[0] : "");
+        PlayerManager.unregCommand(player, args.length > 0 ? args[0] : "");
+        return true;
     }
 
 }
