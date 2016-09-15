@@ -107,7 +107,12 @@ public enum Providers {
             case "dblib":
                 return DbLib.getSql2o();
             case "sqlite":
-                return DbLib.getSql2o(DbLib.getSqliteUrl(cfg.dbSqliteFile), cfg.dbMySqlUser, "");
+                try {
+                    Class.forName("org.sqlite.JDBC");
+                } catch (ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return DbLib.getSql2o(DbLib.getSqliteUrl(cfg.dbSqliteFile), "", "");
             case "mysql":
                 return DbLib.getSql2oMySql(cfg.dbMySqlHost, cfg.dbMySqlPort, cfg.dbMySqlDb, cfg.dbMySqlUser, cfg.dbMySqlPwd);
         }

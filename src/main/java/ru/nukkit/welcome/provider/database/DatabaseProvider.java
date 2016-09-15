@@ -1,12 +1,10 @@
 package ru.nukkit.welcome.provider.database;
 
-import cn.nukkit.Server;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
-import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.provider.PasswordProvider;
-import ru.nukkit.welcome.util.Message;
+import ru.nukkit.welcome.provider.Providers;
 
 import java.util.List;
 
@@ -40,12 +38,7 @@ public class DatabaseProvider implements PasswordProvider {
 
     public DatabaseProvider() {
         enabled = false;
-
-        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null) {
-            Message.DB_DBLIB_NOTFOUND.log();
-            return;
-        }
-        sql2o = DbLib.getSql2o();
+        sql2o = Providers.getSql2o();
         if (sql2o == null) return;
 
         try (Connection con = sql2o.beginTransaction(java.sql.Connection.TRANSACTION_SERIALIZABLE)) {
@@ -53,14 +46,6 @@ public class DatabaseProvider implements PasswordProvider {
             con.createQuery(createLastloginTable).executeUpdate();
             con.commit();
         }
-
-/*
-        try (Connection con = sql2o.open()) {
-            con.createQuery(createPlayersTable).executeUpdate();
-        }
-        try (Connection con = sql2o.open()) {
-            con.createQuery(createLastloginTable).executeUpdate();
-        } */
         enabled = true;
     }
 
