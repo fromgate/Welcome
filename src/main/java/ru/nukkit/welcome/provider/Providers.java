@@ -83,7 +83,7 @@ public enum Providers {
         return null;
     }
 
-    public static synchronized void setLock(final String playerName) {
+    public static void setLock(final String playerName) {
         Message.DB_LOCK.log();
         onDisable();
         passworder = Providers.LOCK.getProvider();
