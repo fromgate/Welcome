@@ -65,11 +65,9 @@ public enum Providers {
         if (pwd != null && pwd.isEnabled()) {
             passworder = pwd;
             Message.DB_REINIT.log(pp.name(), Welcome.getCfg().getHashAlgorithm());
-        } else task = Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
-            public void run() {
-                task = null;
-                reInit();
-            }
+        } else task = Server.getInstance().getScheduler().scheduleDelayedTask(() -> {
+            task = null;
+            reInit();
         }, Welcome.getCfg().getReinitTimeTicks());
     }
 
