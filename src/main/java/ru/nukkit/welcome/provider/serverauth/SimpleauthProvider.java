@@ -11,8 +11,8 @@ import com.j256.ormlite.table.TableUtils;
 import ru.nukkit.dblib.DbLib;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.HashType;
-import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.provider.PasswordProvider;
+import ru.nukkit.welcome.provider.Providers;
 import ru.nukkit.welcome.util.Message;
 
 import java.io.File;
@@ -100,7 +100,7 @@ public class SimpleauthProvider implements PasswordProvider {
             st = dao.queryForId(playerName);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         }
         Message.debugMessage("Getting hash from table: ", st == null ? "table is null" : st.getPassword() == null ? "password is null" : "ok");
@@ -125,7 +125,7 @@ public class SimpleauthProvider implements PasswordProvider {
             dao.update(st);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         }
         return true;
@@ -138,7 +138,7 @@ public class SimpleauthProvider implements PasswordProvider {
             return dao.idExists(playerName);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
         }
         return false;
     }
@@ -151,7 +151,7 @@ public class SimpleauthProvider implements PasswordProvider {
             dao.delete(pt);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         }
         return true;
@@ -164,7 +164,7 @@ public class SimpleauthProvider implements PasswordProvider {
             result = dao.queryBuilder().where().eq("lastip", ip).query();
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(null);
+            Providers.setLock(null);
             return null; // Ошибка - регистрация запрещена
         }
         long time = 0;
@@ -184,7 +184,7 @@ public class SimpleauthProvider implements PasswordProvider {
             st = dao.queryForId(playerName);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
         }
         if (st == null) return false;
         String prevIp = st.getIp();
@@ -207,7 +207,7 @@ public class SimpleauthProvider implements PasswordProvider {
             dao.update(st);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
         }
     }
 
@@ -220,7 +220,7 @@ public class SimpleauthProvider implements PasswordProvider {
             dao.update(st);
         } catch (Exception e) {
             Message.debugException(e);
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         }
         return true;

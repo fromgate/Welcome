@@ -5,8 +5,8 @@ import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
 import ru.nukkit.nedis.Nedis;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.provider.PasswordProvider;
+import ru.nukkit.welcome.provider.Providers;
 import ru.nukkit.welcome.util.Message;
 
 import java.io.File;
@@ -49,7 +49,7 @@ public class RedisProvider implements PasswordProvider {
             if (jedis.exists(key))
                 result = password.equals(key);
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         } finally {
             if (jedis != null) jedis.close();
@@ -63,7 +63,7 @@ public class RedisProvider implements PasswordProvider {
             jedis = jedisPool.getResource();
             jedis.set(key("password", playerName), password);
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         } finally {
             if (jedis != null) jedis.close();
@@ -78,7 +78,7 @@ public class RedisProvider implements PasswordProvider {
             jedis = jedisPool.getResource();
             result = (jedis.exists(key("password", playerName)));
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         } finally {
             if (jedis != null) jedis.close();
@@ -93,7 +93,7 @@ public class RedisProvider implements PasswordProvider {
             String key = key("password", playerName);
             if (jedis.exists(key)) jedis.del(key);
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         } finally {
             if (jedis != null) jedis.close();
@@ -115,7 +115,7 @@ public class RedisProvider implements PasswordProvider {
                 if (ipTime > time) time = ipTime;
             }
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return 0L;
         } finally {
             if (jedis != null) jedis.close();
@@ -136,7 +136,7 @@ public class RedisProvider implements PasswordProvider {
                 time = Long.parseLong(jedis.get(key("time", playerName)));
             }
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
         } finally {
             if (jedis != null) jedis.close();
         }
@@ -151,7 +151,7 @@ public class RedisProvider implements PasswordProvider {
             jedis.set(key("ip", playerName), ip);
             jedis.set(key("time", playerName), String.valueOf(currentTime));
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
         } finally {
             if (jedis != null) jedis.close();
         }
@@ -163,7 +163,7 @@ public class RedisProvider implements PasswordProvider {
             jedis = jedisPool.getResource();
             jedis.set(key("time", playerName), "0");
         } catch (Exception e) {
-            PasswordManager.setLock(playerName);
+            Providers.setLock(playerName);
             return false;
         } finally {
             if (jedis != null) jedis.close();

@@ -2,7 +2,6 @@ package ru.nukkit.welcome.provider;
 
 import cn.nukkit.utils.Config;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.password.PasswordManager;
 
 import java.io.File;
 import java.util.HashMap;
@@ -104,7 +103,7 @@ public class YamlProvider implements PasswordProvider {
             }
             cfg.save();
         } catch (Exception e) {
-            PasswordManager.setLock(null);
+            Providers.setLock(null);
             e.printStackTrace();
         }
     }
@@ -137,7 +136,7 @@ public class YamlProvider implements PasswordProvider {
                 }
             }
         } catch (Exception e) {
-            PasswordManager.setLock(null);
+            Providers.setLock(null);
             e.printStackTrace();
         }
     }

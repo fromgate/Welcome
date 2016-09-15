@@ -6,9 +6,10 @@ import cn.nukkit.plugin.Plugin;
 import cn.nukkit.utils.Config;
 import cn.nukkit.utils.SimpleConfig;
 import cn.nukkit.utils.TextFormat;
+import ru.nukkit.dblib.nukkit.DbLibPlugin;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.HashType;
-import ru.nukkit.welcome.password.PasswordManager;
+import ru.nukkit.welcome.provider.Providers;
 
 import java.io.File;
 import java.lang.reflect.Field;
@@ -54,7 +55,25 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     //# DATABASE - SQLite or MySQL database configured at DBLib plugin
     //# YAML - in yaml files
     @Path("database.provider")
-    public String passwordProvider = PasswordManager.YAML.name();
+    public String passwordProvider = Providers.YAML.name();
+
+    @Path("database.connection")
+    public String dbConnect = "DBLIB";
+
+    @Path("SQLite.file-name")
+    public String dbSqliteFile = DbLibPlugin.getPlugin().getDataFolder() + File.separator + "welcome.db";
+
+    @Path("MySQL.host")
+    public String dbMySqlHost = "localhost";
+    @Path("MySQL.port")
+    public int dbMySqlPort = 3306;
+    @Path("MySQL.database")
+    public String dbMySqlDb = "db";
+    @Path("MySQL.username")
+    public String dbMySqlUser = "nukkit";
+    @Path("MySQL.password")
+    public String dbMySqlPwd = "tikkun";
+
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path("database.reinit-on-fail-time")

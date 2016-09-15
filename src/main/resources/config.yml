@@ -55,9 +55,23 @@ database:
 #              (don't forget to use SIMPLEAUTH hash algorithm)
 # REDIS - Redis database (plugin Nedis required)
   provider: YAML
+# Configuration of DATABASE Connection:
+#  DBLIB  - default connection, defined in DbLib plugin
+#  SQLITE - custom sqlite file
+#  MYSQL  - custom MySql configuration
+  connection: DBLIB
+  SQLite:
+    file-name: welcome.db
+  MySQL:
+    port: 3306
+    database: nukkit
+    username: nukkit
+    password: tikkun
+    host: localhost
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts
-  reinit-on-fail-time: 30s
+    reinit-on-fail-time: 30s
+
 
 login:
 # Store user IP, UUID and Name. Next time (during the provide time limit)
