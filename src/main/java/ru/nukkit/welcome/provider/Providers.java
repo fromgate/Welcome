@@ -88,11 +88,9 @@ public enum Providers {
         onDisable();
         passworder = Providers.LOCK.getProvider();
         if (playerName != null && playerName.isEmpty())
-            Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
-                public void run() {
-                    Player player = Server.getInstance().getPlayerExact(playerName);
-                    if (player != null) player.close("", Message.LOCK_INFORM.getText());
-                }
+            Server.getInstance().getScheduler().scheduleDelayedTask(() -> {
+                Player player = Server.getInstance().getPlayerExact(playerName);
+                if (player != null) player.close("", Message.LOCK_INFORM.getText());
             }, 1);
         reInit();
     }
