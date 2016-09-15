@@ -170,7 +170,7 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
         try {
             Field field = SimpleConfig.class.getDeclaredField("configFile");
             field.setAccessible(true);
-            file = (File) field.get((SimpleConfig) this);
+            file = (File) field.get(this);
         } catch (Exception e) {
             e.printStackTrace();
             return;
