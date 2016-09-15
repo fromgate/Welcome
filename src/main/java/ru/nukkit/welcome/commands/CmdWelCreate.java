@@ -12,12 +12,24 @@ import ru.nukkit.welcome.util.Message;
 public class CmdWelCreate extends Cmd {
     public boolean execute(CommandSender sender, Player player, String[] args) {
         if (args.length < 3) return Message.CRT_NEED_PLAYER.print(sender);
-        if (PasswordManager.hasPassword(args[1])) return Message.CRT_ALREADY_REGISTERED.print(sender, args[1]);
         if (!PasswordValidator.validatePassword(args[2])) {
             Message.CRT_PWD_INVALID.print(sender);
             sender.sendMessage(PasswordValidator.getInfo());
             return true;
         }
-        return (PasswordManager.setPassword(args[1], args[2]) ? Message.CRT_OK : Message.CRT_FAIL).print(sender, args[1]);
+        PasswordManager.hasPassword(args[1]).whenComplete((hasPassword,e) -> {
+            if (hasPassword) {
+                Message.CRT_ALREADY_REGISTERED.print(sender, args[1]);
+            } else {
+                PasswordManager.setPassword(args[1], args[2]).whenComplete((create, e2) ->{
+                    if (e2 != null && create) {
+                        Message.CRT_OK.print(sender);
+                    } else {
+                        Message.CRT_FAIL.print(sender, args[1]);
+                    }
+                });
+            }
+        });
+        return true;
     }
 }

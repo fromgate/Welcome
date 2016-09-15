@@ -116,8 +116,7 @@ public class DatabaseProvider implements PasswordProvider {
 
     @Override
     public boolean removePassword(String playerName) {
-        if (!enabled) return false;
-        if (playerName == null || playerName.isEmpty()) return false;
+        if (!hasPassword(playerName)) return false;
         try (Connection con = sql2o.open()) {
             con.createQuery(deletePlayer)
                     .addParameter("name", playerName)

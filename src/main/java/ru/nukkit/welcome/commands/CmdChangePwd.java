@@ -21,10 +21,23 @@ public class CmdChangePwd extends Cmd {
             return true;
         }
 
-
-        if (!PasswordManager.checkPassword(player, args[0])) return Message.ERR_PWD_WRONG.print(player);
         if (!args[1].equals(args[2])) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
-        PasswordManager.setPassword(player, args[1]);
-        return Message.CPW_OK.print(player, '6');
+
+        PasswordManager.checkPassword(player, args[0]).whenComplete((pwdOk, e) ->{
+            if (e != null && pwdOk) {
+                PasswordManager.setPassword(player, args[1]).whenComplete((pwdSet, e2) -> {
+                    if (e2 != null && pwdOk) {
+                        Message.CPW_OK.print(player, '6');
+                    } else {
+                        Message.CPW_FAIL.print(player, '6');
+                    }
+
+
+                });
+            } else {
+                Message.ERR_PWD_WRONG.print(player);
+            }
+        });
+        return true;
     }
 }

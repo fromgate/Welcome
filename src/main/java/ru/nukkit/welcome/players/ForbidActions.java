@@ -94,12 +94,13 @@ public class ForbidActions implements Listener {
         if (PlayerManager.isPlayerLoggedIn(player)) return;
         if (Welcome.getCfg().typeInChat) {
             String[] ln = event.getMessage().split(" ");
-            if (PlayerManager.isPlayerRegistered(player)) {
-                PlayerManager.loginCommand(player, ln[0]);
-            } else {
-                PlayerManager.regCommand(player, ln[0], ln.length >= 2 ? ln[1] : "");
-            }
-
+            PlayerManager.isPlayerRegistered(player).whenComplete((registered, e) -> {
+                if (e == null && registered) {
+                    PlayerManager.loginCommand(player, ln[0]);
+                } else {
+                    PlayerManager.regCommand(player, ln[0], ln.length >= 2 ? ln[1] : "");
+                }
+            });
             event.setCancelled();
         } else if (Welcome.getCfg().blockChat) event.setCancelled();
     }

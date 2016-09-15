@@ -18,10 +18,8 @@ public class Commander {
 
     public static void init(PluginBase plg) {
         plugin = plg;
-        if (!Welcome.getCfg().typeInChat) {
-            addNewCommand(new CmdLgn());
-            addNewCommand(new CmdReg());
-        }
+        addNewCommand(new CmdLgn());
+        addNewCommand(new CmdReg());
         addNewCommand(new CmdLogOff());
         addNewCommand(new CmdUnreg());
         addNewCommand(new CmdChangePwd());

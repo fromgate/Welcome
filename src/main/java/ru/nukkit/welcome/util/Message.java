@@ -62,6 +62,7 @@ public enum Message {
     CPW_USAGE("/changepassword <OldPassword> <NewPassword> <NewPassword>"),
     ERR_NOT_LOGGED("You're not logged in! Operation declined."),
     CPW_OK("Your password was successfully changed"),
+    CPW_FAIL("Failed to change password"),
     CMD_HELP_DESC("/welcome help - Show help"),
     HLP_TITLE("%1% | Nukkit authorization system"),
     CMD_WLC_DESC("/welcome - Welcome plugin command"),

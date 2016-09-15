@@ -17,6 +17,7 @@ import ru.nukkit.welcome.util.Message;
 import ru.nukkit.welcome.util.Task;
 
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 public enum PasswordManager {
     YAML(YamlProvider.class),
@@ -64,35 +65,63 @@ public enum PasswordManager {
         return null;
     }
 
-    public static boolean checkPassword(String playerName, String pwdStr) {
-        return passworder.checkPassword(playerName.toLowerCase(), hashPassword(playerName.toLowerCase(), pwdStr));
+    public static CompletableFuture<Boolean> checkPassword(String playerName, String pwdStr) {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        new Task() {
+            @Override
+            public void onRun() {
+                result.complete(passworder.checkPassword(playerName.toLowerCase(), hashPassword(playerName.toLowerCase(), pwdStr)));
+            }
+        }.start();
+        return result;
     }
 
-    public static boolean checkPassword(Player player, String pwdStr) {
+    public static CompletableFuture<Boolean> checkPassword(Player player, String pwdStr) {
         return checkPassword(player.getName(), pwdStr);
     }
 
-    public static boolean setPassword(String playerName, String pwdStr) {
-        return passworder.setPassword(playerName.toLowerCase(), hashPassword(playerName, pwdStr));
+    public static CompletableFuture<Boolean> setPassword(String playerName, String pwdStr) {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        new Task() {
+            @Override
+            public void onRun() {
+                result.complete(passworder.setPassword(playerName.toLowerCase(), hashPassword(playerName, pwdStr)));
+            }
+        }.start();
+        return result;
     }
 
-    public static boolean setPassword(Player player, String pwdStr) {
+    public static CompletableFuture<Boolean> setPassword(Player player, String pwdStr) {
         return setPassword(player.getName(), pwdStr);
     }
 
-    public static boolean hasPassword(String playerName) {
-        return passworder.hasPassword(playerName.toLowerCase());
+    public static CompletableFuture<Boolean> hasPassword(String playerName) {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        new Task() {
+            @Override
+            public void onRun() {
+                result.complete(passworder.hasPassword(playerName.toLowerCase()));
+            }
+        }.start();
+        return result;
     }
 
-    public static boolean hasPassword(Player player) {
+    public static CompletableFuture<Boolean> hasPassword(Player player) {
         return hasPassword(player.getName());
     }
 
-    public static boolean removePassword(String playerName) {
-        return passworder.removePassword(playerName.toLowerCase());
+    public static CompletableFuture<Boolean> removePassword(String playerName) {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        new Task() {
+            @Override
+            public void onRun() {
+                result.complete(passworder.removePassword(playerName.toLowerCase()));
+            }
+        }.start();
+        return result;
     }
 
-    public static boolean removePassword(Player player) {
+    public static CompletableFuture<Boolean> removePassword(Player player) {
         return removePassword(player.getName());
     }
 
@@ -100,37 +129,64 @@ public enum PasswordManager {
         return Welcome.getCfg().getHashAlgorithm().getHash(userName, password);
     }
 
-
-    public static boolean checkAutologin(Player player) {
-        if (!hasPassword(player)) return false;
-        if (!Welcome.getCfg().autologinEnable) return false;
-        return passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress());
+    public static CompletableFuture<Boolean> checkAutologin(Player player) {
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
+        if (!Welcome.getCfg().autologinEnable) {
+            result.complete(false);
+        } else {
+            hasPassword(player).whenComplete((hasPassword, e) -> {
+                if (e != null) {
+                    e.printStackTrace();
+                } else {
+                    if (!hasPassword) {
+                        result.complete(false);
+                    } else {
+                        result.complete(passworder.checkAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress()));
+                    }
+                }
+            });
+        }
+        return result;
     }
 
     public static void updateAutologin(Player player, long time) {
-        if (!hasPassword(player)) return;
         if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(), time);
+        updateAutologin(player.getName(), player.getUniqueId(), player.getAddress(), time);
+
     }
 
     public static void updateAutologin(Player player) {
-        if (!hasPassword(player)) return;
-        if (!PlayerManager.isPlayerLoggedIn(player)) return;
-        passworder.updateAutoLogin(player.getName().toLowerCase(), player.getUniqueId().toString(), player.getAddress(), System.currentTimeMillis());
+        updateAutologin(player, System.currentTimeMillis());
     }
 
-    public static void updateAutologinAsync(final String playerName, final UUID uuid, final String ip) {
-        new Task() {
-            @Override
-            public void onRun() {
-                if (!hasPassword(playerName)) return;
-                passworder.updateAutoLogin(playerName.toLowerCase(), uuid.toString(), ip, System.currentTimeMillis());
+    public static void updateAutologin(String playerName, UUID uuid, String ip, long time) {
+        hasPassword(playerName).whenComplete((hasPassword, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                if (hasPassword) {
+                    new Task() {
+                        @Override
+                        public void onRun() {
+                            passworder.updateAutoLogin(playerName.toLowerCase(), uuid.toString(), ip, time);
+                        }
+                    }.start();
+                }
             }
-        }.start();
+        });
+    }
+
+    public static void updateAutologin(String playerName, UUID uuid, String ip) {
+        updateAutologin (playerName, uuid, ip, System.currentTimeMillis());
     }
 
     public static void removeAutologin(String playerName) {
-        passworder.removeAutoLogin(playerName.toLowerCase());
+        new Task() {
+            @Override
+            public void onRun() {
+                passworder.removeAutoLogin(playerName.toLowerCase());
+            }
+        }.start();
     }
 
     public static void setLock(final String playerName) {
@@ -169,10 +225,23 @@ public enum PasswordManager {
         if (passworder != null) passworder.onDisable();
     }
 
-    public static boolean restrictedByIp(Player player) {
-        if (!Welcome.getCfg().registerRestrictions) return false;
-        Long lastLoginTime = passworder.lastLoginFromIp(player.getName(), player.getAddress());
-        if (lastLoginTime == null) return false;
-        return (System.currentTimeMillis() - lastLoginTime) < Welcome.getCfg().getRestrictIpTime();
+    public static CompletableFuture<Boolean> restrictedByIp(Player player) {
+        CompletableFuture<Boolean> result = new CompletableFuture();
+        if (!Welcome.getCfg().registerRestrictions) {
+            result.complete(false);
+        } else {
+            new Task() {
+                @Override
+                public void onRun() {
+                    Long lastLoginTime = passworder.lastLoginFromIp(player.getName(), player.getAddress());
+                    if (lastLoginTime == null) {
+                        result.complete(false);
+                    } else {
+                        result.complete((System.currentTimeMillis() - lastLoginTime) < Welcome.getCfg().getRestrictIpTime());
+                    }
+                }
+            }.start();
+        }
+        return result;
     }
 }

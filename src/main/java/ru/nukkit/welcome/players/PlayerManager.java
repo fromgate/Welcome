@@ -8,11 +8,11 @@ import ru.nukkit.welcome.password.PasswordManager;
 import ru.nukkit.welcome.password.PasswordValidator;
 import ru.nukkit.welcome.util.LoginMeta;
 import ru.nukkit.welcome.util.Message;
-import ru.nukkit.welcome.util.Task;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.concurrent.CompletableFuture;
 
 public class PlayerManager {
     private static Map<String, Long> waitLogin = new HashMap<String, Long>();
@@ -23,15 +23,30 @@ public class PlayerManager {
         String playerName = player.getName();
         if (waitLogin.containsKey(playerName)) waitLogin.remove(playerName);
         if (player.hasMetadata("welcome-in-game")) player.removeMetadata("welcome-in-game", Welcome.getPlugin());
-        if (PasswordManager.checkAutologin(player)) {
-            setPlayerLoggedIn(player);
-            tipOrPrint(player, Message.LGN_AUTO, 'e', '6', player.getName());
-            Welcome.getCfg().broadcastLoginMessage(player);
-            return;
-        }
-        setBlindEffect(player);
-        if (!PasswordManager.hasPassword(player)) startWaitRegister(player);
-        else startWaitLogin(player);
+        PasswordManager.checkAutologin(player).whenComplete((autoLogin, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                if (autoLogin) {
+                    setPlayerLoggedIn(player);
+                    tipOrPrint(player, Message.LGN_AUTO, 'e', '6', player.getName());
+                    Welcome.getCfg().broadcastLoginMessage(player);
+                } else {
+                    setBlindEffect(player);
+                    PasswordManager.hasPassword(player).whenComplete((hasPassword, e2) -> {
+                        if (e2 != null) {
+                            e.printStackTrace();
+                        } else {
+                            if (hasPassword) {
+                                startWaitLogin(player);
+                            } else {
+                                startWaitRegister(player);
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public static boolean isPlayerLoggedIn(Player player) {
@@ -49,21 +64,29 @@ public class PlayerManager {
 
     private static void startWaitRegister(final Player player) {
         if (!player.isOnline()) return;
-        if (isPlayerRegistered(player)) return;
-        String name = player.getName();
-        if (!waitLogin.containsKey(name))
-            waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
-        if (System.currentTimeMillis() < waitLogin.get(name)) {
-            tipOrPrint(player, Welcome.getPlugin().getCfg().getTypeReg());
-            Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
-                public void run() {
-                    startWaitRegister(player);
+        isPlayerRegistered(player).whenComplete((registered, e) ->{
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                if (!registered) {
+                    String name = player.getName();
+                    if (!waitLogin.containsKey(name)) {
+                        waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
+                    }
+                    if (System.currentTimeMillis() < waitLogin.get(name)) {
+                        tipOrPrint(player, Welcome.getPlugin().getCfg().getTypeReg());
+                        Welcome.getPlugin().getServer().getScheduler().scheduleDelayedTask(new Runnable() {
+                            public void run() {
+                                startWaitRegister(player);
+                            }
+                        }, Welcome.getCfg().getMessageRepeatTicks());
+                    } else player.kick(Message.KICK_TIMEOUT.getText(), false);
                 }
-            }, Welcome.getCfg().getMessageRepeatTicks());
-        } else player.kick(Message.KICK_TIMEOUT.getText(), false);
+            }
+        });
     }
 
-    public static boolean isPlayerRegistered(Player player) {
+    public static CompletableFuture<Boolean> isPlayerRegistered(Player player) {
         return PasswordManager.hasPassword(player);
     }
 
@@ -71,64 +94,87 @@ public class PlayerManager {
         if (!player.isOnline()) return;
         if (isPlayerLoggedIn(player)) return;
         String name = player.getName();
-        if (!waitLogin.containsKey(name))
-            waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime()); //3 минуты - это всё потом в конфиг!
+        if (!waitLogin.containsKey(name)){
+            waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
+        }
         if (System.currentTimeMillis() < waitLogin.get(name)) {
 
             tipOrPrint(player, Welcome.getCfg().typeInChat ? Message.TYPE_LGN_CHAT : Message.TYPE_LGN);
 
-            Server.getInstance().getScheduler().scheduleDelayedTask(new Runnable() {
-                public void run() {
-                    startWaitLogin(player);
-                }
+            Server.getInstance().getScheduler().scheduleDelayedTask(() -> {
+                startWaitLogin(player);
             }, Welcome.getCfg().getMessageRepeatTicks());
+
         } else player.kick(Message.KICK_TIMEOUT.getText(), false);
     }
 
     public static void regCommand(final Player player, final String password1, final String password2) {
-        new Task() {
-            @Override
-            public void onRun() {
-                String pwd1 = password1;
-                String pwd2 = password2;
-                if (isPlayerRegistered(player)) {
+        if (isPlayerLoggedIn(player)) {
+            Message.LGN_ALREADY.print(player);
+            return;
+        }
+
+        isPlayerRegistered(player).whenComplete((registered, ex) -> {
+
+            if (ex != null) {
+                ex.printStackTrace();
+            } else {
+                if (registered) {
                     Message.REG_ALREADY.print(player);
-                    return;
-                }
-                if (isPlayerLoggedIn(player)) {
-                    Message.LGN_ALREADY.print(player);
-                    return;
-                }
-                if (PasswordManager.restrictedByIp(player)) {
-                    player.close("", Message.REG_RESTRICED_IP.getText());
-                    return;
-                }
-                if (!Welcome.getCfg().passwordConfirmation) pwd2 = pwd1;
-                if (pwd1 == null || pwd1.isEmpty() || pwd2 == null || pwd2.isEmpty()) {
-                    Welcome.getCfg().getTypeReg().print(player, 'c');
-                    return;
-                }
+                } else {
+                    PasswordManager.restrictedByIp(player).whenComplete((restrict, e) -> {
+                        if (e != null) {
+                            e.printStackTrace();
+                        } else {
+                            if (restrict) {
+                                Server.getInstance().getScheduler().scheduleTask(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        if (player.isOnline()) {
+                                            player.close("", Message.REG_RESTRICED_IP.getText());
+                                        }
+                                    }
+                                });
+                            } else {
+                                String pwd1 = password1;
+                                String pwd2 = password2;
+                                if (!Welcome.getCfg().passwordConfirmation) pwd2 = pwd1;
 
-                if (!pwd2.equals(pwd2)) {
-                    Message.ERR_PWD_NOTMATCH.print(player, 'c');
-                    return;
-                }
-                if (!PasswordValidator.validatePassword(pwd1)) {
-                    Message.ERR_PWD_VALIDATE.print(player, 'c');
-                    player.sendMessage(PasswordValidator.getInfo());
-                    return;
-                }
+                                if (pwd1 == null || pwd1.isEmpty() || pwd2 == null || pwd2.isEmpty()) {
+                                    Welcome.getCfg().getTypeReg().print(player, 'c');
+                                    return;
+                                }
 
-                PasswordManager.setPassword(player, pwd1);
-                clearBlindEffect(player);
-                setPlayerLoggedIn(player);
-                Message.REG_LOG.log(player.getName(), "NOCOLOR");
-                if (Welcome.getCfg().useTips) Message.REG_OK.print(player, '6');
-                PasswordManager.updateAutologin(player);
-                tipOrPrint(player, Message.REG_OK, '6');
-                Welcome.getCfg().broadcastLoginMessage(player);
+                                if (!pwd1.equals(pwd2)) {
+                                    Message.ERR_PWD_NOTMATCH.print(player, 'c');
+                                    return;
+                                }
+                                if (!PasswordValidator.validatePassword(pwd1)) {
+                                    Message.ERR_PWD_VALIDATE.print(player, 'c');
+                                    player.sendMessage(PasswordValidator.getInfo());
+                                    return;
+                                }
+                                PasswordManager.setPassword(player, pwd1).whenComplete((reg, e2) -> {
+                                    if (e2 != null) {
+                                        e2.printStackTrace();
+                                    } else {
+                                        if (reg) {
+                                            clearBlindEffect(player);
+                                            setPlayerLoggedIn(player);
+                                            Message.REG_LOG.log(player.getName(), "NOCOLOR");
+                                            if (Welcome.getCfg().useTips) Message.REG_OK.print(player, '6');
+                                            PasswordManager.updateAutologin(player);
+                                            tipOrPrint(player, Message.REG_OK, '6');
+                                            Welcome.getCfg().broadcastLoginMessage(player);
+                                        }
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
             }
-        }.start();
+        });
     }
 
     public static void loginCommand(final Player player, final String password) {
@@ -136,59 +182,60 @@ public class PlayerManager {
             Message.LGN_MISS_PWD.print(player);
             return;
         }
-        new Task() {
-            @Override
-            public void onRun() {
 
-                if (!isPlayerRegistered(player)) {
+        if (isPlayerLoggedIn(player)) {
+            Message.LGN_ALREADY.print(player);
+            return;
+        }
+
+        isPlayerRegistered(player).whenComplete((registered, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                if (registered) {
+                    PasswordManager.checkPassword(player, password).whenComplete((pwdOk, e2) -> {
+                        if (e2 != null) {
+                            e2.printStackTrace();
+                        } else {
+                            if (pwdOk) {
+                                setPlayerLoggedIn(player);
+                                Message.LGN_LOG.log(player.getName(), "NOCOLOR");
+                                Message.LGN_OK.print(player, '6');
+                                PasswordManager.updateAutologin(player);
+                                clearBlindEffect(player);
+                                tipOrPrint(player, Message.LGN_OK, '6');
+                                Welcome.getCfg().broadcastLoginMessage(player);
+                            } else {
+                                if (Welcome.getCfg().loginAtempts) {
+                                    String name = player.getName();
+                                    int attempt = authAttempts.containsKey(name) ? authAttempts.get(name) : 0;
+                                    attempt++;
+                                    if (attempt >= Welcome.getCfg().loginAtemptsMax) {
+                                        player.close("", Message.LGN_ATTEMPT_EXCEED.getText('c'));
+                                        authAttempts.remove(name);
+                                        Message.LGN_ATTEMPT_EXCEED_LOG.log(name);
+                                        return;
+                                    } else authAttempts.put(name, attempt);
+                                }
+                                Message.ERR_PWD_WRONG.print(player);
+                            }
+                        }
+                    });
+                } else {
                     Message.LGN_NEED_REG.print(player);
-                    return;
                 }
-
-                if (isPlayerLoggedIn(player)) {
-                    Message.LGN_ALREADY.print(player);
-                    return;
-                }
-                if (!PasswordManager.checkPassword(player, password)) {
-                    if (Welcome.getCfg().loginAtempts) {
-                        String name = player.getName();
-                        int attempt = authAttempts.containsKey(name) ? authAttempts.get(name) : 0;
-                        attempt++;
-                        if (attempt >= Welcome.getCfg().loginAtemptsMax) {
-                            player.close("", Message.LGN_ATTEMPT_EXCEED.getText('c'));
-                            authAttempts.remove(name);
-                            Message.LGN_ATTEMPT_EXCEED_LOG.log(name);
-                            return;
-                        } else authAttempts.put(name, attempt);
-                    }
-                    Message.ERR_PWD_WRONG.print(player);
-                    return;
-                }
-                setPlayerLoggedIn(player);
-                Message.LGN_LOG.log(player.getName(), "NOCOLOR");
-                Message.LGN_OK.print(player, '6');
-                PasswordManager.updateAutologin(player);
-                clearBlindEffect(player);
-                tipOrPrint(player, Message.LGN_OK, '6');
-                Welcome.getCfg().broadcastLoginMessage(player);
             }
-        }.start();
+        });
     }
 
     public static void logOff(final Player player) {
-        new Task() {
-            @Override
-            public void onRun() {
-                if (!isPlayerLoggedIn(player)) {
-                    Message.ERR_NOT_LOGGED.print(player);
-                    return;
-                }
-                PasswordManager.updateAutologin(player, 0);
-                setPlayerLoggedOff(player);
-                player.kick(Message.LOGOFF_OK.getText(), false);
-            }
-        }.start();
-
+        if (!isPlayerLoggedIn(player)) {
+            Message.ERR_NOT_LOGGED.print(player);
+            return;
+        }
+        PasswordManager.updateAutologin(player, 0);
+        setPlayerLoggedOff(player);
+        player.kick(Message.LOGOFF_OK.getText(), false);
     }
 
     public static void unregCommand(Player player, String password) {
@@ -196,19 +243,22 @@ public class PlayerManager {
             Message.UNREG_MISS_PWD.print(player);
             return;
         }
-        new Task() {
-            @Override
-            public void onRun() {
 
-                if (!PasswordManager.checkPassword(player, password)) {
+
+        PasswordManager.checkPassword(player, password).whenComplete((pwdOk, e) -> {
+            if (e != null) {
+                e.printStackTrace();
+            } else {
+                if (pwdOk) {
+                    PasswordManager.removeAutologin(player.getName());
+                    PasswordManager.removePassword(player).whenComplete((remove, e2) -> {
+                        player.kick(Message.UNREG_OK.getText(), false);
+                    });
+                } else {
                     Message.ERR_PWD_WRONG.print(player);
-                    return;
                 }
-                PasswordManager.removeAutologin(player.getName());
-                PasswordManager.removePassword(player);
-                player.kick(Message.UNREG_OK.getText(), false);
             }
-        }.start();
+        });
     }
 
     public static void clearBlindEffect(Player player) {

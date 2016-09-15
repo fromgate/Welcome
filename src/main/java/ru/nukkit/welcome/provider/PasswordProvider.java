@@ -2,6 +2,7 @@ package ru.nukkit.welcome.provider;
 
 
 public interface PasswordProvider {
+
     boolean isEnabled();
 
     boolean checkPassword(String playerName, String password);
