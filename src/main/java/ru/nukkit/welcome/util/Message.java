@@ -101,7 +101,8 @@ public enum Message {
     CPWO_OK_INFORM_CONSOLE("Your password was changed, new password is %2%"),
     CPWO_FAIL("Failed to change password of player %1%"),
     DB_UNKNOWN("Unknown database provider: %1%. Check your config file", 'c', '4'),
-    DB_INIT_FAIL("Failed to init database provider: %1%. Check your config file", 'c', '4');
+    DB_INIT_FAIL("Failed to init database provider: %1%. Check your config file", 'c', '4'),
+    OLD_FILE_REMOVED("File %1% removed. All parameters migrated into config.yml");
 
     private static boolean debugMode = false;
     private static String language = "english";

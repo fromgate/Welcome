@@ -6,6 +6,7 @@ import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.players.PlayerManager;
 import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.provider.Providers;
+import ru.nukkit.welcome.util.Message;
 import ru.nukkit.welcome.util.Task;
 
 import java.util.UUID;
@@ -109,6 +110,7 @@ public class PasswordManager {
     }
 
     public static void updateAutologin(String playerName, UUID uuid, String ip, long time) {
+        Message.debugMessage("updateAutLogin: ", playerName);
         hasPassword(playerName).whenComplete((hasPassword, e) -> {
             if (e != null) {
                 e.printStackTrace();

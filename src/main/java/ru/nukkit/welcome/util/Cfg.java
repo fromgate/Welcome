@@ -73,6 +73,9 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path("database.MySQL.password")
     public String dbMySqlPwd = "tikkun";
 
+    @Path("database.schema.simpleauth.table-name")
+    public String sbSimpleAuthTable = "simpleauth_players";
+
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path("database.reinit-on-fail-time")

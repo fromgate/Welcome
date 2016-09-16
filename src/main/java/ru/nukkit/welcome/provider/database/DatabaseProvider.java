@@ -167,7 +167,6 @@ public class DatabaseProvider implements PasswordProvider {
                     .addParameter("ip", ip)
                     .addParameter("time", currentTime)
                     .executeUpdate();
-        } catch (Exception ignore) {
         }
     }
 
