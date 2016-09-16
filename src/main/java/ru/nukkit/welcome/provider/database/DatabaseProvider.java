@@ -28,7 +28,7 @@ public class DatabaseProvider implements PasswordProvider {
 
     public final static String getLastloginByName = "SELECT * FROM lastlogin WHERE name = :name";
 
-    public final static String setLastlogin = "REPLACE INTO lastlogin VALUES (:name, :password, :uuid, :ip)";
+    public final static String setLastlogin = "REPLACE INTO lastlogin VALUES (:name, :uuid, :ip, :time)";
 
     public final String deleteLastlogin = "DELETE FROM lastlogin WHERE name = :name";
 
