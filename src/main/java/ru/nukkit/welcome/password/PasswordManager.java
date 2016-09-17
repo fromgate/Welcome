@@ -128,7 +128,7 @@ public class PasswordManager {
     }
 
     public static void updateAutologin(String playerName, UUID uuid, String ip) {
-        updateAutologin (playerName, uuid, ip, System.currentTimeMillis());
+        updateAutologin(playerName, uuid, ip, System.currentTimeMillis());
     }
 
     public static void removeAutologin(String playerName) {

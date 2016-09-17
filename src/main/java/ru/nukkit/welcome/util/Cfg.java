@@ -80,8 +80,6 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     public String sbServerAuthTable = "srvauth_serverauthdata";
 
 
-
-
     //# Delay between reinitialization tries (on database connections lost)
     @Path("database.reinit-on-fail-time")
     public String providerReinitTime = "30s";

@@ -17,11 +17,11 @@ public class CmdWelCreate extends Cmd {
             sender.sendMessage(PasswordValidator.getInfo());
             return true;
         }
-        PasswordManager.hasPassword(args[1]).whenComplete((hasPassword,e) -> {
+        PasswordManager.hasPassword(args[1]).whenComplete((hasPassword, e) -> {
             if (hasPassword) {
                 Message.CRT_ALREADY_REGISTERED.print(sender, args[1]);
             } else {
-                PasswordManager.setPassword(args[1], args[2]).whenComplete((create, e2) ->{
+                PasswordManager.setPassword(args[1], args[2]).whenComplete((create, e2) -> {
                     if (e2 != null && create) {
                         Message.CRT_OK.print(sender);
                     } else {

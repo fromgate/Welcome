@@ -16,14 +16,13 @@ public class SimpleauthProvider implements PasswordProvider {
 
     private String createPlayersTable = "CREATE TABLE IF NOT EXISTS :table (name VARCHAR(200) NOT NULL, " +
             "hash VARCHAR(200), lastip VARCHAR(200), registerdate VARCHAR(200), logindate VARCHAR(200), PRIMARY KEY(name))";
+
     private String selectByName = "SELECT * FROM :table WHERE name = :name";
 
     private String selectByIp = "SELECT * FROM :table WHERE lastip = :lastip";
 
-
-    // public final static String setPassword = "REPLACE INTO :table VALUES (:name, :hash, :lastip, :registerdate, :logindate)";
-
     private String updatePassword = "UPDATE :table SET name = :name, hash = :hash WHERE name = :name";
+
     private String updatePassword2 = "INSERT OR IGNORE INTO :table (name, hash, registerdate) VALUES (:name, :hash, :registerdate)";
 
     private String deletePlayer = "DELETE FROM :table WHERE name = :name";
@@ -32,16 +31,10 @@ public class SimpleauthProvider implements PasswordProvider {
 
     private String deleteLastlogin = "DELETE FROM :table WHERE name = :name";
 
-    /*
-    -- Try to update any existing row
-UPDATE players SET user_name='steven', age=32 WHERE user_name='steven';
-
--- Make sure it exists
-INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
-     */
-
     private Sql2o sql2o;
+
     private boolean enabled;
+
     private String tableName;
 
     public SimpleauthProvider() {
@@ -76,7 +69,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
 
         try (Connection con = sql2o.open()) {
             con.createQuery(createPlayersTable)
-                    //.addParameter("table", tableName)
                     .executeUpdate();
         }
 
@@ -99,7 +91,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         PlayersTable pt;
         try (Connection con = sql2o.open()) {
             pt = con.createQuery(selectByName)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .executeAndFetchFirst(PlayersTable.class);
         }
@@ -114,12 +105,10 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         if (password == null || password.isEmpty()) return false;
         try (Connection con = sql2o.beginTransaction(java.sql.Connection.TRANSACTION_SERIALIZABLE)) {
             con.createQuery(updatePassword)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .addParameter("hash", password)
                     .executeUpdate();
             con.createQuery(updatePassword2)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .addParameter("hash", password)
                     .addParameter("registerdate", String.valueOf(System.currentTimeMillis()))
@@ -136,7 +125,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         PlayersTable pt;
         try (Connection con = sql2o.open()) {
             pt = con.createQuery(selectByName)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .executeAndFetchFirst(PlayersTable.class);
         }
@@ -150,7 +138,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         if (playerName == null || playerName.isEmpty()) return false;
         try (Connection con = sql2o.open()) {
             con.createQuery(deletePlayer)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .executeUpdate();
         }
@@ -163,7 +150,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         List<PlayersTable> result;
         try (Connection con = sql2o.open()) {
             result = con.createQuery(selectByIp)
-                    //.addParameter("table", tableName)
                     .addParameter("lastip", ip)
                     .executeAndFetch(PlayersTable.class);
         }
@@ -184,7 +170,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         PlayersTable pt;
         try (Connection con = sql2o.open()) {
             pt = con.createQuery(selectByName)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .executeAndFetchFirst(PlayersTable.class);
         }
@@ -202,7 +187,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
         if (playerName == null || playerName.isEmpty()) return;
         try (Connection con = sql2o.open()) {
             con.createQuery(updateLastlogin)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .addParameter("lastip", ip)
                     .addParameter("logindate", String.valueOf(currentTime))
@@ -217,7 +201,6 @@ INSERT OR IGNORE INTO players (user_name, age) VALUES ('steven', 32);
 
         try (Connection con = sql2o.open()) {
             con.createQuery(deleteLastlogin)
-                    //.addParameter("table", tableName)
                     .addParameter("name", playerName)
                     .executeUpdate();
         } catch (Exception e) {

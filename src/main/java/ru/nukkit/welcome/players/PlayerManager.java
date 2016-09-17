@@ -64,7 +64,7 @@ public class PlayerManager {
 
     private static void startWaitRegister(final Player player) {
         if (!player.isOnline()) return;
-        isPlayerRegistered(player).whenComplete((registered, e) ->{
+        isPlayerRegistered(player).whenComplete((registered, e) -> {
             if (e != null) {
                 e.printStackTrace();
             } else {
@@ -94,7 +94,7 @@ public class PlayerManager {
         if (!player.isOnline()) return;
         if (isPlayerLoggedIn(player)) return;
         String name = player.getName();
-        if (!waitLogin.containsKey(name)){
+        if (!waitLogin.containsKey(name)) {
             waitLogin.put(name, System.currentTimeMillis() + Welcome.getCfg().getWaitTime());
         }
         if (System.currentTimeMillis() < waitLogin.get(name)) {

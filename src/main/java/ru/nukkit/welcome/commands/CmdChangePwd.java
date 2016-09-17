@@ -23,7 +23,7 @@ public class CmdChangePwd extends Cmd {
 
         if (!args[1].equals(args[2])) return Message.ERR_PWD_NOTMATCH.print(player, 'c');
 
-        PasswordManager.checkPassword(player, args[0]).whenComplete((pwdOk, e) ->{
+        PasswordManager.checkPassword(player, args[0]).whenComplete((pwdOk, e) -> {
             if (e != null && pwdOk) {
                 PasswordManager.setPassword(player, args[1]).whenComplete((pwdSet, e2) -> {
                     if (e2 != null && pwdOk) {
