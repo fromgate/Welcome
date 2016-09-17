@@ -4,7 +4,6 @@ import cn.nukkit.utils.Config;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 import ru.nukkit.welcome.Welcome;
-import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.provider.Providers;
 import ru.nukkit.welcome.util.Message;
@@ -71,9 +70,6 @@ public class ServerauthProvider implements PasswordProvider {
             con.createQuery(createPlayersTable)
                     .executeUpdate();
         }
-
-        if (Welcome.getCfg().getHashAlgorithm() != HashType.SIMPLEAUTH)
-            Message.DB_HASH_WARNING.log(Welcome.getCfg().getHashAlgorithm().name(), HashType.SIMPLEAUTH.name());
 
         enabled = true;
     }
