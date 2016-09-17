@@ -75,7 +75,7 @@ database:
       table-name: simpleauth_players
 # SERVERAUTH table name
     simpleauth:
-      table-name: simpleauth_players
+      table-name: srvauth_serverauthdata
 
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts
