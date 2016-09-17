@@ -1,219 +1,220 @@
 package ru.nukkit.welcome.provider.serverauth;
 
-import cn.nukkit.Server;
-import com.j256.ormlite.dao.Dao;
-import com.j256.ormlite.dao.DaoManager;
-import com.j256.ormlite.field.DataType;
-import com.j256.ormlite.field.DatabaseFieldConfig;
-import com.j256.ormlite.support.ConnectionSource;
-import com.j256.ormlite.table.DatabaseTableConfig;
-import com.j256.ormlite.table.TableUtils;
-import ru.nukkit.dblib.DbLib;
+import cn.nukkit.utils.Config;
+import org.sql2o.Connection;
+import org.sql2o.Sql2o;
 import ru.nukkit.welcome.Welcome;
+import ru.nukkit.welcome.password.HashType;
 import ru.nukkit.welcome.provider.PasswordProvider;
 import ru.nukkit.welcome.provider.Providers;
 import ru.nukkit.welcome.util.Message;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ServerauthProvider implements PasswordProvider {
-    private boolean enabled;
-    private ServerauthCfg cfg;
 
-    private ConnectionSource connectionSource;
-    Dao<ServerauthTable, String> dao;
-    DatabaseTableConfig<ServerauthTable> tableCfg;
+    private String createPlayersTable = "CREATE TABLE IF NOT EXISTS :table (user VARCHAR(200) NOT NULL, " +
+            "password VARCHAR(200), ip VARCHAR(200), firstlogin VARCHAR(200), lastlogin VARCHAR(200), PRIMARY KEY(user))";
+
+    private String selectByName = "SELECT * FROM :table WHERE user = :name";
+
+    private String selectByIp = "SELECT * FROM :table WHERE ip = :lastip";
+
+    private String updatePassword = "UPDATE :table SET user = :name, password = :hash WHERE user = :name";
+
+    private String updatePassword2 = "INSERT OR IGNORE INTO :table (user, password, firstlogin) VALUES (:name, :hash, :registerdate)";
+
+    private String deletePlayer = "DELETE FROM :table WHERE user = :name";
+
+    private String updateLastlogin = "UPDATE :table SET ip = :lastip, firstlogin = :logindate WHERE user = :name";
+
+    private String deleteLastlogin = "DELETE FROM :table WHERE user = :name";
+
+    private Sql2o sql2o;
+
+    private boolean enabled;
+
+    private String tableName;
 
     public ServerauthProvider() {
         enabled = false;
-        if (Server.getInstance().getPluginManager().getPlugin("DbLib") == null) {
-            Message.DB_DBLIB_NOTFOUND.log();
-            return;
+
+        File oldCfgFile = new File(Welcome.getPlugin().getDataFolder() + File.separator + "serverauth.yml");
+        if (oldCfgFile.exists()) {
+            Config oldCfg = new Config(oldCfgFile, Config.YAML);
+            String oldTableName = oldCfg.getString("database.table-name");
+            if (oldTableName != null && !oldTableName.isEmpty() && !oldTableName.equals(Welcome.getCfg().sbServerAuthTable)) {
+                Welcome.getCfg().sbSimpleAuthTable = oldTableName;
+                Welcome.getCfg().save();
+            }
+            oldCfgFile.delete();
+            Message.OLD_FILE_REMOVED.log("NOCOLOR");
         }
-        cfg = new ServerauthCfg(new File(Welcome.getPlugin().getDataFolder() + File.separator + "serverauth.yml"));
-        cfg.load();
-        cfg.save();
+
+        this.tableName = Welcome.getCfg().sbServerAuthTable;
+
+        createPlayersTable = createPlayersTable.replace(":table", tableName);
+        selectByName = selectByName.replace(":table", tableName);
+        selectByIp = selectByIp.replace(":table", tableName);
+        updatePassword = updatePassword.replace(":table", tableName);
+        updatePassword2 = updatePassword2.replace(":table", tableName);
+        deletePlayer = deletePlayer.replace(":table", tableName);
+        updateLastlogin = updateLastlogin.replace(":table", tableName);
+        deleteLastlogin = deleteLastlogin.replace(":table", tableName);
 
 
-        List<DatabaseFieldConfig> fieldConfigs = new ArrayList<DatabaseFieldConfig>();
-        DatabaseFieldConfig field = new DatabaseFieldConfig("user");
-        field.setCanBeNull(false);
-        field.setId(true);
-        field.setDataType(DataType.STRING);
-        fieldConfigs.add(field);
-        field = new DatabaseFieldConfig("password");
-        field.setDataType(DataType.STRING);
-        field.setCanBeNull(false);
-        fieldConfigs.add(field);
-        field = new DatabaseFieldConfig("ip");
-        field.setDataType(DataType.STRING);
-        fieldConfigs.add(field);
-        field = new DatabaseFieldConfig("firstlogin");
-        field.setDataType(DataType.STRING);
-        fieldConfigs.add(field);
-        field = new DatabaseFieldConfig("lastlogin");
-        field.setDataType(DataType.STRING);
-        fieldConfigs.add(field);
-        tableCfg = new DatabaseTableConfig(ServerauthTable.class, cfg.tableName, fieldConfigs);
+        sql2o = Providers.getSql2o();
+        if (sql2o == null) return;
 
-        connectionSource = cfg.useDefault ? DbLib.getConnectionSource() :
-                DbLib.getConnectionSource(new StringBuilder("jdbc:mysql://").append(cfg.host).append(":").
-                        append(cfg.port).append("/").
-                        append(cfg.db).toString(), cfg.username, cfg.password);
-
-        if (connectionSource == null) return;
-
-        try {
-            dao = DaoManager.createDao(connectionSource, tableCfg);
-            TableUtils.createTableIfNotExists(connectionSource, tableCfg);
-        } catch (Exception e) {
-            Message.debugException(e);
-            return;
+        try (Connection con = sql2o.open()) {
+            con.createQuery(createPlayersTable)
+                    .executeUpdate();
         }
+
+        if (Welcome.getCfg().getHashAlgorithm() != HashType.SIMPLEAUTH)
+            Message.DB_HASH_WARNING.log(Welcome.getCfg().getHashAlgorithm().name(), HashType.SIMPLEAUTH.name());
+
         enabled = true;
     }
 
 
+    @Override
     public boolean isEnabled() {
-        return this.enabled;
+        return enabled;
     }
 
+    @Override
     public boolean checkPassword(String playerName, String password) {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
-        ServerauthTable st;
-        try {
-            st = dao.queryForId(playerName);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
-            return false;
+        PlayersTable pt;
+        try (Connection con = sql2o.open()) {
+            pt = con.createQuery(selectByName)
+                    .addParameter("name", playerName)
+                    .executeAndFetchFirst(PlayersTable.class);
         }
-        if (st.getPassword() == null) return false;
-        return password.equals(st.getPassword());
+        if (pt == null || pt.user == null || pt.password.isEmpty()) return false;
+        return password.equals(pt.password);
     }
 
+    @Override
     public boolean setPassword(String playerName, String password) {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
         if (password == null || password.isEmpty()) return false;
-        ServerauthTable st = new ServerauthTable(playerName, password);
-        try {
-            dao.create(st);
-        } catch (Exception e) {
-            Message.debugException(e);
-            st = null;
-        }
-        if (st == null) try {
-            st = dao.queryForId(playerName);
-            st.setPassword(password);
-            dao.update(st);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
-            return false;
+        try (Connection con = sql2o.beginTransaction(java.sql.Connection.TRANSACTION_SERIALIZABLE)) {
+            con.createQuery(updatePassword)
+                    .addParameter("name", playerName)
+                    .addParameter("hash", password)
+                    .executeUpdate();
+            con.createQuery(updatePassword2)
+                    .addParameter("name", playerName)
+                    .addParameter("hash", password)
+                    .addParameter("registerdate", String.valueOf(System.currentTimeMillis()))
+                    .executeUpdate();
+            con.commit();
         }
         return true;
     }
 
+    @Override
     public boolean hasPassword(String playerName) {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
-        try {
-            return dao.idExists(playerName);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
+        PlayersTable pt;
+        try (Connection con = sql2o.open()) {
+            pt = con.createQuery(selectByName)
+                    .addParameter("name", playerName)
+                    .executeAndFetchFirst(PlayersTable.class);
         }
-        return false;
+        if (pt == null || pt.password == null || pt.password.isEmpty()) return false;
+        return true;
     }
 
+    @Override
     public boolean removePassword(String playerName) {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
-        try {
-            ServerauthTable pt = dao.queryForId(playerName);
-            dao.delete(pt);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
-            return false;
+        try (Connection con = sql2o.open()) {
+            con.createQuery(deletePlayer)
+                    .addParameter("name", playerName)
+                    .executeUpdate();
         }
         return true;
     }
 
-    public Long lastLoginFromIp(String playerName, String ip) {
+    @Override
+    public Long lastLoginFromIp(String playerNane, String ip) {
         if (!enabled) return null; // Ошибка - регистрация запрещена
-        List<ServerauthTable> result;
-        try {
-            result = dao.queryBuilder().where().eq("ip", ip).query();
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(null);
-            return null; // Ошибка - регистрация запрещена
+        List<PlayersTable> result;
+        try (Connection con = sql2o.open()) {
+            result = con.createQuery(selectByIp)
+                    //.addParameter("table", tableName)
+                    .addParameter("lastip", ip)
+                    .executeAndFetch(PlayersTable.class);
         }
+        if (result == null || result.isEmpty()) return null;
         long time = 0;
-        for (ServerauthTable row : result) {
-            long lastTime = Long.parseLong(row.getLastlogin());
+        for (PlayersTable row : result) {
+            if (row.firstlogin == null || row.firstlogin.isEmpty()) continue;
+            long lastTime = Long.parseLong(row.firstlogin);
             if (lastTime > time) time = lastTime;
         }
         return time;
     }
 
+    @Override
     public boolean checkAutoLogin(String playerName, String uuid, String ip) {
         if (!enabled) return false;
-        long loginTime = System.currentTimeMillis();
         if (playerName == null || playerName.isEmpty()) return false;
-        ServerauthTable st = null;
-        try {
-            st = dao.queryForId(playerName);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
+        PlayersTable pt;
+        try (Connection con = sql2o.open()) {
+            pt = con.createQuery(selectByName)
+                    .addParameter("name", playerName)
+                    .executeAndFetchFirst(PlayersTable.class);
         }
-        if (st == null) return false;
-        String prevIp = st.getIp();
-        if (prevIp == null || prevIp.isEmpty()) return false;
-        String prevTimeStr = st.getLastlogin();
-        if (prevTimeStr == null || prevTimeStr.isEmpty()) return false;
-        long prevTime = Long.parseLong(prevTimeStr);
-        if (loginTime - prevTime > Welcome.getCfg().getMaxAutoTime()) return false;
-        return prevIp.equalsIgnoreCase(ip);
+        if (pt == null) return false;
+        if (pt.ip == null || pt.ip.isEmpty()) return false;
+        if (pt.firstlogin == null || pt.firstlogin.isEmpty()) return false;
+
+        if (System.currentTimeMillis() - Long.parseLong(pt.firstlogin) > Welcome.getCfg().getMaxAutoTime())
+            return false;
+        return ip.equals(pt.ip);
     }
 
+    @Override
     public void updateAutoLogin(String playerName, String uuid, String ip, long currentTime) {
         if (!enabled) return;
         if (playerName == null || playerName.isEmpty()) return;
-        try {
-            if (!dao.idExists(playerName)) return;
-            ServerauthTable st = dao.queryForId(playerName);
-            st.setLastlogin(String.valueOf(currentTime));
-            st.setIp(ip);
-            dao.update(st);
-        } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
+        try (Connection con = sql2o.open()) {
+            con.createQuery(updateLastlogin)
+                    .addParameter("name", playerName)
+                    .addParameter("lastip", ip)
+                    .addParameter("logindate", String.valueOf(currentTime))
+                    .executeUpdate();
         }
     }
 
+    @Override
     public boolean removeAutoLogin(String playerName) {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
-        try {
-            ServerauthTable st = dao.queryForId(playerName);
-            st.setLastlogin("0");
-            dao.update(st);
+
+        try (Connection con = sql2o.open()) {
+            con.createQuery(deleteLastlogin)
+                    .addParameter("name", playerName)
+                    .executeUpdate();
         } catch (Exception e) {
-            Message.debugException(e);
-            Providers.setLock(playerName);
             return false;
         }
         return true;
     }
 
+    @Override
     public void onDisable() {
-        if (connectionSource != null) connectionSource.closeQuietly();
+        // Zzzzzz....
     }
+
+
 }

@@ -9,7 +9,7 @@ import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.password.PasswordLock;
 import ru.nukkit.welcome.provider.database.DatabaseProvider;
 import ru.nukkit.welcome.provider.redis.RedisProvider;
-import ru.nukkit.welcome.provider.serverauth.ServerauthProvider;
+import ru.nukkit.welcome.provider.serverauth_old.ServerauthProvider;
 import ru.nukkit.welcome.provider.simpleauth.SimpleauthProvider;
 import ru.nukkit.welcome.util.Cfg;
 import ru.nukkit.welcome.util.Message;

@@ -76,6 +76,11 @@ public class Cfg extends cn.nukkit.utils.SimpleConfig {
     @Path("database.schema.simpleauth.table-name")
     public String sbSimpleAuthTable = "simpleauth_players";
 
+    @Path("database.schema.serverauth.table-name")
+    public String sbServerAuthTable = "srvauth_serverauthdata";
+
+
+
 
     //# Delay between reinitialization tries (on database connections lost)
     @Path("database.reinit-on-fail-time")
