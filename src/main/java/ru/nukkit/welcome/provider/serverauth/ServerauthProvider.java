@@ -44,7 +44,7 @@ public class ServerauthProvider implements PasswordProvider {
             Config oldCfg = new Config(oldCfgFile, Config.YAML);
             String oldTableName = oldCfg.getString("database.table-name");
             if (oldTableName != null && !oldTableName.isEmpty() && !oldTableName.equals(Welcome.getCfg().sbServerAuthTable)) {
-                Welcome.getCfg().sbSimpleAuthTable = oldTableName;
+                Welcome.getCfg().sbServerAuthTable = oldTableName;
                 Welcome.getCfg().save();
             }
             oldCfgFile.delete();

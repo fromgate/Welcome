@@ -68,6 +68,15 @@ database:
     username: nukkit
     password: tikkun
     host: localhost
+# Specific configuraton of database schemas
+  schema:
+# SIMPLEAUTH table name
+    simpleauth:
+      table-name: simpleauth_players
+# SERVERAUTH table name
+    simpleauth:
+      table-name: simpleauth_players
+
 # If database connection failed, it will be reinitilized
 # Time between reinitialization attempts
     reinit-on-fail-time: 30s
