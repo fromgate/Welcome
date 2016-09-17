@@ -1,0 +1,86 @@
+---
+lng_load_fail: ファイルから言語を読み込めませんでした。原文のメッセージを使用します
+lng_save_fail: 言語ファイルを保存できませんでした
+lng_print_fail: |-
+  'null' にメッセージを出力できませんでした: "%1%"
+lng_config: '[MESSAGES] メッセージ: %1% 言語: %2% 保存された翻訳ファイル: %1% デバッグモード: %3%'
+word_unknown: 不明
+permission_fail: このコマンドを実行する権限がありません
+player_commad_only: このコマンドはゲーム内のみで使用できます
+cmd_registered: 'コマンド %1% が登録されました'
+cmd_reg_desc: '/register <パスワード> [パスワード（確認）] - パスワードを登録します'
+type_lgn: '/login <パスワード> でログインしてください'
+type_lgn_chat: Type password in chat!
+type_reg: '/register <パスワード> <パスワード（確認）> でログインしてください'
+type_reg_chat: Type password twice to register on the server!
+type_reg1: '/register <パスワード> でログインしてください'
+type_reg1_chat: Type password in chat to register on the server!
+kick_timeout: 'タイムアウトしました。ゲームの参加するには /register <パスワード> でログインしてください'
+lgn_attempt_exceed: ログインの試行回数が多すぎます
+lgn_attempt_exceed_log: 'プレイヤー %1% のログインの試行回数が多すぎます'
+lgn_already: すでにログインしています
+reg_already: すでに登録しています
+lgn_miss_pwd: 'パスワードが正しくありません。/login <パスワード> で入力し直してください'
+lgn_need_reg: サーバーにまだ登録していません。プレイするには登録する必要があります
+unreg_miss_pwd: 'パスワードが正しくありません。/unreg <パスワード> で入力し直してください'
+err_pwd_wrong: パスワードが正しくありません
+lgn_ok: ログインしました
+reg_ok: 登録しました
+err_pwd_notmatch: 入力したパスワードが一致しません
+cmd_lgn_desc: '/login <パスワード> - サーバーにログインします'
+cmd_lgf_desc: '/logoff - サーバーからログアウトし、自動ログインによる悪用を防ぎます'
+reg_log: 'プレイヤー %1% が登録されました'
+lgn_log: 'プレイヤー %1% がログインしました'
+unreg_ok: サーバーから登録情報が削除されました。今後プレイするには再度登録してください
+logoff_ok: サーバーからログアウトしました
+cmd_unreg_desc: '/unregister <パスワード> - サーバーから登録情報を削除します'
+cmd_rmv_desc: '/welcome remove <プレイヤー> - 指定したプレイヤーの登録情報を削除します'
+rmv_need_player: プレイヤーが指定されていません
+rmv_fail: 'プレイヤー %1% の登録情報を削除できませんでした'
+rmv_ok: 'プレイヤー %1% の登録情報を削除しました'
+lgn_auto: 'おかえりなさい、%1% さん'
+cpw_desc: '/changepassword <現在のパスワード> <新しいパスワード> <新しいパスワード（確認）> - パスワードを変更します'
+cpw_usage: '/changepassword <現在のパスワード> <新しいパスワード> <新しいパスワード（確認）>'
+err_not_logged: ログインしていないため、操作が拒否されました
+cpw_ok: パスワードが変更されました
+cpw_fail: Failed to change password
+cmd_help_desc: '/welcome help - ヘルプを表示します'
+hlp_title: '%1% | Nukkitログイン認証システム'
+cmd_wlc_desc: '/welcome - Welcomeのプラグインコマンド'
+err_pwd_validate: パスワードが無効です
+pwd_valid_info: 'パスワードには%1%を含め、%2%～%3%の長さにしてください'
+vld_capital: 大文字
+vld_letters: 文字
+vld_spec_chr: 特殊文字
+vld_number: 数字
+pwd_valid_pattern: 'パスワード正規表現チェッカー %1% を起動しました'
+already_logged_in: 'プレイヤー %1% はすでにサーバーへログインしています'
+db_lock: パスワードプロバイダーへ接続できませんでした。データベース接続を確認してください
+db_dblib_notfound: DbLibプラグインが見つかりません。http://nukkit.ru/resources/dblib.14/ からダウンロードしてください
+db_nedis_notfound: Nedisプラグインが見つかりません。http://nukkit.ru/resources/nedis.76/ からダウンロードしてください
+db_dblib_found: 'DbLibを検出しました。データベースサポートを有効にするには、config.yml内で "database.provider: DATABASE" を設定してください'
+db_hash_warning: '%1%ハッシュアルゴリズムを使用しています。このデータモデルのデフォルトアルゴリズムは %2% です'
+lock_inform: サーバーがロックされています。管理者に連絡してください
+db_init: 'パスワードプロバイダー: %1% ハッシュアルゴリズム: %2%'
+db_reinit: 'パスワードプロバイダー %1% を再初期化しました'
+db_renit_try: パスワードプロバイダーを初期化しています…
+cfg_updated: 設定ファイルが更新されました。新しい変数が追加されましたが、すべてのコメントは失われました
+reg_restriced_ip: 再登録できません。プレイヤー名を変更するか、時間を置いてから試してください
+reload_cmd_warning: RELOADコマンドの実行が検出されました。プラグインの動作は保証できません
+join_msg_pre: 'こんにちは、%1% さん。プレイするにはログインしてください'
+join_msg_bc: '%1% がゲームに参加しました'
+cmd_crt_desc: '/welcome create <プレイヤー> <パスワード> - プレイヤーの登録情報を指定したパスワードで作成します'
+crt_need_player: プレイヤー名およびパスワードが指定されていません
+crt_already_registered: 'プレイヤー %1% はすでに登録されています'
+crt_pwd_invalid: 指定したパスワードが無効です
+crt_fail: 'プレイヤー %1% の登録情報を作成できませんでした'
+crt_ok: 'プレイヤー %1% を登録しました'
+cpwo_desc: '/welcome setpassword <プレイヤー> <新しいパスワード> - プレイヤーのパスワードを変更します'
+cpwo_usage: プレイヤー名および新しいパスワードを入力してください
+cpwo_ok: 'プレイヤー %1% のパスワードを変更しました'
+cpwo_ok_inform: '%1% により、パスワードが %2% へ変更されました'
+cpwo_ok_inform_console: 'パスワードが %2% へ変更されました'
+cpwo_fail: 'プレイヤー %1% のパスワードを変更できませんでした'
+db_unknown: 'データベースプロバイダー %1% は存在しません。設定ファイルを確認してください'
+db_init_fail: 'データベースプロバイダー %1% を初期化できません。設定ファイルを確認してください'
+old_file_removed: 'File %1% removed. All parameters migrated into config.yml'

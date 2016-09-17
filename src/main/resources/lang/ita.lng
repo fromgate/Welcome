@@ -8,10 +8,13 @@ word_unknown: Sconosciuto
 permission_fail: Non hai il permesso di eseguire questo comando
 player_commad_only: Puoi usare questo comando solo in gioco!
 cmd_registered: 'Comando registrato: %1%'
-cmd_reg_desc: '/register <password> [password] - registra giocatore sul server'
+cmd_reg_desc: '/register <password> [password] - registra un giocatore sul server'
 type_lgn: 'Digita /login <password> per loggarti!'
-type_reg: 'Digita /register <password><password> per registrarti!'
+type_lgn_chat: Type password in chat!
+type_reg: 'Digita /register <password> <password> per registrarti!'
+type_reg_chat: Type password twice to register on the server!
 type_reg1: 'Digita /register <password> per loggarti!'
+type_reg1_chat: Type password in chat to register on the server!
 kick_timeout: 'Tempo scaduto! La prossima volta digita /login <password> per unirti al server!'
 lgn_attempt_exceed: Troppi tentativi di login!
 lgn_attempt_exceed_log: 'Giocatore %1% ha ecceduto i tentativi per loggarsi. Hacker?!'
@@ -21,14 +24,14 @@ lgn_miss_pwd: 'Password dimenticata! Digita /login <password>'
 lgn_need_reg: Non sei ancora registrato sul server. Devi prima registrarti.
 unreg_miss_pwd: 'Password dimenticata! Digita /unreg <password>'
 err_pwd_wrong: Password errata!
-lgn_ok: Hai effettuato correttamente il log-in! Benvenuto!
+lgn_ok: Hai effettuato correttamente il login! Benvenuto!
 reg_ok: Hai completato la registrazione! Benvenuto!
 err_pwd_notmatch: Le password inserite non corrispondono!
-cmd_lgn_desc: '/login <password>- accedi al server'
+cmd_lgn_desc: '/login <password> - accedi al server'
 cmd_lgf_desc: "/logoff - disconnettiti dal server (per evitare l'autologin)"
 reg_log: 'Giocatore %1% registrato!'
 lgn_log: 'Giocatore %1% loggato!'
-unreg_ok: Sei stato kickato dal server. La prossima volta devi registrarti nuovamente!
+unreg_ok: Sei stato kickato dal server. La prossima volta dovrai registrarti nuovamente!
 logoff_ok: Disconnesso dal server. Torna presto :)
 cmd_unreg_desc: '/unregister <password> - annulla la registrazione dal server'
 cmd_rmv_desc: '/welcome remove <player> - rimuove (annulla la registrazione) il giocatore indicato'
@@ -40,6 +43,7 @@ cpw_desc: '/changepassword <password> <newPassword> <newPassword> - cambia la pa
 cpw_usage: '/changepassword <password> <newPassword> <newPassword>'
 err_not_logged: Non sei loggato! Operazione annullata.
 cpw_ok: La tua password è stata modificata con successo
+cpw_fail: Failed to change password
 cmd_help_desc: "/welcome help - Visualizza la pagina d'aiuto"
 hlp_title: '%1% | Sistema di autorizzazione Nukkit'
 cmd_wlc_desc: '/welcome - Comando del plugin Welcome'
@@ -49,15 +53,15 @@ vld_capital: lettere maiuscole
 vld_letters: lettere
 vld_spec_chr: caratteri speciali
 vld_number: numeri
-pwd_valid_pattern: 'Password validator regex prepared: %1%'
+pwd_valid_pattern: 'Password validator regex preparato: %1%'
 already_logged_in: 'Giocatore %1% è già loggato sul server!'
 db_lock: Password provider failed. Please check your database connections.
 db_dblib_notfound: 'DbLib plugin non trovato. Scaricalo per favore su: http://nukkit.ru/resources/dblib.14/'
-db_nedis_notfound: 'Plugin Nedis non trovato. Per favore, scaricalo su: http://nukkit.ru/resources/nedis.76/'
-db_dblib_found: 'DbLib rilevato. Puoi abilitare il supporto per database impostando "database.provider: DATABASE" in config.yml'
-db_hash_warning: 'You using %1% hash algorithm. Default algorithm for this data model is %2%.'
-lock_inform: Il server è bloccato. Per favore, contatta un admin del server
-db_init: 'Password provider: %1% Hash algorithm: %2%'
+db_nedis_notfound: 'Plugin Nedis non trovato. Scaricalo per favore su: http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'DbLib rilevata. Puoi abilitare il supporto per database impostando "database.provider: DATABASE" nel config.yml'
+db_hash_warning: "Stai usando l'algoritmo hash %1%. L'algoritmo predefinito per questo modello di dati è %2%."
+lock_inform: Il server è chiuso. Per favore, contatta un admin del server
+db_init: 'Password provider: %1% Algoritmo hash: %2%'
 db_reinit: 'Password provider %1% reinizializzato con successo'
 db_renit_try: Cercando di reinizializzare il provider di password...
 cfg_updated: File di configurazione aggiornato. Aggiunte nuove variabili, ma abbiamo perso tutti i commenti...
@@ -74,8 +78,9 @@ crt_ok: 'Giocatore %1% è stato registrato con successo!'
 cpwo_desc: '/welcome setpassword <player> <newPassword> - modifica la password di un altro giocatore'
 cpwo_usage: 'Devi digitare il nickname e la nuova password (/welcome cpw <player> <password>)'
 cpwo_ok: 'La password del giocatore %1% è stata modificata'
-cpwo_ok_inform: 'La password è stata cambiata da %1%, ora la tua nuova password è %2%'
+cpwo_ok_inform: 'La password è stata modificata da %1%, ora la tua nuova password è %2%'
 cpwo_ok_inform_console: 'La tua password è stata modificata, ora è %2%'
 cpwo_fail: 'Impossibile modificare la password del giocatore %1%'
 db_unknown: 'Database provider sconosciuto: %1%. Controlla il file config'
 db_init_fail: 'Impossibile inizializzare il provider del database: %1%. Controlla il file config'
+old_file_removed: 'File %1% removed. All parameters migrated into config.yml'

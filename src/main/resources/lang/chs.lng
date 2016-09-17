@@ -1,0 +1,86 @@
+---
+lng_load_fail: 未能从文件加载语言文件。使用默认语言
+lng_save_fail: 设置语言文件失败
+lng_print_fail: |-
+  Failed to print message to 'null': "%1%"
+lng_config: '[MESSAGES] 信息: %1% 语言: %2% 保存翻译文件: %1% 调试模式: %3%'
+word_unknown: 未知
+permission_fail: 你没有权限来执行此命令
+player_commad_only: 必须在游戏内执行此命令!
+cmd_registered: '已注册此命令: %1%'
+cmd_reg_desc: '/register <密码> <确认密码> - 玩家注册命令'
+type_lgn: '输入 /login <密码> 来登陆游戏!'
+type_lgn_chat: Type password in chat!
+type_reg: '输入 /register <密码> <确认密码> 来注册账号!'
+type_reg_chat: Type password twice to register on the server!
+type_reg1: '输入 /register <密码> 来进行注册!'
+type_reg1_chat: Type password in chat to register on the server!
+kick_timeout: '你已过登陆限时，下次以 /login <密码> 即可登陆!'
+lgn_attempt_exceed: 尝试登陆次数过多!
+lgn_attempt_exceed_log: '玩家 %1% 以过尝试登陆次数，是黑客？'
+lgn_already: 你已成功登陆游戏!
+reg_already: 你已成功注册此账号!
+lgn_miss_pwd: '密码错误! 输入 /login <密码> 再来一次'
+lgn_need_reg: 你还没有在服务器上注册，请先进行注册！
+unreg_miss_pwd: '密码错误! 输入 /unreg <密码> 重置账号'
+err_pwd_wrong: 密码错误!
+lgn_ok: 你已成功登陆游戏! 欢迎!
+reg_ok: 你已成功注册账号! 欢迎!
+err_pwd_notmatch: 你的密码不符合，请重新输入!
+cmd_lgn_desc: '/login 密码 - 登录服务器'
+cmd_lgf_desc: '/logoff - 从服务器上注销登录'
+reg_log: '玩家 %1% 已经被注册过了！'
+lgn_log: 'Player %1% logged-in!'
+unreg_ok: 从服务器上删除你，下次进入服务器将需要重新注册。
+logoff_ok: Logged off from server. Come back soon :)
+cmd_unreg_desc: '/unregister 密码 - 取消注册'
+cmd_rmv_desc: '/welcome remove 玩家 - 删除（取消注册）玩家'
+rmv_need_player: 未提供玩家名称 (/welcome remove 玩家）
+rmv_fail: '未能删除玩家︰ %1%'
+rmv_ok: '成功删除玩家 %1% '
+lgn_auto: '欢迎回来，%1%！'
+cpw_desc: '/changepassword 原密码 新密码 确认密码 - 更改密码'
+cpw_usage: /changepassword 原密码 新密码 确认密码
+err_not_logged: 您没有登录 ！拒绝操作。
+cpw_ok: 您的密码已成功更改。
+cpw_fail: Failed to change password
+cmd_help_desc: '/welcome help - 查看帮助'
+hlp_title: '%1 %|Nukkit 授权系统'
+cmd_wlc_desc: '/welcome - Welcome 插件命令'
+err_pwd_validate: 您的密码无效！
+pwd_valid_info: '密码必须包含︰ %1% 长度︰ %2%-%3%'
+vld_capital: 大写字母
+vld_letters: 字母
+vld_spec_chr: 特殊字符
+vld_number: 数目
+pwd_valid_pattern: 'Password validator regex prepared: %1%'
+already_logged_in: '玩家 %1% 已经登录服务器 ！'
+db_lock: 存储连接失败，请检查您的数据库连接。
+db_dblib_notfound: DbLib 插件未安装，请到 http://nukkit.ru/resources/dblib.14/ 进行下载
+db_nedis_notfound: Nedis 未安装，请到 http://nukkit.ru/resources/nedis.76/ 进行下载
+db_dblib_found: 'DbLib detected. You can enable database support, by setting "database.provider: DATABASE" in config.yml'
+db_hash_warning: 'You using %1% hash algorithm. Default algorithm for this data model is %2%.'
+lock_inform: Server is locked. Please contact server admin
+db_init: 'Password provider: %1% Hash algorithm: %2%'
+db_reinit: 'Password provider %1% successfully reinitialized'
+db_renit_try: Trying to reinitialize password provider...
+cfg_updated: Config file updated. New variables added but we lost all comments...
+reg_restriced_ip: You cannot register again. Change back your player name and login.
+reload_cmd_warning: Welcome plugin detected that command RELOAD was executed. Sorry, further plugin work cannot be guaranteed.
+join_msg_pre: '你好 %1%！你必须登录后才能进行游戏！！'
+join_msg_bc: '%1% 加入了游戏 ！'
+cmd_crt_desc: '/welcome create <player> <password> - Create (register) new player with provided password'
+crt_need_player: 'Player name and password was not provided (/welcome create <player> <password>)'
+crt_already_registered: 'Player %1% already registered!'
+crt_pwd_invalid: 密码无效！
+crt_fail: 'Failed to register player %1%'
+crt_ok: '玩家 %1% 注册成功 ！'
+cpwo_desc: '/welcome setpassword 玩家 新密码 - 修改其他玩家的密码'
+cpwo_usage: 您需要提供玩家名字和新密码 (/welcome cpw 玩家 密码）
+cpwo_ok: '已更改玩家 %1% 的密码'
+cpwo_ok_inform: '你的密码已经被 %1% 更改，新密码是 %2%'
+cpwo_ok_inform_console: '您的密码已被更改，新密码  %2% '
+cpwo_fail: '无法更改玩家 %1% 的密码'
+db_unknown: '未知的数据库程序︰ %1%。检查您的配置文件'
+db_init_fail: '未能初始化数据库，数据库程序︰ %1%。检查您的配置文件'
+old_file_removed: 'File %1% removed. All parameters migrated into config.yml'

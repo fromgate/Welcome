@@ -49,7 +49,7 @@ public class SimpleauthProvider implements PasswordProvider {
                 Welcome.getCfg().save();
             }
             oldCfgFile.delete();
-            Message.OLD_FILE_REMOVED.log("NOCOLOR");
+            Message.OLD_FILE_REMOVED.log("NOCOLOR", "simpleauth.yml");
         }
 
         this.tableName = Welcome.getCfg().sbSimpleAuthTable;

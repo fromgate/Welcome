@@ -48,7 +48,7 @@ public class ServerauthProvider implements PasswordProvider {
                 Welcome.getCfg().save();
             }
             oldCfgFile.delete();
-            Message.OLD_FILE_REMOVED.log("NOCOLOR");
+            Message.OLD_FILE_REMOVED.log("NOCOLOR", "serverauth.yml");
         }
 
         this.tableName = Welcome.getCfg().sbServerAuthTable;

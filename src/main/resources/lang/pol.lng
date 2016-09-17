@@ -2,7 +2,7 @@
 lng_load_fail: Failed to load languages from file. Default message used
 lng_save_fail: Nie można zapisać pliku lang.
 lng_print_fail: |-
-  Failed to print message to 'null': "%1%"
+  Nie można wydrukować wiadomość 'NULL': "%1%"
 lng_config: '[MESSAGES] Komunikaty: %1% | Język: %2% | Zapisz plik z tłumaczeniem: %1% | Tryb debug: %3%'
 word_unknown: Nieznane
 permission_fail: Nie masz wystarczających uprawnień, by użyć tej komendy!
@@ -10,15 +10,18 @@ player_commad_only: Możesz użyć tej komendy tylko w grze!
 cmd_registered: 'Zarejestrowano komendę: %1%'
 cmd_reg_desc: '/register <password> [password] - rejestruje gracza na serwerze'
 type_lgn: 'Wpisz komendę /login <password>, by się zalogować!'
+type_lgn_chat: Type password in chat!
 type_reg: 'Wpisz komendę /register <password> <password>, by się zalogować!'
+type_reg_chat: Type password twice to register on the server!
 type_reg1: 'Wpisz komendę /register <password>, by się zalogować!'
+type_reg1_chat: Type password in chat to register on the server!
 kick_timeout: 'Czas minął! Następnym razem wpisz komendę /login <password>, by dołączyć do gry!'
 lgn_attempt_exceed: Zbyt wiele prób logowania!
 lgn_attempt_exceed_log: 'Gracz %1% przekroczył dozwoloną ilość prób logowania. Haker?!'
 lgn_already: Zalogowano Cię już!
 reg_already: Zarejestrowano Cię już!
 lgn_miss_pwd: 'Nie podano hasła! Wpisz: /login <password>'
-lgn_need_reg: "You're not registered on server yet. You must register first."
+lgn_need_reg: Nie jesteś zarejestrowany jeszcze na serwerze. Musi najpierw się zarejestrować.
 unreg_miss_pwd: 'Nie podano hasła! Wpisz: /unreg <password>'
 err_pwd_wrong: Złe hasło!
 lgn_ok: Udało Ci się zalogować! Witamy!
@@ -40,6 +43,7 @@ cpw_desc: '/changepassword <password> <newPassword> <newPassword> - zmienia has�
 cpw_usage: '/changepassword <password> <newPassword> <newPassword>'
 err_not_logged: Nie jesteś zalogowanym graczem! Odmowa dostępu.
 cpw_ok: Twoje hasło zostało zmienione.
+cpw_fail: Failed to change password
 cmd_help_desc: '/welcome help - wyświetla pomoc'
 hlp_title: '%1% | System autoryzacji Nukkit'
 cmd_wlc_desc: '/welcome - komenda pluginu Welcome'
@@ -79,3 +83,4 @@ cpwo_ok_inform_console: 'Twoje hasło zostało zmienione na: %2%'
 cpwo_fail: 'Nie można zmienić hasła gracza: %1%'
 db_unknown: 'Unknown database provider: %1%. Check your config file'
 db_init_fail: 'Failed to init database provider: %1%. Check your config file'
+old_file_removed: 'File %1% removed. All parameters migrated into config.yml'
