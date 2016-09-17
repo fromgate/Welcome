@@ -10,8 +10,11 @@ player_commad_only: このコマンドはゲーム内のみで使用できます
 cmd_registered: 'コマンド %1% が登録されました'
 cmd_reg_desc: '/register <パスワード> [パスワード（確認）] - パスワードを登録します'
 type_lgn: '/login <パスワード> でログインしてください'
+type_lgn_chat: Type password in chat!
 type_reg: '/register <パスワード> <パスワード（確認）> でログインしてください'
+type_reg_chat: Type password twice to register on the server!
 type_reg1: '/register <パスワード> でログインしてください'
+type_reg1_chat: Type password in chat to register on the server!
 kick_timeout: 'タイムアウトしました。ゲームの参加するには /register <パスワード> でログインしてください'
 lgn_attempt_exceed: ログインの試行回数が多すぎます
 lgn_attempt_exceed_log: 'プレイヤー %1% のログインの試行回数が多すぎます'
@@ -40,6 +43,7 @@ cpw_desc: '/changepassword <現在のパスワード> <新しいパスワード>
 cpw_usage: '/changepassword <現在のパスワード> <新しいパスワード> <新しいパスワード（確認）>'
 err_not_logged: ログインしていないため、操作が拒否されました
 cpw_ok: パスワードが変更されました
+cpw_fail: Failed to change password
 cmd_help_desc: '/welcome help - ヘルプを表示します'
 hlp_title: '%1% | Nukkitログイン認証システム'
 cmd_wlc_desc: '/welcome - Welcomeのプラグインコマンド'
@@ -79,3 +83,4 @@ cpwo_ok_inform_console: 'パスワードが %2% へ変更されました'
 cpwo_fail: 'プレイヤー %1% のパスワードを変更できませんでした'
 db_unknown: 'データベースプロバイダー %1% は存在しません。設定ファイルを確認してください'
 db_init_fail: 'データベースプロバイダー %1% を初期化できません。設定ファイルを確認してください'
+old_file_removed: 'File %1% removed. All parameters migrated into config.yml'
