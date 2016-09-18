@@ -130,7 +130,7 @@ public class PasswordManager {
     }
 
     public static CompletableFuture<Boolean> removeAutologin(String playerName) {
-        CompletableFuture<Boolean> result = new CompletableFuture();
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
         new Task() {
             @Override
             public void onRun() {
@@ -141,7 +141,7 @@ public class PasswordManager {
     }
 
     public static CompletableFuture<Boolean> restrictedByIp(Player player) {
-        CompletableFuture<Boolean> result = new CompletableFuture();
+        CompletableFuture<Boolean> result = new CompletableFuture<>();
         if (!Welcome.getCfg().registerRestrictions) {
             result.complete(false);
         } else {
