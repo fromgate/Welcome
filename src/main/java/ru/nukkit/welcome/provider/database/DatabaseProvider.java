@@ -92,7 +92,9 @@ public class DatabaseProvider implements PasswordProvider {
         if (playerName == null || playerName.isEmpty()) return false;
         PasswordsTable pt = null;
         try (Connection con = sql2o.open()) {
-            pt = con.createQuery(getPlayer).addParameter("name", playerName).executeAndFetchFirst(PasswordsTable.class);
+            pt = con.createQuery(getPlayer)
+                    .addParameter("name", playerName)
+                    .executeAndFetchFirst(PasswordsTable.class);
             con.close();
         }
         if (pt == null || pt.name == null || pt.password.isEmpty()) return false;
