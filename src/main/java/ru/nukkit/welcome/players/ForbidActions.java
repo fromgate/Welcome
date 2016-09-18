@@ -109,7 +109,7 @@ public class ForbidActions implements Listener {
     public void onPlayerCommandPreprocessEvent(PlayerCommandPreprocessEvent event) {
         if (PlayerManager.isPlayerLoggedIn(event.getPlayer())) return;
         String cmd = Commander.getCommandByAlias(event.getMessage().substring(1).split(" ")[0]);
-        if (!Welcome.getCfg().typeInChat && cmd != null && cmd.matches("(?i)register|reg|login|lgn|l")) {
+        if (!Welcome.getCfg().typeInChat && cmd != null) {
             return; // Разрешаем только команды для регистрации
         }
         event.setCancelled();
