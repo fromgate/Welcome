@@ -129,13 +129,15 @@ public class PasswordManager {
         updateAutologin(playerName, uuid, ip, System.currentTimeMillis());
     }
 
-    public static void removeAutologin(String playerName) {
+    public static CompletableFuture<Boolean> removeAutologin(String playerName) {
+        CompletableFuture<Boolean> result = new CompletableFuture();
         new Task() {
             @Override
             public void onRun() {
-                getProvider().removeAutoLogin(playerName.toLowerCase());
+                result.complete(getProvider().removeAutoLogin(playerName.toLowerCase()));
             }
         }.start();
+        return result;
     }
 
     public static CompletableFuture<Boolean> restrictedByIp(Player player) {

@@ -22,10 +22,14 @@ public class CmdWelCreate extends Cmd {
                 Message.CRT_ALREADY_REGISTERED.print(sender, args[1]);
             } else {
                 PasswordManager.setPassword(args[1], args[2]).whenComplete((create, e2) -> {
-                    if (e2 != null && create) {
-                        Message.CRT_OK.print(sender);
+                    if (e2 != null) {
+                        e2.printStackTrace();
                     } else {
-                        Message.CRT_FAIL.print(sender, args[1]);
+                        if (create) {
+                            Message.CRT_OK.print(sender);
+                        } else {
+                            Message.CRT_FAIL.print(sender, args[1]);
+                        }
                     }
                 });
             }

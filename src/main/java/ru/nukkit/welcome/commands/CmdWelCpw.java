@@ -19,17 +19,20 @@ public class CmdWelCpw extends Cmd {
         }
 
         PasswordManager.setPassword(args[1], args[2]).whenComplete((pwdSet, e) -> {
-            if (e == null && pwdSet) {
-                Player otherPlayer = Server.getInstance().getPlayerExact(args[2]);
-                if (otherPlayer != null && PlayerManager.isPlayerLoggedIn(otherPlayer)) {
-                    (player == null ? Message.CPWO_OK_INFORM_CONSOLE : Message.CPWO_OK_INFORM).print(sender, sender.getName(), args[2]);
-                }
-                Message.CPWO_OK.print(sender, args[1]);
+            if (e != null) {
+                e.printStackTrace();
             } else {
-                Message.CPWO_FAIL.print(sender, args[1]);
+                if (pwdSet) {
+                    Player otherPlayer = Server.getInstance().getPlayerExact(args[2]);
+                    if (otherPlayer != null && PlayerManager.isPlayerLoggedIn(otherPlayer)) {
+                        (player == null ? Message.CPWO_OK_INFORM_CONSOLE : Message.CPWO_OK_INFORM).print(sender, sender.getName(), args[2]);
+                    }
+                    Message.CPWO_OK.print(sender, args[1]);
+                } else {
+                    Message.CPWO_FAIL.print(sender, args[1]);
+                }
             }
         });
-
         return true;
     }
 }

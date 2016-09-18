@@ -102,7 +102,9 @@ public class ForbidActions implements Listener {
                 }
             });
             event.setCancelled();
-        } else if (Welcome.getCfg().blockChat) event.setCancelled();
+        } else if (Welcome.getCfg().blockChat) {
+            event.setCancelled();
+        }
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
