@@ -22,7 +22,7 @@ public class ServerauthProvider implements PasswordProvider {
 
     private String updatePassword = "UPDATE :table SET user = :name, password = :hash WHERE user = :name";
 
-    private String updatePassword2 = "INSERT OR IGNORE INTO :table (user, password, firstlogin) VALUES (:name, :hash, :registerdate)";
+    private String insertPassword = "INSERT INTO :table (user, password, firstlogin) VALUES (:name, :hash, :registerdate)";
 
     private String deletePlayer = "DELETE FROM :table WHERE user = :name";
 
@@ -57,7 +57,7 @@ public class ServerauthProvider implements PasswordProvider {
         selectByName = selectByName.replace(":table", tableName);
         selectByIp = selectByIp.replace(":table", tableName);
         updatePassword = updatePassword.replace(":table", tableName);
-        updatePassword2 = updatePassword2.replace(":table", tableName);
+        insertPassword = insertPassword.replace(":table", tableName);
         deletePlayer = deletePlayer.replace(":table", tableName);
         updateLastlogin = updateLastlogin.replace(":table", tableName);
         deleteLastlogin = deleteLastlogin.replace(":table", tableName);
@@ -99,17 +99,27 @@ public class ServerauthProvider implements PasswordProvider {
         if (!enabled) return false;
         if (playerName == null || playerName.isEmpty()) return false;
         if (password == null || password.isEmpty()) return false;
-        try (Connection con = sql2o.beginTransaction(java.sql.Connection.TRANSACTION_SERIALIZABLE)) {
-            con.createQuery(updatePassword)
+        PlayersTable pt;
+        try (Connection con = sql2o.open()) {
+            pt = con.createQuery(selectByName)
                     .addParameter("name", playerName)
-                    .addParameter("hash", password)
-                    .executeUpdate();
-            con.createQuery(updatePassword2)
-                    .addParameter("name", playerName)
-                    .addParameter("hash", password)
-                    .addParameter("registerdate", String.valueOf(System.currentTimeMillis()))
-                    .executeUpdate();
-            con.commit();
+                    .executeAndFetchFirst(PlayersTable.class);
+        }
+        if (pt == null) {
+            try (Connection con = sql2o.open()) {
+                con.createQuery(insertPassword)
+                        .addParameter("name", playerName)
+                        .addParameter("hash", password)
+                        .addParameter("registerdate", String.valueOf(System.currentTimeMillis()))
+                        .executeUpdate();
+            }
+        } else {
+            try (Connection con = sql2o.open()) {
+                con.createQuery(updatePassword)
+                        .addParameter("name", playerName)
+                        .addParameter("hash", password)
+                        .executeUpdate();
+            }
         }
         return true;
     }
