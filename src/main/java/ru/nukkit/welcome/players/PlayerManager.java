@@ -35,7 +35,7 @@ public class PlayerManager {
                     setBlindEffect(player);
                     PasswordManager.hasPassword(player).whenComplete((hasPassword, e2) -> {
                         if (e2 != null) {
-                            e.printStackTrace();
+                            e2.printStackTrace();
                         } else {
                             if (hasPassword) {
                                 startWaitLogin(player);
