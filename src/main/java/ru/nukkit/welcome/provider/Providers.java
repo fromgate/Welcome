@@ -85,7 +85,7 @@ public enum Providers {
         Message.DB_LOCK.log();
         onDisable();
         passworder = Providers.LOCK.getProvider();
-        if (playerName != null && playerName.isEmpty())
+        if (playerName != null && !playerName.isEmpty())
             Server.getInstance().getScheduler().scheduleDelayedTask(() -> {
                 Player player = Server.getInstance().getPlayerExact(playerName);
                 if (player != null) player.close("", Message.LOCK_INFORM.getText());
