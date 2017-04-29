@@ -1,23 +1,22 @@
 ---
 lng_load_fail: Failed to load languages from file. Default message used
 lng_save_fail: Nie można zapisać pliku lang.
-lng_print_fail: |-
-  Nie można wydrukować wiadomość 'NULL': "%1%"
+lng_print_fail: 'Nie można wydrukować wiadomość ''NULL'': "%1%"'
 lng_config: '[MESSAGES] Komunikaty: %1% | Język: %2% | Zapisz plik z tłumaczeniem: %1% | Tryb debug: %3%'
 word_unknown: Nieznane
 permission_fail: Nie masz wystarczających uprawnień, by użyć tej komendy!
 player_commad_only: Możesz użyć tej komendy tylko w grze!
 cmd_registered: 'Zarejestrowano komendę: %1%'
-cmd_reg_desc: '/register <password> [password] - rejestruje gracza na serwerze'
-type_lgn: 'Wpisz komendę /login <password>, by się zalogować!'
+cmd_reg_desc: /register <password> [password] - rejestruje gracza na serwerze
+type_lgn: Wpisz komendę /login <password>, by się zalogować!
 type_lgn_chat: Type password in chat!
-type_reg: 'Wpisz komendę /register <password> <password>, by się zalogować!'
+type_reg: Wpisz komendę /register <password> <password>, by się zalogować!
 type_reg_chat: Type password twice to register on the server!
-type_reg1: 'Wpisz komendę /register <password>, by się zalogować!'
+type_reg1: Wpisz komendę /register <password>, by się zalogować!
 type_reg1_chat: Type password in chat to register on the server!
-kick_timeout: 'Czas minął! Następnym razem wpisz komendę /login <password>, by dołączyć do gry!'
+kick_timeout: Czas minął! Następnym razem wpisz komendę /login <password>, by dołączyć do gry!
 lgn_attempt_exceed: Zbyt wiele prób logowania!
-lgn_attempt_exceed_log: 'Gracz %1% przekroczył dozwoloną ilość prób logowania. Haker?!'
+lgn_attempt_exceed_log: Gracz %1% przekroczył dozwoloną ilość prób logowania. Haker?!
 lgn_already: Zalogowano Cię już!
 reg_already: Zarejestrowano Cię już!
 lgn_miss_pwd: 'Nie podano hasła! Wpisz: /login <password>'
@@ -27,26 +26,26 @@ err_pwd_wrong: Złe hasło!
 lgn_ok: Udało Ci się zalogować! Witamy!
 reg_ok: Udało Ci się zarejestrować! Witamy!
 err_pwd_notmatch: Wprowadzone hasła nie pasują do siebie!
-cmd_lgn_desc: '/login <password> - loguje gracza na serwerze'
-cmd_lgf_desc: '/logoff - wylogowuje gracza z serwera'
-reg_log: 'Gracz %1% zarejestrował się!'
-lgn_log: 'Gracz %1% zalogował się!'
+cmd_lgn_desc: /login <password> - loguje gracza na serwerze
+cmd_lgf_desc: /logoff - wylogowuje gracza z serwera
+reg_log: Gracz %1% zarejestrował się!
+lgn_log: Gracz %1% zalogował się!
 unreg_ok: Usunięto Cię z serwera. Następnym razem musisz zarejestrować się ponownie!
 logoff_ok: Udało Ci się wylogować z serwera. Do zobaczenia!
-cmd_unreg_desc: '/unregister <password> - wyrejestrowuje gracza z serwera'
-cmd_rmv_desc: '/welcome remove <player> - usuwa (wyrejestrowuje) podanego gracza'
-rmv_need_player: 'Nie podano nazwy gracza (/welcome remove <player>)'
+cmd_unreg_desc: /unregister <password> - wyrejestrowuje gracza z serwera
+cmd_rmv_desc: /welcome remove <player> - usuwa (wyrejestrowuje) podanego gracza
+rmv_need_player: Nie podano nazwy gracza (/welcome remove <player>)
 rmv_fail: 'Nie można usunąć gracza: %1%'
-rmv_ok: 'Gracz %1% został usunięty!'
-lgn_auto: 'Witamy ponownie, %1%!'
-cpw_desc: '/changepassword <password> <newPassword> <newPassword> - zmienia hasło'
-cpw_usage: '/changepassword <password> <newPassword> <newPassword>'
+rmv_ok: Gracz %1% został usunięty!
+lgn_auto: Witamy ponownie, %1%!
+cpw_desc: /changepassword <password> <newPassword> <newPassword> - zmienia hasło
+cpw_usage: /changepassword <password> <newPassword> <newPassword>
 err_not_logged: Nie jesteś zalogowanym graczem! Odmowa dostępu.
 cpw_ok: Twoje hasło zostało zmienione.
 cpw_fail: Failed to change password
-cmd_help_desc: '/welcome help - wyświetla pomoc'
+cmd_help_desc: /welcome help - wyświetla pomoc
 hlp_title: '%1% | System autoryzacji Nukkit'
-cmd_wlc_desc: '/welcome - komenda pluginu Welcome'
+cmd_wlc_desc: /welcome - komenda pluginu Welcome
 err_pwd_validate: Twoje hasło jest nieprawidłowe!
 pwd_valid_info: 'Hasło musi zawierać: %1% (wymagana ilość znaków: %2%-%3%).'
 vld_capital: wielkie litery
@@ -54,33 +53,33 @@ vld_letters: litery
 vld_spec_chr: znaki specjalne
 vld_number: cyfry
 pwd_valid_pattern: 'Password validator regex prepared: %1%'
-already_logged_in: 'Gracz %1% jest już zalogowany na serwerze!'
+already_logged_in: Gracz %1% jest już zalogowany na serwerze!
 db_lock: Password provider failed. Please check your database connections.
 db_dblib_notfound: 'Nie znaleziono pluginu DbLib. Proszę pobrać go ze strony: http://nukkit.ru/resources/dblib.14/'
 db_nedis_notfound: 'Nie znaleziono pluginu Nedis. Proszę pobrać go ze strony: http://nukkit.ru/resources/nedis.76/'
 db_dblib_found: 'DbLib detected. You can enable database support, by setting "database.provider: DATABASE" in config.yml'
-db_hash_warning: 'You using %1% hash algorithm. Default algorithm for this data model is %2%.'
+db_hash_warning: You using %1% hash algorithm. Default algorithm for this data model is %2%.
 lock_inform: Serwer jest zablokowany. Proszę skontaktować się z administratorem.
 db_init: 'Password provider: %1% Hash algorithm: %2%'
-db_reinit: 'Password provider %1% successfully reinitialized'
+db_reinit: Password provider %1% successfully reinitialized
 db_renit_try: Trying to reinitialize password provider...
 cfg_updated: Config file updated. New variables added but we lost all comments...
 reg_restriced_ip: Nie można zarejestrować się ponownie. Zmień swoją nazwę gracza i login.
 reload_cmd_warning: Plugin Welcome wykrył, że została użyta komenda RELOAD. Przepraszamy, ale nie możemy zagwarantować, że dalsza praca pluginu będzie prawidłowa.
-join_msg_pre: 'Witaj, %1%! Musisz się zalogować, by grać na tym serwerze!'
+join_msg_pre: Witaj, %1%! Musisz się zalogować, by grać na tym serwerze!
 join_msg_bc: 'Gracz %1% dołączył do gry!'
-cmd_crt_desc: '/welcome create <player> <password> - tworzy (rejestruje) nowego gracza z podanym hasłem'
-crt_need_player: 'Nie podano nazwy gracza i hasła (/welcome create <player> <password>)'
-crt_already_registered: 'Gracz %1% został już zarejestrowany!'
+cmd_crt_desc: /welcome create <player> <password> - tworzy (rejestruje) nowego gracza z podanym hasłem
+crt_need_player: Nie podano nazwy gracza i hasła (/welcome create <player> <password>)
+crt_already_registered: Gracz %1% został już zarejestrowany!
 crt_pwd_invalid: Podane hasło jest niepoprawne!
 crt_fail: 'Nie można zarejestrować gracza: %1%'
-crt_ok: 'Gracz %1% został zarejestrowany!'
-cpwo_desc: '/welcome setpassword <player> <newPassword> - zmienia hasło innego gracza'
-cpwo_usage: 'Musisz podać nazwę gracza i nowe hasło (/welcome cpw <player> <password>)'
+crt_ok: Gracz %1% został zarejestrowany!
+cpwo_desc: /welcome setpassword <player> <newPassword> - zmienia hasło innego gracza
+cpwo_usage: Musisz podać nazwę gracza i nowe hasło (/welcome cpw <player> <password>)
 cpwo_ok: 'Zmieniono hasło gracza: %1%'
 cpwo_ok_inform: 'Twoje hasło zostało zmienione przez gracza o nazwie %1%. Twoje nowe hasło to: %2%'
 cpwo_ok_inform_console: 'Twoje hasło zostało zmienione na: %2%'
 cpwo_fail: 'Nie można zmienić hasła gracza: %1%'
 db_unknown: 'Unknown database provider: %1%. Check your config file'
 db_init_fail: 'Failed to init database provider: %1%. Check your config file'
-old_file_removed: 'File %1% removed. All parameters migrated into config.yml'
+old_file_removed: File %1% removed. All parameters migrated into config.yml

@@ -1,0 +1,85 @@
+---
+lng_load_fail: Fehler beim Laden der Sprachen aus der Datei. Standartnachricht wurde verwendet
+lng_save_fail: Fehler beim speichern der "lang" Datei
+lng_print_fail: 'Failed to print message to ''null'': "%1%"'
+lng_config: '[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%'
+word_unknown: Unbekannt
+permission_fail: Du hast nicht die benötigten Rechte um diesen Befehl auszuführen
+player_commad_only: Du kannst diesen Befehl nur In-Game nutzen!
+cmd_registered: 'Befehl registriert: %1 %'
+cmd_reg_desc: /register <passwort> [Passwort] - Einen Spieler für den Server registrieren
+type_lgn: Schreibe /login <password> um dich einzuloggen!
+type_lgn_chat: Schreibe das Passwort in den Chat!
+type_reg: Schreibe /register <password> <password> um dich einzuloggen!
+type_reg_chat: Geben Sie Kennwort zweimal ein, um sich auf dem Server zu registrieren!
+type_reg1: Verwende /register <Passwort> um dich anzumelden!
+type_reg1_chat: Schreibe das Passwort im Chat um dich auf dem Server zu registrieren!
+kick_timeout: Time Out! Nächstes mal schreibe /login <password> um am Spiel teilzunehmen!
+lgn_attempt_exceed: Zu viele Login-Versuche!
+lgn_attempt_exceed_log: Spieler %1% hat Login-Versuche überschritten. Hacker?!
+lgn_already: Bereits eingeloggt!
+reg_already: Du bist bereits registriert!
+lgn_miss_pwd: Kennwort wurde nicht eingegeben! Typ /login <password>
+lgn_need_reg: Du bist auf diesem Server noch nicht registriert. Du musst dich zuerst registrieren.
+unreg_miss_pwd: Kennwort wurde nicht eingegeben! Schreibe /unreg <password>
+err_pwd_wrong: Falsches Passwort!
+lgn_ok: Erfolgreich angemeldet! Willkommen!
+reg_ok: Erfolgreich registriert! Willkommen!
+err_pwd_notmatch: Die eingegebenen Passwörter stimmen nicht überein!
+cmd_lgn_desc: /login <Passwort> - Auf dem Server einloggen
+cmd_lgf_desc: /Logoff - Abmeldung vom Server (um automatisches Login zu verhindern)
+reg_log: Spieler %1 % registriert!
+lgn_log: Spieler %1 % eingeloggt!
+unreg_ok: Sie wurden vom Server entfernt. Das nächste Mal müssen Sie sich erneut registrieren!
+logoff_ok: 'Vom Server abgemeldet. Kommen Sie bald wieder :)'
+cmd_unreg_desc: /unregister <Passwort> - Vom Server deregistrieren
+cmd_rmv_desc: /welcome remove <player> - remove (unregister) provided player
+rmv_need_player: Player name was not provided (/welcome remove <player>)
+rmv_fail: 'Fehler beim Entfernen des Spielers: %1 %'
+rmv_ok: Spieler %1 % entfernt!
+lgn_auto: Willkommen zurück, %1%!
+cpw_desc: /changepassword <Passwort> <neuesPasswort> <neuesPasswort> - ändere dein Passwort
+cpw_usage: /changepassword <Passwort> <neuesPasswort> <neuesPasswort>
+err_not_logged: Du bist nicht eingeloggt! Operation abgebrochen.
+cpw_ok: Dein Passwort wurde erfolgreich geändert
+cpw_fail: Fehler beim ändern des Passworts
+cmd_help_desc: /welcome help - Zeige Hilfe
+hlp_title: '%1 % | Nukkit Berechtigungssystem'
+cmd_wlc_desc: /welcome - Welcome plugin command
+err_pwd_validate: Ihr Passwort ist ungültig!
+pwd_valid_info: 'Passwort muss beinhalten: %1 % Länge: %2 %%3 %'
+vld_capital: Großbuchstaben
+vld_letters: buchstaben
+vld_spec_chr: sonderzeichen
+vld_number: Nummern
+pwd_valid_pattern: 'Password validator regex prepared: %1%'
+already_logged_in: Spieler %1 % ist bereits am Server angemeldet!
+db_lock: Password provider failed. Please check your database connections.
+db_dblib_notfound: 'DbLib Plugin nicht gefunden. Bitte herunterladen unter: http://nukkit.ru/resources/dblib.14/'
+db_nedis_notfound: 'Nedis Plugin nicht gefunden. Bitte herunterladen unter: http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'DbLib detected. You can enable database support, by setting "database.provider: DATABASE" in config.yml'
+db_hash_warning: You using %1% hash algorithm. Default algorithm for this data model is %2%.
+lock_inform: Der Server ist gesperrt. Bitte kontaktiere einen Server admin
+db_init: 'Password provider: %1% Hash algorithm: %2%'
+db_reinit: Password provider %1% successfully reinitialized
+db_renit_try: Trying to reinitialize password provider...
+cfg_updated: Config file updated. New variables added but we lost all comments...
+reg_restriced_ip: Du kannst dich nicht erneut registrieren. Ändere dienen Spielernamen und dein Login.
+reload_cmd_warning: Welcome plugin detected that command RELOAD was executed. Sorry, further plugin work cannot be guaranteed.
+join_msg_pre: Hallo %1%! Du musst dich einloggen um hier zu spielen!
+join_msg_bc: '%1 % hat das Spiel betreten!'
+cmd_crt_desc: /welcome create <player> <password> - Create (register) new player with provided password
+crt_need_player: Player name and password was not provided (/welcome create <player> <password>)
+crt_already_registered: Spieler %1% ist bereits registriert!
+crt_pwd_invalid: Provided password is not valid!
+crt_fail: Fehler beim registrieren des Spielers %1%
+crt_ok: Spieler %1% wurde erfolgreich registriert!
+cpwo_desc: /welcome setpassword <player> <newPassword> - change password of another player
+cpwo_usage: You need to provide player name and new password (/welcome cpw <player> <password>)
+cpwo_ok: Das Passwort des Spielers %1% wurde geändert
+cpwo_ok_inform: Dein Passwort wurde von %1% geändert, dein neues Passwort ist %2%
+cpwo_ok_inform_console: Dein Passwort wurde geändert, dein Passwort ist nun %2%
+cpwo_fail: Fehler beim wechseln des Passwortes des Spielers %1%
+db_unknown: 'Unknown database provider: %1%. Check your config file'
+db_init_fail: 'Failed to init database provider: %1%. Check your config file'
+old_file_removed: File %1% removed. All parameters migrated into config.yml

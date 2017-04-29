@@ -1,0 +1,85 @@
+---
+lng_load_fail: Falha ao carregar idiomas do arquivo. Mensagem padrão usada
+lng_save_fail: Falha ao salvar o arquivo de idioma
+lng_print_fail: 'Falha ao enviar mensagem para ''nulo'': "%1%"'
+lng_config: '[MESSAGES] Mensagens: %1% Idioma: %2% Salvar arquivo de tradução: %1% Modo de depuração: %3%'
+word_unknown: Desconhecido
+permission_fail: Você não tem permissões suficientes para executar este comando
+player_commad_only: Você pode usar este comando apenas no jogo!
+cmd_registered: 'Comando registrado: %1%'
+cmd_reg_desc: /registre <senha> [password] - registar o jogador no servidor
+type_lgn: Digite /login <senha> para fazer login!
+type_lgn_chat: Digite a sua senha no chat!
+type_reg: Digite /registre <senha> <senha> para se registrar no servidor!
+type_reg_chat: Digite a senha duas vezes para se registrar no servidor!
+type_reg1: Digite /registre <senha> para se registrar no servidor!
+type_reg1_chat: Digite a senha no chat para se registrar no servidor!
+kick_timeout: Tempo esgotado! Da próxima vez, digite /login <senha> para logar-se no servidor!
+lgn_attempt_exceed: Muitas tentativas de login!
+lgn_attempt_exceed_log: Jogador %1% excedeu as tentativas de login. Hacker?!
+lgn_already: Você já está logado!
+reg_already: Você já está registrado!
+lgn_miss_pwd: Senha não inserida! Digite /login <senha>
+lgn_need_reg: Você ainda não está registrado no servidor. Você deve se registrar primeiro.
+unreg_miss_pwd: A senha não foi inserida! Digite /unreg <senha>
+err_pwd_wrong: Senha incorreta!
+lgn_ok: Você efetuou o logou-in com sucesso! Bem vindo(a)!
+reg_ok: Você foi registrado com sucesso! Bem vindo(a)!
+err_pwd_notmatch: Senhas inseridas não se correspondem!
+cmd_lgn_desc: /login <senha> - login no servidor
+cmd_lgf_desc: /logoff - logoff do servidor (para evitar o tempo de login automático)
+reg_log: Jogador %1% registrado!
+lgn_log: Jogador %1% iniciou sessão!
+unreg_ok: Você foi removido do servidor. Da próxima vez você deve se registrar novamente!
+logoff_ok: 'Desconectado do servidor. Volte em breve :)'
+cmd_unreg_desc: /unregister <senha> - cancelar o registro do servidor
+cmd_rmv_desc: /bemvindo remover <jogador> - remover (cancelar registro) jogador fornecido
+rmv_need_player: O nome do jogador não foi fornecido (/ welcome remover <player>)
+rmv_fail: 'Falha ao remover o jogador: %1%'
+rmv_ok: Jogador %1% removido!
+lgn_auto: Bem-vindo de volta, %1%!
+cpw_desc: /alterarsenha <senhaantiga> <novasenha> <novasenha> - alterar senha
+cpw_usage: /alterarsenha <senhaantiga> <novasenha> <novasenha>
+err_not_logged: Você não está logado! Movimentação bloqueada.
+cpw_ok: Sua senha foi alterada com sucesso
+cpw_fail: Falha ao alterar a senha
+cmd_help_desc: /bemvindo ajuda - mostrar ajuda
+hlp_title: '%1% | Sistema de autorização Nukkit'
+cmd_wlc_desc: /bemvindo - BemVindo comando do plugin
+err_pwd_validate: Sua senha não é válida!
+pwd_valid_info: 'A senha deve conter: %1% Comprimento: %2%-%3%'
+vld_capital: letras maiúsculas
+vld_letters: letras
+vld_spec_chr: caracteres especiais
+vld_number: números
+pwd_valid_pattern: 'Validação de senha regex preparada: %1%'
+already_logged_in: Jogador %1% já está conectado no servidor!
+db_lock: Falha no provedor de senha. Verifique as conexões do banco de dados.
+db_dblib_notfound: 'DbLib plugin não encontrado. Faça o download em: http://nukkit.ru/resources/dblib.14/'
+db_nedis_notfound: 'Nedis plugin não encontrado. Faça o download em: http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'DbLib detectado. Você pode ativar o suporte ao banco de dados, definindo "database.provider: DATABASE" no config.yml'
+db_hash_warning: Você está usando %1% algoritmo de hash. O algoritmo padrão para este modelo de dados é %2%.
+lock_inform: O servidor está bloqueado. Entre em contato com o administrador do servidor
+db_init: 'Provedor de senha: %1% Algoritmo de hash: %2%'
+db_reinit: O provedor de senha %1% foi reinicializado com êxito
+db_renit_try: Tentando reinicializar o provedor de senha...
+cfg_updated: Arquivo de configuração atualizado. Novas variáveis ​​adicionadas, mas perdemos todos os comentários...
+reg_restriced_ip: Você não pode se registrar novamente. Altere o nome e o login do seu jogador.
+reload_cmd_warning: O plugin detectou que o comando RELOAD foi executado. Desculpe, outros trabalhos de plug-in não podem ser garantidos.
+join_msg_pre: Olá, %1%! Você deve fazer login para jogar!
+join_msg_bc: '%1% entrou para o jogo!'
+cmd_crt_desc: /bemvindo create <jogador> <senha> - Criar (registrar) novo jogador com a senha fornecida
+crt_need_player: O nome do jogador e a senha não foram fornecidos (/bemvindo create <jogador> <senha>)
+crt_already_registered: Jogador %1% já está registrado!
+crt_pwd_invalid: A senha fornecida não é válida!
+crt_fail: Falha ao registrar o jogador %1%
+crt_ok: Jogador %1% registrado com sucesso!
+cpwo_desc: /bemvindo setpassword <jogador> <novaSenha> - alterar a senha de outro jogador
+cpwo_usage: Você precisa fornecer o nome do jogador e a nova senha (/bemvindo cpw <jogador> <senha>)
+cpwo_ok: Senha do jogador %1% foi alterada
+cpwo_ok_inform: Sua senha foi alterada por %1%, a nova senha é %2%
+cpwo_ok_inform_console: Sua senha foi alterada, a nova senha é %2%
+cpwo_fail: Falha ao alterar a senha do player %1%
+db_unknown: 'Provedor de banco de dados desconhecido: %1%. Verifique seu arquivo de configuração'
+db_init_fail: 'Falha ao provedor de banco de dados init: %1%. Verifique seu arquivo de configuração'
+old_file_removed: Ficheiro %1% removido. Todos os parâmetros migrados para config.yml

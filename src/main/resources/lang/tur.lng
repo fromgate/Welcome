@@ -1,86 +1,85 @@
 ---
 lng_load_fail: Dosyadan diller yüklenemedi. Varsayılan mesaj kullanıldı
 lng_save_fail: Dil dosyası kaydedilemedi
-lng_print_fail: |-
-  Failed to print message to 'null': "%1%"
+lng_print_fail: 'Failed to print message to ''null'': "%1%"'
 lng_config: '[MESAJLAR] Mesajlar: %1% Dil: %2% Çeviri dosyasını kaydet: %1% Hata ayıklama modu: %3%'
 word_unknown: Bilinmeyen
 permission_fail: Bu komutu yürütmek için yeterli izne sahip değilsin
 player_commad_only: Bu komutu sadece oyun sırasında kullanabilirsin!
 cmd_registered: 'Komut kaydedildi: %1%'
-cmd_reg_desc: '/register <şifre> [şifre] - oyuncuyu sunucuya kaydet'
-type_lgn: 'Giriş yaomak için /login <şifre> yaz!'
-type_lgn_chat: Type password in chat!
-type_reg: 'Giriş yapmak için /register <şifre> <şifre> yaz!'
-type_reg_chat: Type password twice to register on the server!
-type_reg1: 'Giriş yapmak için /register <şifre> yazın!'
-type_reg1_chat: Type password in chat to register on the server!
-kick_timeout: 'Süre doldu! Birdahaki sefere /login <şifre> yazarak oyuna katılın!'
+cmd_reg_desc: /register <şifre> [şifre] - oyuncuyu sunucuya kaydet
+type_lgn: Giriş yaomak için /login <şifre> yaz!
+type_lgn_chat: Şifreyi sohbete yaz!
+type_reg: Giriş yapmak için /register <şifre> <şifre> yaz!
+type_reg_chat: Sunucuya kayıt olmak için şifreyi iki kere yaz!
+type_reg1: Giriş yapmak için /register <şifre> yazın!
+type_reg1_chat: Sunucuya kayıt olmak için şifreyi sohbete yaz!
+kick_timeout: Süre doldu! Birdahaki sefere /login <şifre> yazarak oyuna katılın!
 lgn_attempt_exceed: Çok fazla oturum açma denemeleri!
-lgn_attempt_exceed_log: 'Oyuncu %1% oturum açma denemelerini aştı. Hacker?!'
+lgn_attempt_exceed_log: Oyuncu %1% oturum açma denemelerini aştı. Hacker?!
 lgn_already: Zaten oturumunuz açık!
 reg_already: Zaten kayıtlısınız!
-lgn_miss_pwd: 'Şifre girilmedi! /login <şifre> yaz'
+lgn_miss_pwd: Şifre girilmedi! /login <şifre> yaz
 lgn_need_reg: Henüz bu sunucya kayıt olmamışsınız. İlk önce kayıt olmalısınız.
-unreg_miss_pwd: 'Şifre girilmedi! /unreg <şifre> yaz'
+unreg_miss_pwd: Şifre girilmedi! /unreg <şifre> yaz
 err_pwd_wrong: Yanlış şifre!
 lgn_ok: Başarılı bir şekilde giriş yaptınız! Hoş geldiniz!
 reg_ok: Başarıyla kayıt oldunuz! Hoş geldiniz!
 err_pwd_notmatch: Girilen şifreler eşleşmiyor!
-cmd_lgn_desc: '/login <şifre> - sunucuda oturum aç'
-cmd_lgf_desc: '/logoff - sunucudan oturumu kapat (otomatik oturum açmayı önlemek için)'
-reg_log: 'Oyuncu %1% kayıt oldu!'
-lgn_log: 'Oyuncu %1% oturum açtı!'
+cmd_lgn_desc: /login <şifre> - sunucuda oturum aç
+cmd_lgf_desc: /logoff - sunucudan oturumu kapat (otomatik oturum açmayı önlemek için)
+reg_log: Oyuncu %1% kayıt oldu!
+lgn_log: Oyuncu %1% oturum açtı!
 unreg_ok: Sunucudan kaldırıldınız. Birdahaki sefere tekrar kayıt olmanız gerek!
-logoff_ok: Sunucudan oturumu kapattınız. Yine bekleriz :)
-cmd_unreg_desc: '/unregister <şifre> - sunucudan kaydını sil'
-cmd_rmv_desc: '/welcome remove <oyuncu> - belirtilen oyuncuyu kaldır (oyuncunun kaydını sil)'
-rmv_need_player: 'Oyuncu adı belirtilmedi (/welcome remove <oyuncu>)'
+logoff_ok: 'Sunucudan oturumu kapattınız. Yine bekleriz :)'
+cmd_unreg_desc: /unregister <şifre> - sunucudan kaydını sil
+cmd_rmv_desc: /welcome remove <oyuncu> - belirtilen oyuncuyu kaldır (oyuncunun kaydını sil)
+rmv_need_player: Oyuncu adı belirtilmedi (/welcome remove <oyuncu>)
 rmv_fail: 'Oyuncu kaldırılamadı: %1%'
-rmv_ok: 'Oyuncu %1% kaldırıldı!'
-lgn_auto: 'Tekrar hoş geldiniz, %1%!'
-cpw_desc: '/changepassword <şifre> <yeniŞifre> <yeniŞifre> - şifreyi değiştir'
-cpw_usage: '/changepassword <şifre> <yeniŞifre> <yeniŞifre>'
+rmv_ok: Oyuncu %1% kaldırıldı!
+lgn_auto: Tekrar hoş geldiniz, %1%!
+cpw_desc: /changepassword <şifre> <yeniŞifre> <yeniŞifre> - şifreyi değiştir
+cpw_usage: /changepassword <şifre> <yeniŞifre> <yeniŞifre>
 err_not_logged: Oturumunuz açık değil! İşlem reddedildi.
 cpw_ok: Şifreniz başarıyla değiştirildi
-cpw_fail: Failed to change password
-cmd_help_desc: '/welcome help - yardımı göster'
+cpw_fail: Şifre değiştirilemedi
+cmd_help_desc: /welcome help - yardımı göster
 hlp_title: '%1% | Nukkit kimlik doğrulama sistemi'
-cmd_wlc_desc: '/welcome - Welcome eklenti komutu'
+cmd_wlc_desc: /welcome - Welcome eklenti komutu
 err_pwd_validate: Şifreniz geçerli değil!
-pwd_valid_info: 'Şifre %1% içermeli ve %2%-%3% uzunluk aralığında olmalıdır'
+pwd_valid_info: Şifre %1% içermeli ve %2%-%3% uzunluk aralığında olmalıdır
 vld_capital: büyük harfler
 vld_letters: harfler
 vld_spec_chr: özel karakterler
 vld_number: sayılar
-pwd_valid_pattern: 'Password validator regex prepared: %1%'
-already_logged_in: 'Oyuncu %1% zaten sunucuda oturum açmış!'
+pwd_valid_pattern: 'Şifre doğrulayıcı düzenli ifadesi hazırlandı: %1%'
+already_logged_in: Oyuncu %1% zaten sunucuda oturum açmış!
 db_lock: Şifre sağlayıcısı başarısız oldu. Lütfen veri tabanı bağlantılarınızı kontrol edin.
 db_dblib_notfound: 'DbLib eklentisi bulunamadı. Lütfen şuradan indirin: http://nukkit.ru/resources/dblib.14/'
 db_nedis_notfound: 'Nedis eklentisi bulunamadı. Lütfen şuradan indirin: http://nukkit.ru/resources/nedis.76/'
 db_dblib_found: 'DbLib tespit edildi. Veri tabanı desteğini config.yml üzerinde "database.provider: DATABASE" değerini ayarlayarak aktifleştirebilirsiniz'
-db_hash_warning: 'You using %1% hash algorithm. Default algorithm for this data model is %2%.'
+db_hash_warning: You using %1% hash algorithm. Default algorithm for this data model is %2%.
 lock_inform: Sunucu kilitli. Lütfen sunucu yöneticisine başvurun
 db_init: 'Password provider: %1% Hash algorithm: %2%'
-db_reinit: 'Şifre sağlayıcı %1% başarıyla yeniden başlatıdı'
+db_reinit: Şifre sağlayıcı %1% başarıyla yeniden başlatıdı
 db_renit_try: Şifre sağlayıcısını yeniden başlatmaya çalışılıyor...
 cfg_updated: Yapılandırma dosyası güncellendi. Yeni değişkenler eklendi ama tüm yorumları kaybettik...
 reg_restriced_ip: Tekrar kayıt olamazsınız. Oyuncu adınızı ve oturumunuzu geri değiştirin.
 reload_cmd_warning: Welcome eklentisi RELOAD komutunun yürütüldüğunü tespit etti. Üzgünüz, ileriki eklenti çalışmalarını garanti edemeyiz.
-join_msg_pre: 'Merhaba %1%! Burada oynamak için oturum açmalısınız!'
+join_msg_pre: Merhaba %1%! Burada oynamak için oturum açmalısınız!
 join_msg_bc: '%1% oyuna katıldı!'
-cmd_crt_desc: '/welcome create <oyuncu> <şifre> - belirtilen şifre ile yeni bir oyuncu oluştur (kaydet)'
-crt_need_player: 'Oyuncu adı ve şifresi belirtilmedi (/welcome create <oyuncu> <şifre>)'
-crt_already_registered: 'Oyuncu %1% zaten kayıt olmuş!'
+cmd_crt_desc: /welcome create <oyuncu> <şifre> - belirtilen şifre ile yeni bir oyuncu oluştur (kaydet)
+crt_need_player: Oyuncu adı ve şifresi belirtilmedi (/welcome create <oyuncu> <şifre>)
+crt_already_registered: Oyuncu %1% zaten kayıt olmuş!
 crt_pwd_invalid: Belirtilen şifre geçerli değil!
-crt_fail: 'Oyuncu %1% kaydedilemedi'
-crt_ok: 'Oyuncu %1% başarıyla kaydedildi!'
-cpwo_desc: '/welcome setpassword <oyuncu> <yeniŞifre> - başka bir oyuncunun şifresini değiştir'
-cpwo_usage: 'Oyuncu adı ve yeni şifre belirtilmedi (/welcome setpassword <oyuncu> <yeniŞifre>)'
-cpwo_ok: "Oyuncu %1%'in şifresi değistirildi"
-cpwo_ok_inform: 'Şifreniz %1% tarafından değiştirildi, yeni şifre %2%'
-cpwo_ok_inform_console: 'Şifreniz değiştirildi, yeni şifre %2%'
-cpwo_fail: "Oyuncu %1%'in şifresi değiştirilemedi"
+crt_fail: Oyuncu %1% kaydedilemedi
+crt_ok: Oyuncu %1% başarıyla kaydedildi!
+cpwo_desc: /welcome setpassword <oyuncu> <yeniŞifre> - başka bir oyuncunun şifresini değiştir
+cpwo_usage: Oyuncu adı ve yeni şifre belirtilmedi (/welcome setpassword <oyuncu> <yeniŞifre>)
+cpwo_ok: Oyuncu %1%'in şifresi değistirildi
+cpwo_ok_inform: Şifreniz %1% tarafından değiştirildi, yeni şifre %2%
+cpwo_ok_inform_console: Şifreniz değiştirildi, yeni şifre %2%
+cpwo_fail: Oyuncu %1%'in şifresi değiştirilemedi
 db_unknown: 'Bilinmeyen veri tabanı sağlayıcı: %1%. Yapılandırma dosyanızı kontrol edin'
 db_init_fail: 'Veri tabanı sağlayıcısı başlatılamadı: %1%. Yapılandırma dosyanızı kontrol edin'
-old_file_removed: 'File %1% removed. All parameters migrated into config.yml'
+old_file_removed: Dosya %1% kaldırıldı. Tüm parametreler config.yml dosyasına taşındı

@@ -1,0 +1,85 @@
+---
+lng_load_fail: Impossible de charger le nouveau langage. Message par défaut utilisé
+lng_save_fail: Impossible d’enregistrer le fichier langue
+lng_print_fail: 'Impossible d''afficher le message ''null'' : "%1%"'
+lng_config: '[MESSAGES] Messages : %1% Langage: %2% Sauvegarde du fichier de traduction: %1% Mode debug: %3 %'
+word_unknown: Inconnu
+permission_fail: Vous n’avez pas la permission d'exécuter cette commande
+player_commad_only: Vous ne pouvez utiliser cet commande que dans le jeu !
+cmd_registered: 'Commande enregistrée : %1%'
+cmd_reg_desc: /register <mot de passe> [password] - S'inscrire sur ce serveur
+type_lgn: Tapez /login <mot de passe> pour vous connecter !
+type_lgn_chat: Tapez votre mot de passe dans le chat !
+type_reg: Tapez /register <password><password> pour vous inscrire sur le serveur !
+type_reg_chat: Tapez le mot de passe deux fois pour s’inscrire sur le serveur !
+type_reg1: Tapez /register <mot de passe> pour vous inscrire sur le serveur !
+type_reg1_chat: Tapez le mot de passe dans le chat pour s’inscrire sur le serveur !
+kick_timeout: Temps écoulé ! La prochaine fois, tapez /login <mot de passe> pour rejoindre la partie !
+lgn_attempt_exceed: Trop de tentatives incorrectes!
+lgn_attempt_exceed_log: Le joueur %1% a dépassé le nombre de tentatives maximum pour se connecter. Hacker ?
+lgn_already: Vous êtes déjà connecté !
+reg_already: Vous êtes déjà inscrit !
+lgn_miss_pwd: Le mot de passe n'a pas été entré ! Tapez /login <mot de passe>
+lgn_need_reg: Vous n'êtes pas encore inscrit sur ce serveur. Vous devez vous enregistrer.
+unreg_miss_pwd: Le mot de passe n'a pas été entré ! Tapez /unreg <mot de passe>
+err_pwd_wrong: Mot de passe incorrect !
+lgn_ok: Connexion réussie ! Bienvenue !
+reg_ok: Inscription réussie ! Bienvenue !
+err_pwd_notmatch: Les deux mots de passe ne correspondent pas !
+cmd_lgn_desc: /Login <mot de passe> - se connecter au serveur
+cmd_lgf_desc: /logoff - fermer votre session sur ce serveur (cela empêchera la connexion automatique)
+reg_log: Joueur %1% inscrit !
+lgn_log: Joueur %1% connecté !
+unreg_ok: Vous a été supprimé du serveur. La prochaine fois, vous devrez vous inscrire à nouveau !
+logoff_ok: 'Déconnecté du serveur. À bientôt :)'
+cmd_unreg_desc: /unregister <mot de passe> - se désinscrire du serveur
+cmd_rmv_desc: /welcome remove <joueur> - supprime le joueur fourni (désinscrit)
+rmv_need_player: Le nom du joueur n'a pas été fourni (/welcome remove <joueur>)
+rmv_fail: Impossible de supprimer le joueur %1%
+rmv_ok: Joueur %1% supprimé avec succès !
+lgn_auto: Rebonjour, %1%!
+cpw_desc: /changepassword <ancienMDP> <nouveauMDP> <nouveauMDP> - changer le mot de passe
+cpw_usage: /changepassword <ancienMDP> <nouveauMDP> <nouveauMDP>
+err_not_logged: Vous n'êtes pas connecté ! Opération interdite.
+cpw_ok: Votre mot de passe a bien été modifié
+cpw_fail: Le mot de passe n'a pas pu être mis à jour
+cmd_help_desc: /welcome help - afficher l'aide
+hlp_title: '%1% | Système d’autorisation de Nukkit'
+cmd_wlc_desc: /welcome - commande du plugin Welcome
+err_pwd_validate: Le mot de passe est incorrect !
+pwd_valid_info: 'Le mot de passe doit contenir : %1% Taille : %2%-%3%'
+vld_capital: lettres majuscules
+vld_letters: lettres
+vld_spec_chr: caractères spéciaux
+vld_number: nombres et chiffres
+pwd_valid_pattern: 'Programme de validation d''expression regulée préparé : %1%'
+already_logged_in: Le joueur %1% est déjà connecté au serveur!
+db_lock: Le fournisseur de mots de passe a échoué. Veuillez vérifier les connexions de votre base de données.
+db_dblib_notfound: 'Plugin DbLib introuvable. Veuillez le télécharger à : http://nukkit.ru/resources/dblib.14/'
+db_nedis_notfound: 'Plugin Nedis introuvable. Veuillez le télécharger à : http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'DbLib détecté. Vous pouvez activer le support de base de données, en définissant "database.provider: DATABASE" dans config.yml'
+db_hash_warning: Vous utilisez un algorithme hash %1%. L'algorithme par défaut pour ce modèle de données est %2%.
+lock_inform: Le serveur est verrouillé. Veuillez contacter l'administrateur du serveur
+db_init: 'Fournisseur de mot de passe : %1% algorithme Hash : %2 %'
+db_reinit: Fournisseur de mots de passe %1% réinitialisé avec succès
+db_renit_try: Tentative de réinitialisation du fournisseur de mots de passe ...
+cfg_updated: Fichier de configuration mis à jour. De nouvelles variables ajouté, mais nous avons perdu tous les commentaires...
+reg_restriced_ip: Vous ne pouvez pas vous inscrire à nouveau. Changer votre nom de joueur et reconnectez vous.
+reload_cmd_warning: Le plugin Welcome a détecter que la commande RELOAD a été exécutée. Désolé, mais nous ne pouvons plus garantir un fonctionnement parfait.
+join_msg_pre: Salut %1%! Vous devez vous connecter pour jouer ici !
+join_msg_bc: '%1% a rejoint la partie !'
+cmd_crt_desc: /welcome create <joueur> <mot de passe> - Crée (inscrit) un nouevau joueur avec les donées fournies
+crt_need_player: Le nom du joueur et son mot de passe n'ont pas été fournis (/welcome create <joueur> <mot de passe>)
+crt_already_registered: Joueur %1% déjà inscrit !
+crt_pwd_invalid: Le mot de passe fourni est incorrect !
+crt_fail: Impossible d’inscrire le joueur %1%
+crt_ok: Joueur %1% inscrit avec succès !
+cpwo_desc: /welcome setpassword <joueur> <nouveauMDP> - change le mot de passe du joueur fourni
+cpwo_usage: Vous devez fournir le nom du joueur et le nouveau mot de passe (/welcome cpw <joueur> <nouveauMDP>)
+cpwo_ok: Le mot de passe de %1% a été modifié
+cpwo_ok_inform: Votre mot de passe a été modifié par %1%, votre nouveau mot de passe est %2%
+cpwo_ok_inform_console: Votre mot de passe a été modifié, votre nouveau mot de passe est %2%
+cpwo_fail: Impossible de changer le mot de passe du joueur %1%
+db_unknown: 'Fournisseur de base de données inconnu: %1%. vérifiez votre fichier de configuration'
+db_init_fail: 'Impossible d''initialiser le Fournisseur de base de données: %1%. Vérifiez votre fichier de configuration'
+old_file_removed: Fichier %1% supprimé. Tous les paramètres ont été transférés dans config.yml

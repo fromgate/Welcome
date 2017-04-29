@@ -1,0 +1,85 @@
+---
+lng_load_fail: Error al cargar idiomas del archivo. Se ha utilizado el mensaje predeterminado
+lng_save_fail: Error al guardar el archivo de idioma
+lng_print_fail: 'Error al imprimir un mensaje a ''null'': ''%%1'''
+lng_config: '[MESSAGES] Mensajes: %1% Idioma: %2% Guardar archivo de traducción: %1% Modo de depuración: %3%'
+word_unknown: Desconocido
+permission_fail: No tienes suficientes permisos para ejecutar este comando
+player_commad_only: '¡Solo puedes utilizar este comando dentro del juego!'
+cmd_registered: 'Comando registrado: %1%'
+cmd_reg_desc: /register <contraseña> [contraseña] - Registrar la cuenta en el servidor
+type_lgn: '¡Escribe /login <contraseña> para acceder!'
+type_lgn_chat: '¡Escribe tu contraseña en el chat! (No te preocupes, no se muestra en públicamente)'
+type_reg: '¡Escribe /register <contraseña> <contraseña> para registrar la cuenta en el servidor!'
+type_reg_chat: '¡Escribe la contraseña dos veces para registrarte en el servidor!'
+type_reg1: '¡Escribe /register <contraseña> para registrarte en el servidor!'
+type_reg1_chat: '¡Escribe la contraseña en el chat para registrarte en el servidor!'
+kick_timeout: '¡Tiempo agotado! La próxima vez escribe /login <contraseña> para entrar al juego.'
+lgn_attempt_exceed: '¡Demasiados intentos de inicio de sesión!'
+lgn_attempt_exceed_log: El jugador %1% superó los intentos de inicio de sesión. ¡¿Hacker?!
+lgn_already: '¡Ya has iniciado sesión!'
+reg_already: '¡Ya estás registrado!'
+lgn_miss_pwd: '¡No has introducido la contraseña! Escribe /login <contraseña>'
+lgn_need_reg: Aún no te has registrado. Debes registrarte primero.
+unreg_miss_pwd: '¡No has introducido la contraseña! Escribe /login <contraseña>'
+err_pwd_wrong: '¡Contraseña incorrecta!'
+lgn_ok: '¡Te has logueado con éxito! ¡Bienvenido!'
+reg_ok: '¡Te has registrado con éxito! ¡Bienvenido!'
+err_pwd_notmatch: '¡Las contraseñas introducidas no coinciden!'
+cmd_lgn_desc: /login <contraseña> - Inicia sesión en el servidor
+cmd_lgf_desc: /logoff - Cierra sesión en el servidor (también previene la conexión automática)
+reg_log: '¡Jugador %1% registrado!'
+lgn_log: '¡Jugador %1% logueado!'
+unreg_ok: Tu cuenta ha sido eliminada del servidor. ¡La próxima vez que entres deberás registrarte de nuevo!
+logoff_ok: Se ha cerrado la sesión en el servidor. ¡Vuelve pronto!
+cmd_unreg_desc: /unregister <contraseña> - Elimina tu registro del servidor
+cmd_rmv_desc: /welcome remove <jugador> - Elimina (quita) el registro del jugador proporcionado
+rmv_need_player: No se ha proporcionado el nombre del jugador (/welcome remove <jugador>)
+rmv_fail: 'No se ha podido eliminar al jugador: %1%'
+rmv_ok: '¡Se ha eliminado correctamente al jugador %1%!'
+lgn_auto: '¡Bienvenido de nuevo, %1%!'
+cpw_desc: /changepassword <anteriorContraseña> <nuevaContraseña> <repiteContraseña> - Cambiar la contraseña
+cpw_usage: /changepassword <anteriorContraseña> <nuevaContraseña> <repiteContraseña> - Cambiar la contraseña
+err_not_logged: '¡No has iniciado sesión! Operación rechazada.'
+cpw_ok: Tu contraseña se ha cambiado correctamente
+cpw_fail: Error al cambiar la contraseña
+cmd_help_desc: /welcome help - Muestra la ayuda
+hlp_title: '%1% | Sistema de autorización de Nukkit'
+cmd_wlc_desc: /welcome - Comando del plugin de Welcome
+err_pwd_validate: '¡La contraseña no es válida!'
+pwd_valid_info: 'La contraseña debe tener: %1% Longitud: %2%-%3%'
+vld_capital: Letras en mayúscula
+vld_letters: Letras
+vld_spec_chr: Caracteres especiales
+vld_number: Números
+pwd_valid_pattern: 'Contraseña de validación regex preparada: %1%'
+already_logged_in: '¡El jugador %1% ya ha iniciado sesión en el servidor!'
+db_lock: El proveedor de contraseñas ha fallado. Por favor, comprueba la conexión a la base de datos.
+db_dblib_notfound: 'DbLib no encontrado. Por favor descarga lo en: http://nukkit.ru/resources/dblib.14/'
+db_nedis_notfound: 'Nedis no encontrado. Por favor descarga lo en: http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'DbLib detectado. Puedes habilitar la compatibilidad de la base de datos, mediante el establecimiento de "database.provider: DATABASE" en el config.yml'
+db_hash_warning: Estas usando %1% como algoritmo de encriptación. El algoritmo predeterminado para esto modelo de datos es %2%
+lock_inform: El servidor está bloqueado. Por favor, ponte en contacto con administrador del servidor
+db_init: 'Proveedor de contraseñas: %1% Algoritmo de encriptación (Hash): %2%'
+db_reinit: El proveedor de contraseñas %1% se ha reinicializado con éxito
+db_renit_try: Intentando reiniciar proveedor de contraseñas...
+cfg_updated: Archivo de configuración actualizado. Nuevas variables añadidas pero perdió todos los comentarios...
+reg_restriced_ip: No puedes registrarte otra vez. Cambia de nuevo tu nombre de jugador e inicia sesión.
+reload_cmd_warning: El plugin Welcome ha detectado que el comando RELOAD se ha ejecutado. Lo sentimos, pero no podemos garantizar que el plugin funcione correctamente.
+join_msg_pre: '¡Hola %1%! ¡Debes iniciar sesión para jugar aquí!'
+join_msg_bc: '¡%1% se ha unido al juego!'
+cmd_crt_desc: /welcome create <jugador> <contraseña> - Crea (registra) un nuevo jugador con una contraseña proporcionada
+crt_need_player: El nombre de jugador y la contraseña no se han proporcionado (/welcome create <jugador> <contraseña>)
+crt_already_registered: '¡El jugador %1% ya está registrado!'
+crt_pwd_invalid: '¡La contraseña proporcionada no es válida!'
+crt_fail: Error al registrar el jugador %1%
+crt_ok: '¡Jugador %1% registrado con éxito!'
+cpwo_desc: /welcome setpassword <jugador> <nuevaContraseña> - Cambia la contraseña de otro jugador
+cpwo_usage: Debes proporcionar un nombre de jugador y contraseña nuevos (/welcome cpw <jugador> <contraseña>)
+cpwo_ok: La contraseña del jugador %1% se ha cambiado
+cpwo_ok_inform: Tu contraseña ha sido cambiada por %1%, la nueva contraseña es %2%
+cpwo_ok_inform_console: Tu contraseña ha sido cambiada, la nueva contraseña es %2%
+cpwo_fail: Error al cambiar la contraseña del jugador %1%
+db_unknown: 'Proveedor de base de datos desconocido: %1%. Comprueba el archivo de configuración'
+db_init_fail: 'Error al iniciar el proveedor de base de datos: %1%. Comprueba el archivo de configuración'
+old_file_removed: Se ha eliminado el archivo %1%. Todos los parámetros se han migrado a config.yml

@@ -1,0 +1,85 @@
+---
+lng_load_fail: Не вдалось завантажити файл мови. Будуть використані повідомлення за замовчуванням
+lng_save_fail: Не вдалося зберегти файл мови
+lng_print_fail: 'Failed to print message to ''null'': "%1%"'
+lng_config: '[MESSAGES] Messages: %1% Language: %2% Save translate file: %1% Debug mode: %3%'
+word_unknown: Невідоме
+permission_fail: У вас немає дозволу для виповнення цієї команди
+player_commad_only: Ви можете використовувати цю команду лише у грі!
+cmd_registered: 'Команда зареєстрована: %1%'
+cmd_reg_desc: /register <password> [password] - зареєструвати гравця на сервері
+type_lgn: Наберіть /login <пароль> щоб увійти на сервер!
+type_lgn_chat: Введіть пароль в чат!
+type_reg: Наберіть /register <пароль> <пароль> для реєстрації!
+type_reg_chat: Введіть пароль двічі для реєстрації на сервері!
+type_reg1: Введіть /register <password> для реєстрації на сервері!
+type_reg1_chat: Введіть пароль в чат для реєстрації на сервері!
+kick_timeout: Час сплив! Наступного разу введіть /login <пароль>, щоб увійти!
+lgn_attempt_exceed: Забагато спроб увійти на сервер!
+lgn_attempt_exceed_log: Гравець %1% перевищив кількість спроб увійти. Хакер?!
+lgn_already: Ви вже увійшли!
+reg_already: Ви вже зареєстровані!
+lgn_miss_pwd: Пароль не введено! Введіть /login <пароль>
+lgn_need_reg: Ви ще не зареєстровані на сервері. Ви повинні спочатку зареєструватися.
+unreg_miss_pwd: Пароль не введено! Введіть /unreg <пароль>
+err_pwd_wrong: Невірний пароль!
+lgn_ok: Ви успішно увішли! Вітаємо!
+reg_ok: Ви зареєструвались! Вітаємо!
+err_pwd_notmatch: Введені паролі не співпадають!
+cmd_lgn_desc: /login <password> - увійти на сервер
+cmd_lgf_desc: /logoff - вихід із сервера (щоб уникнути автологіну)
+reg_log: Гравець %1% зареєстрований!
+lgn_log: Гравець %1% увійшов!
+unreg_ok: Вас було прибрано з серверу. Наступного разу потрібно зареєструватися знову!
+logoff_ok: 'Ви вийшли з серверу. Повертайтеся скоріше :)'
+cmd_unreg_desc: /unregister <password> - видалити аккаунт
+cmd_rmv_desc: /welcome remove <player> - видалити гравця
+rmv_need_player: Не введено нік гравця (/welcome remove <player>)
+rmv_fail: 'Не вдалося видалити гравця: %1%'
+rmv_ok: Гравець %1% успішно вилучений!
+lgn_auto: З поверненням, %1%!
+cpw_desc: /changepassword <старийПароль> <новийПароль> <новийПарольЩеРаз> - змінити пароль
+cpw_usage: /changepassword <старийПароль> <новийПароль> <новийПарольЩеРаз>
+err_not_logged: Ви не авторизувались! Операцію відхилено!
+cpw_ok: Ваш пароль успішно змінено
+cpw_fail: Не вдалося змінити пароль
+cmd_help_desc: /welcome help - отримати допомогу
+hlp_title: '%1% | Система авторизації Nukkit'
+cmd_wlc_desc: /welcome - Welcome plugin command
+err_pwd_validate: Неприпустимий пароль!
+pwd_valid_info: 'Пароль має містити: %1% довжина: %2%%3%'
+vld_capital: великі літери
+vld_letters: букви
+vld_spec_chr: спеціальні символи
+vld_number: цифри
+pwd_valid_pattern: 'Password validator regex prepared: %1%'
+already_logged_in: Гравець %1% уже увійшов на сервер!
+db_lock: Password provider failed. Please check your database connections.
+db_dblib_notfound: 'DbLib не знайдено. Будь ласка, завантажте його на: http://nukkit.ru/resources/dblib.14/'
+db_nedis_notfound: 'Nedis не знайдено. Будь ласка, завантажте його на: http://nukkit.ru/resources/nedis.76/'
+db_dblib_found: 'Виявлено DbLib. Підтримку баз даних, можна ввімкнути, встановивши "database.provider: DATABASE" в config.yml'
+db_hash_warning: Ви використовуєте %1% хеш-алгоритм. Алгоритм за замовчуванням для цієї моделі даних є %2%.
+lock_inform: Сервер заблоковано. Зверніться до адміністратора сервера
+db_init: 'Password provider: %1% Hash algorithm: %2%'
+db_reinit: Password provider %1% successfully reinitialized
+db_renit_try: Trying to reinitialize password provider...
+cfg_updated: Конфігураційний файл оновлено. Нові змінні додано, але ми втратили всі коментарі...
+reg_restriced_ip: You cannot register again. Change back your player name and login.
+reload_cmd_warning: Welcome plugin detected that command RELOAD was executed. Sorry, further plugin work cannot be guaranteed.
+join_msg_pre: Hello %1%! You must login to play here!
+join_msg_bc: '%1% joined the game!'
+cmd_crt_desc: /welcome create <player> <password> - Create (register) new player with provided password
+crt_need_player: Player name and password was not provided (/welcome create <player> <password>)
+crt_already_registered: Player %1% already registered!
+crt_pwd_invalid: Provided password is not valid!
+crt_fail: Failed to register player %1%
+crt_ok: Player %1% successfully registered!
+cpwo_desc: /welcome setpassword <player> <newPassword> - change password of another player
+cpwo_usage: You need to provide player name and new password (/welcome cpw <player> <password>)
+cpwo_ok: Password of player %1% was changed
+cpwo_ok_inform: Your password was changed by %1%, new password is %2%
+cpwo_ok_inform_console: Your password was changed, new password is %2%
+cpwo_fail: Не вдалось змінити пароль гравцю %1%
+db_unknown: 'Невідоме джерело даних: %1%. Перевірте файл налаштувань'
+db_init_fail: 'Не вдалось встановити зв''язок з базою даних: %1%. Перевірте файл налаштувань'
+old_file_removed: File %1% removed. All parameters migrated into config.yml
