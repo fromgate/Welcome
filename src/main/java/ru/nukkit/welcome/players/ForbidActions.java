@@ -15,10 +15,21 @@ import cn.nukkit.event.inventory.CraftItemEvent;
 import cn.nukkit.event.inventory.InventoryPickupArrowEvent;
 import cn.nukkit.event.inventory.InventoryPickupItemEvent;
 import cn.nukkit.event.inventory.InventoryTransactionEvent;
-import cn.nukkit.event.player.*;
+import cn.nukkit.event.player.PlayerAchievementAwardedEvent;
+import cn.nukkit.event.player.PlayerChatEvent;
+import cn.nukkit.event.player.PlayerCommandPreprocessEvent;
+import cn.nukkit.event.player.PlayerDropItemEvent;
+import cn.nukkit.event.player.PlayerFoodLevelChangeEvent;
+import cn.nukkit.event.player.PlayerGameModeChangeEvent;
+import cn.nukkit.event.player.PlayerInteractEvent;
+import cn.nukkit.event.player.PlayerItemConsumeEvent;
+import cn.nukkit.event.player.PlayerMoveEvent;
+import cn.nukkit.event.player.PlayerToggleSneakEvent;
 import cn.nukkit.inventory.Inventory;
 import ru.nukkit.welcome.Welcome;
 import ru.nukkit.welcome.commands.Commander;
+
+import java.util.Set;
 
 public class ForbidActions implements Listener {
 
@@ -48,11 +59,18 @@ public class ForbidActions implements Listener {
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.MONITOR)
     public void onInventory(InventoryTransactionEvent event) {
-        for (Inventory inv : event.getTransaction().getInventories()) {
-            Player player = inv.getHolder() instanceof Player ? (Player) inv.getHolder() : null;
-            if (player == null) continue;
-            cancel(player, event);
-            if (event.isCancelled()) return;
+        Set<Inventory> inventories = null;
+        try {
+            inventories = event.getTransaction().getInventories();
+        } catch (Throwable ignore) {
+        }
+        if (inventories != null) {
+            for (Inventory inv : event.getTransaction().getInventories()) {
+                Player player = inv.getHolder() instanceof Player ? (Player) inv.getHolder() : null;
+                if (player == null) continue;
+                cancel(player, event);
+                if (event.isCancelled()) return;
+            }
         }
     }
 
