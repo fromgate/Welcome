@@ -120,7 +120,7 @@ public class ForbidActions implements Listener {
                 }
             });
             event.setCancelled();
-        } else if (Welcome.getCfg().blockChat) {
+        } else {
             event.setCancelled();
         }
     }
